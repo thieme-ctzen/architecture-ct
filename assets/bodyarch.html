@@ -1,0 +1,753 @@
+<div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="brandLogo" src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" />
+        <h1>Arquitetura CleverTap</h1>
+      </div>
+
+      <div class="section">
+        <div class="hd">
+          <h2>Conectores de Integração</h2>
+          <button class="secToggle" type="button" aria-expanded="true" title="Recolher seção">−</button>
+        </div>
+        <div class="bd">
+          <button class="btn" data-add="integration:api">
+            <div class="left">
+              <div class="ico"><img src="https://icons.veryicon.com/png/o/internet--web/internet-simple-icon/api-management.png" alt="API" /></div>
+              <div class="txt"><div>API</div><span>Server-to-server</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+
+          <button class="btn" data-add="integration:sdk">
+            <div class="left">
+              <div class="ico"><img src="https://icons.veryicon.com/png/o/miscellaneous/hekr/open-sdk-download.png" alt="SDK" /></div>
+              <div class="txt"><div>SDK</div><span>App / Web</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+
+          <div class="nativeLaunchWrap" id="nativeLaunchWrap">
+            <button class="btn" data-add="integration:native" id="nativePrimaryBtn">
+              <div class="left">
+                <div class="ico"><img src="https://images.icon-icons.com/3251/PNG/512/plug_connected_regular_icon_202791.png" alt="Nativo" /></div>
+                <div class="txt"><div>Nativo</div><span>Integração interna</span></div>
+              </div>
+            </button>
+            <button class="nativeFlyoutArrow" id="nativeFlyoutArrow" type="button" aria-label="Abrir conexões nativas" aria-expanded="false" aria-controls="nativeFlyout">
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
+
+          <button class="btn" data-add="integration:manual">
+            <div class="left">
+              <div class="ico"><img src="https://media.istockphoto.com/id/1187149723/pt/vetorial/touch-outline-vector-illustration-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=h2Z3b3CzeZPm5oLu_m_g6dzhhCgWWwfO5CEHTuS1E-A=" alt="Manual" /></div>
+              <div class="txt"><div>Manual</div><span>Operação assistida</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="hd">
+          <h2>Bloco Central</h2>
+          <button class="secToggle" type="button" aria-expanded="true" title="Recolher seção">−</button>
+        </div>
+        <div class="bd">
+          <button class="btn" data-add="core:central">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-icons-png.flaticon.com/512/30/30254.png" alt="Bloco Central" /></div>
+              <div class="txt"><div>Bloco Central</div><span>Nome editável</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="core:organizer">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-icons-png.flaticon.com/512/30/30254.png" alt="Organizador" /></div>
+              <div class="txt"><div>Organizador</div><span>Container por categoria</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="hd">
+          <h2>Canais</h2>
+          <button class="secToggle" type="button" aria-expanded="true" title="Recolher seção">−</button>
+        </div>
+        <div class="bd">
+          <button class="btn" data-add="channel:whatsapp">
+            <div class="left"><div class="ico"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png" alt="WhatsApp" /></div><div class="txt"><div>WhatsApp</div><span>Conversational</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="channel:rcs">
+            <div class="left"><div class="ico"><img src="https://www.messangi.com/wp-content/uploads/2023/06/rcs-1.png" alt="RCS" /></div><div class="txt"><div>RCS</div><span>Rich messaging</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="channel:app">
+            <div class="left"><div class="ico"><img src="https://cdn-icons-png.flaticon.com/512/8766/8766948.png" alt="App" /></div><div class="txt"><div>App</div><span>Push / In-App</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="channel:web">
+            <div class="left"><div class="ico"><img src="https://cdn-icons-png.flaticon.com/512/5339/5339181.png" alt="Web" /></div><div class="txt"><div>Web</div><span>Web push / overlays</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="channel:email">
+            <div class="left"><div class="ico"><img src="https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small/email-message-icon-design-in-blue-circle-png.png" alt="Email" /></div><div class="txt"><div>Email</div><span>HTML / templates</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="channel:sms">
+            <div class="left"><div class="ico"><img src="https://cdn-icons-png.flaticon.com/512/733/733533.png" alt="SMS" /></div><div class="txt"><div>SMS</div><span>Transactional / promo</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="channel:webhook">
+            <div class="left"><div class="ico"><img src="https://www.svix.com/resources/assets/images/color-webhook-240-1deccb0e365ff4ea493396ad28638fb7.png" alt="Webhook" /></div><div class="txt"><div>Webhook</div><span>HTTP callbacks / automations</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="channel:fbads">
+            <div class="left"><div class="ico"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/960px-2023_Facebook_icon.svg.png" alt="Facebook Ads" /></div><div class="txt"><div>Facebook Ads</div><span>Remarketing</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="channel:tiktok">
+            <div class="left"><div class="ico"><img src="https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png" alt="TikTok Ads" /></div><div class="txt"><div>TikTok Ads</div><span>Remarketing</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="channel:gads">
+            <div class="left"><div class="ico"><img src="https://static.vecteezy.com/system/resources/previews/042/712/671/non_2x/google-ads-icon-logo-symbol-free-png.png" alt="Google Ads" /></div><div class="txt"><div>Google Ads</div><span>Remarketing</span></div></div><div class="arrow">→</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="hd">
+          <h2>Conectores de Dados</h2>
+          <button class="secToggle" type="button" aria-expanded="true" title="Recolher seção">−</button>
+        </div>
+        <div class="bd">
+          <button class="btn" data-add="data:datalake">
+            <div class="left"><div class="ico"><img src="https://images.icon-icons.com/1502/PNG/512/officedatabase_103574.png" alt="Data Lake" /></div><div class="txt"><div>Data Lake</div><span>Raw storage</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="data:warehouse">
+            <div class="left"><div class="ico"><img src="https://images.icon-icons.com/1502/PNG/512/officedatabase_103574.png" alt="Data Warehouse" /></div><div class="txt"><div>Data Warehouse</div><span>BI / modelado</span></div></div><div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="data:queue">
+            <div class="left"><div class="ico"><img src="https://images.icon-icons.com/1502/PNG/512/officedatabase_103574.png" alt="Data Queue" /></div><div class="txt"><div>Data Queue</div><span>Streaming buffer</span></div></div><div class="arrow">→</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="hd">
+          <h2>Soluções CleverTap</h2>
+          <button class="secToggle" type="button" aria-expanded="true" title="Recolher seção">−</button>
+        </div>
+        <div class="bd">
+          <button class="btn" data-add="solution:martech">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+              <div class="txt"><div>Martech</div><span>Bloco completo editável</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="solution:segments">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+              <div class="txt"><div>Segments</div><span>Bloco completo editável</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="solution:analytics">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+              <div class="txt"><div>Analytics</div><span>Bloco completo editável</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <div class="featuresLaunchWrap" id="featuresLaunchWrap">
+            <button class="btn" data-add="solution:features" id="featuresPrimaryBtn">
+              <div class="left">
+                <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+                <div class="txt"><div>Features</div><span>Bloco completo editável</span></div>
+              </div>
+            </button>
+            <button class="featuresFlyoutArrow" id="featuresFlyoutArrow" type="button" aria-label="Abrir features" aria-expanded="false" aria-controls="featuresFlyout">
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
+          <button class="btn" data-add="solution:productexperiences">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+              <div class="txt"><div>Product Experiences</div><span>Addon CleverTap</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="solution:promotions">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+              <div class="txt"><div>Promotions</div><span>Addon CleverTap</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="solution:tesseractdbtm">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+              <div class="txt"><div>TesseractDB™</div><span>Bloco completo editável</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="solution:scribeai">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+              <div class="txt"><div>ScribeAI</div><span>Bloco AI especial</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="solution:askai">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+              <div class="txt"><div>AskAI</div><span>Bloco AI especial</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="solution:agentai">
+            <div class="left">
+              <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+              <div class="txt"><div>AI Agent</div><span>Bloco AI especial</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button class="tbtn" id="btnTemplate">Templates</button>
+        <button class="tbtn" id="btnExport">Export JSON</button>
+        <button class="tbtn" id="btnImport">Import JSON</button>
+        <button class="tbtn" id="btnReset">Reset</button>
+      </div>
+
+      <div class="section">
+        <div class="hd">
+          <h2>Anotações</h2>
+          <button class="secToggle" type="button" aria-expanded="true" title="Recolher seção">−</button>
+        </div>
+        <div class="bd">
+          <button class="btn" data-add="text:note">
+            <div class="left">
+              <div class="txt"><div>Texto Livre</div><span>Nota flutuante no canvas</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+          <button class="btn" data-add="text:sticky">
+            <div class="left">
+              <div class="txt"><div>Sticky Note</div><span>Post-it colorido</span></div>
+            </div>
+            <div class="arrow">→</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="hint">
+        <b>Como conectar:</b> clique e arraste de um <b>port</b> para outro (ou clique em um port e depois no destino).
+        <br><br>
+        <b>Atalhos:</b> apagar seleção <span class="kbd">Del</span> • editar bloco: <b>duplo clique</b> • multi seleção: <span class="kbd">Shift</span> + clique ou arraste no fundo • pan: arrastar fundo • zoom: <span class="kbd">Ctrl</span> + scroll
+      </div>
+    </aside>
+    <div class="nativeFlyout" id="nativeFlyout" aria-hidden="true">
+      <div class="nativeFlyoutCard">
+        <div class="nativeFlyoutHead" id="nativeFlyoutHead">Conexões Nativas</div>
+        <button class="btn" data-add="native:connector">
+          <div class="left">
+            <div class="ico"><img src="https://images.icon-icons.com/3251/PNG/512/plug_connected_regular_icon_202791.png" alt="Conector nativo" /></div>
+            <div class="txt"><div>Conector nativo</div><span>Integração interna</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <div class="btnMenuGroup" data-native-group="Analytics">Analytics</div>
+        <button class="btn" data-add="native:amplitude">
+          <div class="left">
+            <div class="ico"><img src="https://companieslogo.com/img/orig/AMPL-501a52ff.png?t=1720244490" alt="Amplitude" /></div>
+            <div class="txt"><div>Amplitude</div><span>Analytics</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:mixpanel">
+          <div class="left">
+            <div class="ico"><img src="https://cdn.appsflyer.com/marketplace/static/logo/mixpanel.png" alt="Mixpanel" /></div>
+            <div class="txt"><div>Mixpanel</div><span>Analytics</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:posthog">
+          <div class="left">
+            <div class="ico"><img src="https://posthog.com/brand/posthog-logo-stacked@2x.png" alt="PostHog" /></div>
+            <div class="txt"><div>PostHog</div><span>Analytics</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <div class="btnMenuGroup" data-native-group="Attribution">Attribution</div>
+        <button class="btn" data-add="native:adjust">
+          <div class="left">
+            <div class="ico"><img src="https://avatars.githubusercontent.com/u/1327203?s=280&v=4" alt="Adjust" /></div>
+            <div class="txt"><div>Adjust</div><span>Attribution</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:airbridge">
+          <div class="left">
+            <div class="ico"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Airbridge_logo_CL.png" alt="Airbridge" /></div>
+            <div class="txt"><div>Airbridge</div><span>Attribution</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:appsflyer">
+          <div class="left">
+            <div class="ico"><img src="https://cdn.prod.website-files.com/5ecbeb8d7557e7f636691721/65837c5f480644e2de769eb5_AppsFlyer_logo.png" alt="AppsFlyer" /></div>
+            <div class="txt"><div>AppsFlyer</div><span>Attribution</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:apptrove">
+          <div class="left">
+            <div class="ico"><img src="https://files.readme.io/1d84909a84cbc1303083f451b01b6345f8329ac4a8bc8a0bf675153453cea99c-Apptrove.webp" alt="AppTrove" /></div>
+            <div class="txt"><div>AppTrove</div><span>Attribution</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:branch">
+          <div class="left">
+            <div class="ico"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv6Ow_N_fGWVLscgtELG4K7j1_3LyThe-Ulg&s" alt="Branch" /></div>
+            <div class="txt"><div>Branch</div><span>Attribution</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:singular">
+          <div class="left">
+            <div class="ico"><img src="https://www.businessofapps.com/wp-content/uploads/2019/05/singular_logo_2019.png" alt="Singular" /></div>
+            <div class="txt"><div>Singular</div><span>Attribution</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <div class="btnMenuGroup" data-native-group="E-commerce">E-commerce</div>
+        <button class="btn" data-add="native:shopify">
+          <div class="left">
+            <div class="ico"><img src="https://www.pngall.com/wp-content/uploads/13/Shopify-Logo-PNG.png" alt="Shopify" /></div>
+            <div class="txt"><div>Shopify</div><span>E-commerce</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:vtex">
+          <div class="left">
+            <div class="ico"><img src="https://companieslogo.com/img/orig/VTEX-64045aa2.png?t=1720244494" alt="VTEX" /></div>
+            <div class="txt"><div>VTEX</div><span>E-commerce</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <div class="btnMenuGroup" data-native-group="CDP">CDP</div>
+        <button class="btn" data-add="native:hightouch">
+          <div class="left">
+            <div class="ico"><img src="https://static.amplitude.com/data-connections/icons/HIGHTOUCH.png" alt="High Touch" /></div>
+            <div class="txt"><div>High Touch</div><span>CDP</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:segment">
+          <div class="left">
+            <div class="ico"><img src="https://logo.svgcdn.com/logos/segment.png" alt="Segment" /></div>
+            <div class="txt"><div>Segment</div><span>CDP</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:rudderstack">
+          <div class="left">
+            <div class="ico"><img src="https://cdn.prod.website-files.com/685d3f27e667cdf05fe197f8/685d3f27e667cdf05fe1aa8b_64d3ddaa31ad7172011fd9b5_rudderstack-1.svg" alt="RudderStack" /></div>
+            <div class="txt"><div>RudderStack</div><span>CDP</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:census">
+          <div class="left">
+            <div class="ico"><img src="https://f.hubspotusercontent10.net/hubfs/7162616/__hs-marketplace__/Census%20logo%2032x32-3-1.png" alt="Census" /></div>
+            <div class="txt"><div>Census</div><span>CDP</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:boltic">
+          <div class="left">
+            <div class="ico"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1AWj_TRcan-rLeTFdVzDdfe98wQL5pQb-ew&s" alt="Boltic" /></div>
+            <div class="txt"><div>Boltic</div><span>CDP</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:mparticle">
+          <div class="left">
+            <div class="ico"><img src="https://www.svgrepo.com/show/354098/mparticle-icon.svg" alt="mParticle" /></div>
+            <div class="txt"><div>mParticle</div><span>CDP</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="native:treasuredata">
+          <div class="left">
+            <div class="ico"><img src="https://www.svgrepo.com/show/354460/treasuredata-icon.svg" alt="Treasure Data" /></div>
+            <div class="txt"><div>Treasure Data</div><span>CDP</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+      </div>
+    </div>
+    <div class="featuresFlyout" id="featuresFlyout" aria-hidden="true">
+      <div class="featuresFlyoutCard">
+        <div class="featuresFlyoutHead" id="featuresFlyoutHead">Features</div>
+        <button class="btn" data-add="solution:events">
+          <div class="left">
+            <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+            <div class="txt"><div>Events</div><span>Features</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="solution:userproperties">
+          <div class="left">
+            <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+            <div class="txt"><div>User Properties</div><span>Features</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="solution:useridentity">
+          <div class="left">
+            <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+            <div class="txt"><div>User Identity</div><span>Identity do usuário por Email, Telefone ou Custom ID.</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="solution:piiencryption">
+          <div class="left">
+            <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+            <div class="txt"><div>PII Encryption</div><span>Features</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="solution:productcatalog">
+          <div class="left">
+            <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+            <div class="txt"><div>Product Catalog</div><span>Features</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="solution:recommendations">
+          <div class="left">
+            <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+            <div class="txt"><div>Recommendations</div><span>Features</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+        <button class="btn" data-add="solution:hyperpersonalization">
+          <div class="left">
+            <div class="ico"><img src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" /></div>
+            <div class="txt"><div>Hyper Personalization</div><span>Features</span></div>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="topbar">
+        <div class="leftTools">
+          <button class="sideToggle" id="btnSidebar" type="button" title="Recolher sidebar" aria-label="Recolher sidebar" aria-expanded="true">
+            <span class="arr" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="canvasNameWrap">
+          <span class="canvasName" id="canvasName" title="Clique para renomear" tabindex="0">Diagrama CleverTap</span>
+        </div>
+        <div class="controls">
+          <div class="pill searchPill">
+            <input id="search" placeholder="Buscar blocos..." />
+          </div>
+          <button class="btn2" id="btnPreview">Selecionar área</button>
+          <button class="btn2" id="btnCenter">Centralizar</button>
+          <button class="btn2 primary" id="btnGenerateProject">Gerar projeto</button>
+        </div>
+      </div>
+      <div class="settingsPanel" id="settingsPanel" aria-hidden="true">
+        <div class="settingsRow">
+          <label>Config Canva</label>
+          <button class="iconBtn active" id="btnConnect" type="button" title="Modo Conectar">
+            <img src="https://cdn-icons-png.flaticon.com/512/6619/6619462.png" alt="Conector" />
+          </button>
+          <button class="iconBtn active" id="btnGrid" type="button" title="Grid">
+            <img src="https://cdn-icons-png.flaticon.com/512/91/91080.png" alt="Grid" />
+          </button>
+          <button class="iconBtn active" id="btnFlow" type="button" title="Flow">
+            <img src="https://static.thenounproject.com/png/2383823-200.png" alt="Flow" />
+          </button>
+        </div>
+        <div class="settingsRow">
+          <label>Tipo linha</label>
+          <select id="cfgLineType">
+            <option value="dashed">Tracejada</option>
+            <option value="solid">Sólida</option>
+            <option value="dotted">Pontilhada</option>
+          </select>
+        </div>
+        <div class="settingsRow">
+          <label>Conector</label>
+          <select id="cfgConnectorType">
+            <option value="curved">Livre</option>
+            <option value="straight">Reto</option>
+          </select>
+        </div>
+        <div class="settingsRow">
+          <label>Ponteiro</label>
+          <select id="cfgMarker">
+            <option value="arrow">Seta</option>
+            <option value="dot">Ponto</option>
+            <option value="none">Nenhum</option>
+          </select>
+        </div>
+        <div class="settingsRow">
+          <label>Fluxo</label>
+          <select id="cfgFlowDots">
+            <option value="1">1 ponto</option>
+            <option value="2">2 pontos</option>
+            <option value="3">3 pontos</option>
+          </select>
+        </div>
+        <div class="settingsRow colorPairRow">
+          <label>Cores</label>
+          <div class="colorPair">
+            <div class="colorDotWrap">
+              <span class="colorRef">Linha</span>
+              <input id="cfgLineColor" type="color" title="Cor da linha" />
+            </div>
+            <div class="colorDotWrap">
+              <span class="colorRef">Flow</span>
+              <input id="cfgFlowColor" type="color" title="Cor do flow" />
+            </div>
+          </div>
+        </div>
+        <div class="settingsRow">
+          <label>Idioma</label>
+          <select id="cfgLanguage">
+            <option value="pt">Português</option>
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+      <button class="settingsFab" id="btnSettings" type="button" title="Configuracoes">⚙</button>
+      <div class="textBar" id="textBar" aria-hidden="true">
+        <input id="tbText" type="text" placeholder="Digite aqui sua anotacao..." style="width:230px;height:24px;border:1px solid #dbe4f0;border-radius:999px;padding:0 10px;font-size:12px;outline:none;" />
+        <button class="textCtl" id="tbDec" type="button" title="Diminuir fonte">A-</button>
+        <button class="textCtl" id="tbInc" type="button" title="Aumentar fonte">A+</button>
+        <select class="textFont" id="tbFont" title="Fonte">
+          <option value="Georgia">Georgia</option>
+          <option value="'Trebuchet MS'">Trebuchet</option>
+          <option value="Verdana">Verdana</option>
+          <option value="'Courier New'">Courier</option>
+          <option value="'Times New Roman'">Times</option>
+        </select>
+        <input id="tbColor" type="color" title="Cor" style="width:30px;height:24px;border:none;background:transparent;padding:0;" />
+        <select class="textFont" id="tbAlign" title="Alinhamento">
+          <option value="left">Esq</option>
+          <option value="center">Centro</option>
+          <option value="right">Dir</option>
+        </select>
+      </div>
+
+      <div class="wrap" id="wrap">
+        <div class="zoomDock">
+          <button class="zoomBtn" id="btnZoomOut" type="button" title="Zoom out">−</button>
+          <input class="zoomPct" id="zoomPct" type="text" inputmode="decimal" value="100%" title="Zoom %" aria-label="Zoom porcentagem" />
+          <button class="zoomBtn" id="btnZoomIn" type="button" title="Zoom in">+</button>
+        </div>
+        <div class="marquee" id="marquee"></div>
+        <div class="previewPick" id="previewPick"></div>
+        <div class="canvas" id="canvas"></div>
+        <div class="grid" id="grid"></div>
+        <svg id="svg" aria-hidden="true"></svg>
+        <div class="nodes" id="nodes"></div>
+        <div class="toast" id="toast"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modalBack" id="modalBack" aria-hidden="true">
+    <div class="modal">
+      <div class="mh">
+        <h3>Editar Bloco</h3>
+        <button class="close" id="btnClose">Fechar X</button>
+      </div>
+      <div class="mb">
+        <div class="row">
+          <label>Título</label>
+          <input id="fTitle" placeholder="Ex: Motor de Segmentação" />
+        </div>
+        <div class="row">
+          <label>Tipo</label>
+          <select id="fType">
+            <option value="gray">Neutro</option>
+            <option value="red">Canais/Martech</option>
+            <option value="blue">Core/Integração</option>
+            <option value="green">Dados</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>Descrição</label>
+          <textarea id="fDesc" placeholder="Explique o que esse bloco faz..."></textarea>
+        </div>
+        <div class="row">
+          <label>Logo URL</label>
+          <input id="fLogo" placeholder="https://cliente.com/logo.png" />
+        </div>
+        <div class="actions">
+          <button class="btn2" id="btnDeleteNode">Excluir</button>
+          <button class="btn2 primary" id="btnSaveNode">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modalBack" id="previewBack" aria-hidden="true">
+    <div class="modal previewModal">
+      <div class="mh">
+        <h3>Pré-visualização do Canvas</h3>
+        <button class="close" id="btnPreviewClose" type="button">Fechar</button>
+      </div>
+      <div class="mb previewBody">
+        <div class="previewStage">
+          <img id="previewImg" alt="Pré-visualização do canvas" />
+        </div>
+        <div class="actions">
+          <button class="btn2" id="btnDownloadPng" type="button">Download PNG</button>
+          <button class="btn2 primary" id="btnDownloadPdf" type="button">Download PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modalBack" id="tplBack" aria-hidden="true">
+    <div class="modal" style="max-width:560px;">
+      <div class="mh">
+        <h3>Templates</h3>
+        <button class="close" id="btnTplClose" type="button">Fechar</button>
+      </div>
+      <div class="mb">
+        <div class="tplList" id="tplList"></div>
+        <div class="actions">
+          <button class="btn2" id="btnTplPaste" type="button">Colar JSON Template</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modalBack" id="exportBack" aria-hidden="true">
+    <div class="modal" style="max-width:560px;">
+      <div class="mh">
+        <h3>Export JSON</h3>
+        <button class="close" id="btnExportClose" type="button">Fechar</button>
+      </div>
+      <div class="mb">
+        <div class="row full">
+          <label for="exportFileNameInput">Nome do arquivo</label>
+          <input id="exportFileNameInput" type="text" placeholder="clevertap-canvas" />
+        </div>
+        <div class="row full" style="margin-top:-2px;">
+          <span class="importSelectedFile">Digite o nome do arquivo e siga para baixar o JSON.</span>
+        </div>
+        <div class="actions">
+          <button class="btn2" id="btnExportCancel" type="button">Cancelar</button>
+          <button class="btn2 primary" id="btnExportApply" type="button">Seguir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modalBack" id="importBack" aria-hidden="true">
+      <div class="modal" style="max-width:760px;">
+      <div class="mh">
+        <h3>Import JSON</h3>
+        <button class="close" id="btnImportClose" type="button">Fechar</button>
+      </div>
+      <div class="mb">
+        <div class="row full">
+          <label>Modo de importação</label>
+          <div class="importModeSwitch" id="importModeSwitch" role="tablist" aria-label="Modo de importação">
+            <button class="importModeBtn active" id="importModePasteBtn" type="button" aria-selected="true" data-mode="paste">Colar JSON</button>
+            <button class="importModeBtn" id="importModeFileBtn" type="button" aria-selected="false" data-mode="file">Arquivo</button>
+          </div>
+        </div>
+        <div class="importModePanel active" id="importPastePanel">
+          <div class="row full">
+            <label for="importPasteArea">Cole o JSON</label>
+            <textarea id="importPasteArea" class="jsonPasteArea importPasteArea" placeholder="Cole o JSON exportado aqui..."></textarea>
+          </div>
+        </div>
+        <div class="importModePanel" id="importFilePanel">
+          <div class="row full">
+            <label>Arquivo JSON</label>
+            <div class="importPicker">
+              <input id="importFileInput" class="importFileInput" type="file" accept=".json,.JSON,application/json,text/json" />
+              <label class="importDropzone" id="importDropzone" for="importFileInput" tabindex="0" role="button">
+                <div class="importDropzoneIcon">JSON</div>
+                <div class="importDropzoneText">
+                  <strong id="importDropTitle">Arraste seu arquivo JSON aqui</strong>
+                  <span id="importDropSubtitle">ou clique para selecionar no computador</span>
+                </div>
+              </label>
+              <div class="importSelectedFile" id="importSelectedFile">Nenhum arquivo selecionado</div>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn2" id="btnImportCancel" type="button">Cancelar</button>
+          <button class="btn2 primary" id="btnImportApply" type="button" disabled>Import JSON</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modalBack" id="projectBack" aria-hidden="true">
+    <div class="modal" style="max-width:760px;">
+      <div class="mh">
+        <h3>Overall Information</h3>
+        <button class="close" id="btnProjectClose" type="button">Fechar</button>
+      </div>
+      <div class="mb">
+        <div class="row">
+          <label>Challenges - Current Situation</label>
+          <textarea id="pOverallChallenges" placeholder="Descreva os desafios e a situação atual..."></textarea>
+        </div>
+        <div class="row">
+          <label>Business Goals</label>
+          <textarea id="pOverallGoals" placeholder="Objetivo de negócio que querem atingir com CleverTap..."></textarea>
+        </div>
+        <div class="row">
+          <label>Expectations</label>
+          <textarea id="pOverallExpectations" placeholder="Quais expectativas para o projeto?"></textarea>
+        </div>
+        <div class="row">
+          <label>L1</label>
+          <input id="pOverallL1" placeholder="L1" />
+        </div>
+        <div class="row">
+          <label>L2</label>
+          <input id="pOverallL2" placeholder="L2" />
+        </div>
+        <div class="row">
+          <label>L3</label>
+          <input id="pOverallL3" placeholder="L3" />
+        </div>
+        <div class="actions">
+          <button class="btn2" id="btnProjectCancel" type="button">Cancelar</button>
+          <button class="btn2 primary" id="btnProjectCreate" type="button">Gerar projeto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ctxMenu" id="ctxMenu" role="menu" aria-hidden="true">
+    <div class="ctxItem" id="ctx-edit">Editar</div>
+    <div class="ctxItem" id="ctx-dup">Duplicar</div>
+    <div class="ctxItem" id="ctx-connect">Conectar daqui</div>
+    <div class="ctxItem" id="ctx-highlight">Aplicar destaque de borda</div>
+    <div class="ctxItem ctx-danger" id="ctx-del">✕ Excluir</div>
+  </div>
+  <div class="ctxMenu" id="ctxCanvasMenu" role="menu" aria-hidden="true">
+    <div class="ctxItem" id="ctx-addNote">Adicionar Sticky Note aqui</div>
+    <div class="ctxItem" id="ctx-addText">Adicionar Texto aqui</div>
+    <div class="ctxItem" id="ctx-selectAll">Selecionar todos</div>
+    <div class="ctxItem" id="ctx-fitAll">Centralizar tudo</div>
+  </div>
+  <div class="edgeTypeBar" id="edgeTypeBar"></div>
