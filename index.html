@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CleverTap Architecture Canvas - V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/creative.css" />
+  <style>
+    body.mock-plan-loading {
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      color: #0f172a;
+      background: #f6f8fb;
+    }
+    .mock-plan-loader {
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid #dbe4f0;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(15,23,42,.10);
+      font-size: 14px;
+    }
+    .mock-plan-error {
+      max-width: 560px;
+      margin: 24px auto;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(239,68,68,.25);
+      background: rgba(239,68,68,.06);
+      color: #991b1b;
+      font: 14px/1.45 Inter, system-ui, sans-serif;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body class="mock-plan-loading">
+  <div class="mock-plan-loader">Carregando arquitetura CleverTap...</div>
+  <script>
+    (async () => {
+      try {
+        const response = await fetch('./assets/bodyarch.html', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error('Falha ao carregar o fragmento do canvas (' + response.status + ')');
+        }
+        const html = await response.text();
+        document.body.className = '';
+        document.body.innerHTML = html;
+        const script = document.createElement('script');
+        script.src = './assets/archapp.js';
+        script.defer = true;
+        script.onerror = () => {
+          document.body.innerHTML = '<div class="mock-plan-error">Falha ao carregar o script principal do canvas.</div>';
+        };
+        document.body.appendChild(script);
+      } catch (error) {
+        document.body.className = '';
+        document.body.innerHTML = '<div class="mock-plan-error">Não foi possível inicializar o mock-plan público.\n\n' + String(error && error.message ? error.message : error) + '</div>';
+      }
+    })();
+  </script>
+</body>
+</html>
