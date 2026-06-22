@@ -165,6 +165,7 @@
   let jsPdfLoader = null;
   const DUP_ICON_URL = "https://www.pngall.com/wp-content/uploads/16/Black-Copy-Icon-PNG-Photos.png";
   const COMPACT_ICON_URL = "https://cdn-icons-png.flaticon.com/512/2223/2223714.png";
+  const MAXIMIZE_ICON_URL = "https://cdn-icons-png.flaticon.com/512/8373/8373559.png";
   const TEMPLATE_LIBRARY_KEY = "clevertap_canvas_templates_v1";
   const DRIVE_PROJECT_WEBHOOK_URL = "";
   let projectOverallInfo = {
@@ -445,6 +446,8 @@
   let customCanvasTemplates = [];
   let currentLanguage = "pt";
   let canvasNameI18n = null;
+  let compactToggleAnim = null; // { nodeId, mode: "compact" | "expand" }
+  let compactToggleAnimTimer = null;
 
   const LANGUAGES = ["pt", "es", "en"];
   const UI_MESSAGES = {
@@ -1215,6 +1218,14 @@
     applyCurrentLanguage();
     if(!options.silent) showToast(t("languageChanged"));
     if(options.render !== false) render();
+  }
+
+  function compactToggleButtonHtml(node){
+    const isCompact = !!node?.compact;
+    const title = isCompact ? "Expandir bloco" : "Minimizar bloco";
+    const alt = isCompact ? "Expandir" : "Minimizar";
+    const iconUrl = isCompact ? MAXIMIZE_ICON_URL : COMPACT_ICON_URL;
+    return `<button class="nact comp compactToggle" type="button" title="${title}" aria-label="${title}"><img src="${iconUrl}" alt="${alt}" /></button>`;
   }
 
   function defaultFontSizeForVariant(variant){
@@ -2651,6 +2662,9 @@
       if(!matches(n)) el.style.opacity = "0.25";
       if(isCompactNode){
         el.classList.add("compact");
+        if(compactToggleAnim?.nodeId === n.id){
+          el.classList.add("compactAnim", `compactAnim-${compactToggleAnim.mode}`);
+        }
         el.title = n.title || "Bloco";
         el.style.width = `${n.w || 84}px`;
         el.style.height = `${n.h || 84}px`;
@@ -2662,10 +2676,12 @@
           </div>
           <div class="nodeActions">
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
-            <button class="nact comp compactToggle" type="button" title="Expandir bloco" aria-label="Expandir bloco"><img src="${COMPACT_ICON_URL}" alt="Expandir" /></button>
+            ${compactToggleButtonHtml(n)}
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
         `;
+      } else if(compactToggleAnim?.nodeId === n.id){
+        el.classList.add("compactAnim", `compactAnim-${compactToggleAnim.mode}`);
       } else if(n.variant === "text"){
         const fontSize = clamp(Number(n.fontSize || 28), 12, 92);
         const fontFamily = (n.fontFamily || "Georgia").toString();
@@ -2854,7 +2870,7 @@
           </div>
           <div class="nodeActions">
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
-            <button class="nact comp compactToggle" type="button" title="Minimizar bloco" aria-label="Minimizar bloco"><img src="${COMPACT_ICON_URL}" alt="Minimizar" /></button>
+            ${compactToggleButtonHtml(n)}
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
           <div class="nodeResize" title="Redimensionar bloco" aria-hidden="true"></div>
@@ -2883,7 +2899,7 @@
             <button class="nact back" type="button" title="Enviar para trás" aria-label="Enviar para trás"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Enviar para trás" /></button>
             <button class="nact front" type="button" title="Trazer para frente" aria-label="Trazer para frente"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Trazer para frente" /></button>
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
-            <button class="nact comp compactToggle" type="button" title="Minimizar bloco" aria-label="Minimizar bloco"><img src="${COMPACT_ICON_URL}" alt="Minimizar" /></button>
+            ${compactToggleButtonHtml(n)}
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
           <div class="nodeResize" title="Redimensionar bloco" aria-hidden="true"></div>
@@ -2964,7 +2980,7 @@
           </div>
           <div class="nodeActions">
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
-            <button class="nact comp compactToggle" type="button" title="Minimizar bloco" aria-label="Minimizar bloco"><img src="${COMPACT_ICON_URL}" alt="Minimizar" /></button>
+            ${compactToggleButtonHtml(n)}
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
           <div class="nodeResize" title="Redimensionar bloco" aria-hidden="true"></div>
@@ -3020,7 +3036,7 @@
           </div>
           <div class="nodeActions">
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
-            <button class="nact comp compactToggle" type="button" title="Minimizar bloco" aria-label="Minimizar bloco"><img src="${COMPACT_ICON_URL}" alt="Minimizar" /></button>
+            ${compactToggleButtonHtml(n)}
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
         `;
@@ -3903,6 +3919,17 @@
     if(!n.compact){
       n.compactSize = null;
     }
+    if(compactToggleAnimTimer){
+      clearTimeout(compactToggleAnimTimer);
+      compactToggleAnimTimer = null;
+    }
+    compactToggleAnim = { nodeId, mode: n.compact ? "compact" : "expand" };
+    compactToggleAnimTimer = setTimeout(()=>{
+      if(compactToggleAnim?.nodeId === nodeId){
+        compactToggleAnim = null;
+      }
+      compactToggleAnimTimer = null;
+    }, 240);
     render();
     showToast(n.compact ? "Bloco minimizado." : "Bloco expandido.");
   }
