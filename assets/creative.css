@@ -1989,8 +1989,7 @@
       transform: scale(.55);
       transition: opacity .12s ease, transform .12s ease, border-color .12s ease, box-shadow .12s ease;
     }
-    .wrap.connecting .node:hover .port,
-    .wrap.connecting .node.ports-visible .port,
+    .port.preview,
     .port.active{
       opacity:1;
       pointer-events:auto;
