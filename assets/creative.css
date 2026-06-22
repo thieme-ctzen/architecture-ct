@@ -1989,6 +1989,12 @@
       transform: scale(.55);
       transition: opacity .12s ease, transform .12s ease, border-color .12s ease, box-shadow .12s ease;
     }
+    .node.ports-visible .port,
+    .node.connect-source .port{
+      opacity:1;
+      pointer-events:auto;
+      transform: scale(1);
+    }
     .port.preview,
     .port.active{
       opacity:1;
