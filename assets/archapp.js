@@ -121,6 +121,7 @@
   let selectedNodeIds = new Set();
   let connectFrom = null; // {nodeId, port}
   let connectDrag = null; // {from:{nodeId,port}, to:{x,y}, moved}
+  let hoveredNodeId = null;
   let dragSolutionItem = null; // {nodeId, index}
   let marquee = null; // {x1,y1,x2,y2, append}
   let suppressWrapClick = false;
@@ -162,14 +163,7 @@
   let html2canvasLoader = null;
   let jsPdfLoader = null;
   const DUP_ICON_URL = "https://www.pngall.com/wp-content/uploads/16/Black-Copy-Icon-PNG-Photos.png";
-  const COMPACT_ICON_URL = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-      <path d="M9 6.5h3.1a3.4 3.4 0 0 1 3.4 3.4v1.2a3.4 3.4 0 0 1-3.4 3.4H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M9 9.5h3.2M9 12.5h3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M6.2 10.1h2.6v3.8H6.2a1.7 1.7 0 0 1-1.7-1.7v-.4a1.7 1.7 0 0 1 1.7-1.7Z" fill="currentColor" opacity=".18"/>
-      <path d="M6.2 10.1h2.6v3.8H6.2a1.7 1.7 0 0 1-1.7-1.7v-.4a1.7 1.7 0 0 1 1.7-1.7Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
-    </svg>
-  `);
+  const COMPACT_ICON_URL = "https://cdn-icons-png.flaticon.com/512/2223/2223714.png";
   const TEMPLATE_LIBRARY_KEY = "clevertap_canvas_templates_v1";
   const DRIVE_PROJECT_WEBHOOK_URL = "";
   let projectOverallInfo = {
@@ -2586,6 +2580,8 @@
 
     // nodes layer
     nodesLayer.innerHTML = "";
+    wrap.classList.toggle("connect-mode", connectMode);
+    wrap.classList.toggle("connecting", connectMode && !!connectFrom);
     for(const n of nodes){
       const el = document.createElement("div");
       el.className = "node";
@@ -2654,6 +2650,9 @@
       }
       if(selectedNodeIds.has(n.id) || (selected.type==="node" && selected.id===n.id)) el.classList.add("selected");
       if(!matches(n)) el.style.opacity = "0.25";
+      const showPorts = connectMode && !!connectFrom && (hoveredNodeId === n.id || connectFrom.nodeId === n.id);
+      if(showPorts) el.classList.add("ports-visible");
+      if(connectMode && connectFrom && connectFrom.nodeId === n.id) el.classList.add("connect-source");
 
       if(isCompactNode){
         el.classList.add("compact");
@@ -3051,6 +3050,17 @@
       }
 
       nodesLayer.appendChild(el);
+      el.addEventListener("mouseenter", ()=>{
+        if(!connectMode || !connectFrom) return;
+        hoveredNodeId = n.id;
+        render();
+      });
+      el.addEventListener("mouseleave", ()=>{
+        if(!connectMode || !connectFrom) return;
+        if(hoveredNodeId !== n.id) return;
+        hoveredNodeId = null;
+        render();
+      });
       if(n.variant !== "solution" && n.variant !== "text"){
         const iconEl = el.querySelector(".nodeIcon");
         const logoUrl = normalizeLogoUrl(n.logoUrl);
@@ -3562,8 +3572,11 @@
   function setConnectMode(v, silent = false){
     connectMode = v;
     btnConnect.classList.toggle("active", connectMode);
+    wrap.classList.toggle("connect-mode", connectMode);
+    wrap.classList.toggle("connecting", connectMode && !!connectFrom);
     if(!connectMode){
       connectFrom = null;
+      hoveredNodeId = null;
     }
     if(!silent) showToast(`Conectar ${connectMode ? "habilitado" : "desabilitado"}.`);
     render();
