@@ -121,8 +121,6 @@
   let selectedNodeIds = new Set();
   let connectFrom = null; // {nodeId, port}
   let connectDrag = null; // {from:{nodeId,port}, to:{x,y}, moved}
-  let hoveredNodeId = null;
-  let hoveredPortHint = null; // { nodeId, port }
   let dragSolutionItem = null; // {nodeId, index}
   let marquee = null; // {x1,y1,x2,y2, append}
   let suppressWrapClick = false;
@@ -1769,7 +1767,7 @@
         best = port;
       }
     }
-    return { port: best || "e2", distance: Math.sqrt(bestD) };
+    return { port: best || "e", distance: Math.sqrt(bestD) };
   }
   function nodePointToPort(node, clientX, clientY, excludePort = ""){
     return nodePointToPortInfo(node, clientX, clientY, excludePort).port;
@@ -2406,38 +2404,33 @@
 
   // ports definition
   const PORTS = [
-    "n1","n2","n3",
-    "e1","e2","e3",
-    "s1","s2","s3",
-    "w1","w2","w3"
+    "n","e","s","w"
   ];
   const STICKY_COLORS = ["#fef08a", "#fce7f3", "#dbeafe", "#dcfce7", "#ffedd5"];
   function normalizePortKey(port){
-    if(port === "n") return "n2";
-    if(port === "e") return "e2";
-    if(port === "s") return "s2";
-    if(port === "w") return "w2";
-    return port || "n2";
+    const key = (port || "").toString().toLowerCase();
+    if(key === "n" || key.startsWith("n")) return "n";
+    if(key === "e" || key.startsWith("e")) return "e";
+    if(key === "s" || key.startsWith("s")) return "s";
+    if(key === "w" || key.startsWith("w")) return "w";
+    return "n";
   }
   function portSide(port){
     return normalizePortKey(port).charAt(0) || "n";
   }
-  function portSlot(port){
-    const key = normalizePortKey(port);
-    const slot = Number(key.slice(1));
-    return [1,2,3].includes(slot) ? slot : 2;
-  }
   function portPos(n, port){
     const w = n.w || 280;
     const h = Math.max(n.h || 92, 92);
-    const pad = 0;
-    const ratios = [0.25, 0.5, 0.75];
-    const ratio = ratios[portSlot(port) - 1] ?? 0.5;
     const side = portSide(port);
-    if(side === "n") return { x: n.x + w * ratio, y: n.y - pad };
-    if(side === "s") return { x: n.x + w * ratio, y: n.y + h + pad };
-    if(side === "e") return { x: n.x + w + pad, y: n.y + h * ratio };
-    return { x: n.x - pad, y: n.y + h * ratio }; // w
+    if(side === "n") return { x: n.x + w / 2, y: n.y };
+    if(side === "s") return { x: n.x + w / 2, y: n.y + h };
+    if(side === "e") return { x: n.x + w, y: n.y + h / 2 };
+    return { x: n.x, y: n.y + h / 2 }; // w
+  }
+  function portHoverThresholdPx(node){
+    const base = Math.min(Number(node?.w || 280), Math.max(Number(node?.h || 92), 92));
+    const scaled = base * Math.max(view.z, 0.0001) * 0.08;
+    return clamp(scaled, 12, 18);
   }
 
   function outwardDir(port){
@@ -3591,6 +3584,7 @@
     wrap.classList.toggle("connecting", connectMode && !!connectFrom);
     if(!connectMode){
       connectFrom = null;
+      connectDrag = null;
       hoveredNodeId = null;
       hoveredPortHint = null;
     }
@@ -3664,8 +3658,9 @@
     }
     const exclude = connectFrom?.nodeId === nodeId ? connectFrom.port : "";
     const info = nodePointToPortInfo(node, clientX, clientY, exclude);
-    const threshold = Math.max(22, Math.min(Number(node.w || 280), Number(node.h || 92)) * 0.30);
-    const next = info.distance <= threshold ? { nodeId, port: info.port } : null;
+    const thresholdPx = portHoverThresholdPx(node);
+    const distancePx = info.distance * Math.max(view.z, 0.0001);
+    const next = distancePx <= thresholdPx ? { nodeId, port: info.port } : null;
     const prevNode = hoveredPortHint?.nodeId || null;
     const prevPort = hoveredPortHint?.port || null;
     if(prevNode === (next?.nodeId || null) && prevPort === (next?.port || null)) return true;
@@ -3770,6 +3765,10 @@
     let dragStarted = false;
 
     const move = (ev)=>{
+      if(!connectMode){
+        connectDrag = null;
+        return;
+      }
       const p = worldFromClient(ev.clientX, ev.clientY);
       const moveMin = screenPxToWorld(3);
       if(!dragStarted && (Math.abs(p.x - start.x) > moveMin || Math.abs(p.y - start.y) > moveMin)){
@@ -3801,6 +3800,10 @@
     const up = (ev)=>{
       document.removeEventListener("mousemove", move);
       document.removeEventListener("mouseup", up);
+      if(!connectMode){
+        connectDrag = null;
+        return;
+      }
       if(!dragStarted){
         onPortClick(nodeId, port);
         return;
