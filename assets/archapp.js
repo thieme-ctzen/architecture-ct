@@ -3053,6 +3053,10 @@
       }
 
       nodesLayer.appendChild(el);
+      el.querySelectorAll("img").forEach((img)=>{
+        img.draggable = false;
+        img.addEventListener("dragstart", (ev)=>ev.preventDefault());
+      });
       el.addEventListener("mouseenter", (e)=>{
         if(!connectMode) return;
         hoveredNodeId = n.id;
@@ -3193,8 +3197,9 @@
             port.classList.add("preview");
           }
 
-          port.addEventListener("mousedown", (e)=>{
-            startConnectDrag(e, n.id, p);
+          port.addEventListener("click", (e)=>{
+            e.stopPropagation();
+            onPortClick(n.id, p);
           });
           el.appendChild(port);
         }
@@ -3955,6 +3960,7 @@
     if(e.target.closest('[contenteditable="true"]')) return;
     if(e.shiftKey) return;
     e.stopPropagation();
+    e.preventDefault();
     rememberActionState();
     if(!selectedNodeIds.has(nodeId)) setSingleNodeSelection(nodeId);
     syncSingleSelection();
