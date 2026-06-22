@@ -617,6 +617,16 @@
       user-select:none;
       cursor: grab;
       overflow: visible;
+      transition:
+        width .24s ease,
+        min-width .24s ease,
+        height .24s ease,
+        min-height .24s ease,
+        padding .24s ease,
+        border-radius .24s ease,
+        box-shadow .24s ease,
+        transform .24s ease;
+      will-change: width, height, transform, padding, border-radius, box-shadow;
     }
     .node.compact{
       width:84px;
@@ -628,6 +638,7 @@
       display:grid;
       place-items:center;
       background: rgba(255,255,255,.96);
+      transform: scale(.985);
     }
     .node.compact .compactFace{
       width:100%;
@@ -1975,13 +1986,15 @@
       cursor: crosshair;
       opacity:0;
       pointer-events:none;
-      transition: opacity .12s ease, transform .12s ease, border-color .12s ease;
+      transform: scale(.55);
+      transition: opacity .12s ease, transform .12s ease, border-color .12s ease, box-shadow .12s ease;
     }
-    .node:hover .port,
-    .node.selected .port,
+    .wrap.connecting .node:hover .port,
+    .wrap.connecting .node.ports-visible .port,
     .port.active{
       opacity:1;
       pointer-events:auto;
+      transform: scale(1);
     }
     .port:hover{
       border-color: #dc2626;
