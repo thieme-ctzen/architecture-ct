@@ -2649,14 +2649,6 @@
       }
       if(selectedNodeIds.has(n.id) || (selected.type==="node" && selected.id===n.id)) el.classList.add("selected");
       if(!matches(n)) el.style.opacity = "0.25";
-      const showPorts = connectMode && (
-        selectedNodeIds.has(n.id) ||
-        hoveredNodeId === n.id ||
-        (connectFrom && connectFrom.nodeId === n.id)
-      );
-      if(showPorts) el.classList.add("ports-visible");
-      if(connectMode && connectFrom && connectFrom.nodeId === n.id) el.classList.add("connect-source");
-
       if(isCompactNode){
         el.classList.add("compact");
         el.title = n.title || "Bloco";
@@ -3057,23 +3049,6 @@
         img.draggable = false;
         img.addEventListener("dragstart", (ev)=>ev.preventDefault());
       });
-      el.addEventListener("mouseenter", (e)=>{
-        if(!connectMode) return;
-        hoveredNodeId = n.id;
-        render();
-      });
-      el.addEventListener("mousemove", (e)=>{
-        if(!connectMode) return;
-        if(hoveredNodeId !== n.id){
-          hoveredNodeId = n.id;
-          render();
-        }
-      });
-      el.addEventListener("mouseleave", ()=>{
-        if(!connectMode) return;
-        if(hoveredNodeId === n.id) hoveredNodeId = null;
-        render();
-      });
       if(n.variant !== "solution" && n.variant !== "text"){
         const iconEl = el.querySelector(".nodeIcon");
         const logoUrl = normalizeLogoUrl(n.logoUrl);
@@ -3197,9 +3172,8 @@
             port.classList.add("preview");
           }
 
-          port.addEventListener("click", (e)=>{
-            e.stopPropagation();
-            onPortClick(n.id, p);
+          port.addEventListener("mousedown", (e)=>{
+            startConnectDrag(e, n.id, p);
           });
           el.appendChild(port);
         }
@@ -3397,7 +3371,7 @@
       const resizeHandle = el.querySelector(".nodeResize");
       resizeHandle?.addEventListener("mousedown", (e)=>startResizeNode(e, n.id));
 
-      el.addEventListener("mousedown", (e)=>startDragNode(e, n.id), true);
+      el.addEventListener("mousedown", (e)=>startDragNode(e, n.id));
       el.addEventListener("click", (e)=>{
         e.stopPropagation();
         if(e.target.closest(".orgTitleBtn") || e.target.closest(".orgMenu")) return;
