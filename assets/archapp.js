@@ -3397,7 +3397,7 @@
       const resizeHandle = el.querySelector(".nodeResize");
       resizeHandle?.addEventListener("mousedown", (e)=>startResizeNode(e, n.id));
 
-      el.addEventListener("mousedown", (e)=>startDragNode(e, n.id));
+      el.addEventListener("mousedown", (e)=>startDragNode(e, n.id), true);
       el.addEventListener("click", (e)=>{
         e.stopPropagation();
         if(e.target.closest(".orgTitleBtn") || e.target.closest(".orgMenu")) return;
