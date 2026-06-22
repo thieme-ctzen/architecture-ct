@@ -652,6 +652,7 @@
     { pt:"Analytics", es:"Analytics", en:"Analytics" },
     { pt:"Attribution", es:"Attribution", en:"Attribution" },
     { pt:"E-commerce", es:"E-commerce", en:"E-commerce" },
+    { pt:"Cloud Storage", es:"Cloud Storage", en:"Cloud Storage" },
     { pt:"CDP", es:"CDP", en:"CDP" },
     { pt:"Manual", es:"Manual", en:"Manual" },
     { pt:"Operação assistida", es:"Operación asistida", en:"Assisted operation" },
@@ -709,6 +710,12 @@
     { pt:"Plataforma de analytics com conexão nativa.", es:"Plataforma de analítica con conexión nativa.", en:"Analytics platform with native connection." },
     { pt:"Plataforma de atribuição com conexão nativa.", es:"Plataforma de atribución con conexión nativa.", en:"Attribution platform with native connection." },
     { pt:"Plataforma de e-commerce com conexão nativa.", es:"Plataforma de e-commerce con conexión nativa.", en:"E-commerce platform with native connection." },
+    { pt:"Event routing / orchestration", es:"Enrutamiento / orquestación de eventos", en:"Event routing / orchestration" },
+    { pt:"Object storage", es:"Almacenamiento de objetos", en:"Object storage" },
+    { pt:"Cloud platform", es:"Plataforma en la nube", en:"Cloud platform" },
+    { pt:"Cloud data warehouse", es:"Data warehouse en la nube", en:"Cloud data warehouse" },
+    { pt:"Lakehouse / analytics", es:"Lakehouse / analítica", en:"Lakehouse / analytics" },
+    { pt:"Analytics platform", es:"Plataforma de analítica", en:"Analytics platform" },
     { pt:"CDP com conexão nativa.", es:"CDP con conexión nativa.", en:"CDP with native connection." },
     { pt:"Operacao manual ou assistida, sem dependencia de API, SDK ou conector nativo.", es:"Operación manual o asistida, sin dependencia de API, SDK o conector nativo.", en:"Manual or assisted operation without API, SDK, or native connector dependency." },
     { pt:"Edite o nome e descreva a funcionalidade (ex.: Segmentacao, Journeys, Analytics).", es:"Edita el nombre y describe la funcionalidad (ej.: Segmentación, Journeys, Analytics).", en:"Edit the name and describe the functionality (e.g. Segmentation, Journeys, Analytics)." },
@@ -957,6 +964,15 @@
     setButtonCopy("native:singular", translateKnownPhrase("Singular"), translateKnownPhrase("Attribution"));
     setButtonCopy("native:shopify", translateKnownPhrase("Shopify"), translateKnownPhrase("E-commerce"));
     setButtonCopy("native:vtex", translateKnownPhrase("VTEX"), translateKnownPhrase("E-commerce"));
+    setButtonCopy("native:eventbridge", translateKnownPhrase("Amazon EventBridge"), translateKnownPhrase("Event routing / orchestration"));
+    setButtonCopy("native:s3", translateKnownPhrase("AWS S3"), translateKnownPhrase("Object storage"));
+    setButtonCopy("native:gcp", translateKnownPhrase("Google Cloud Platform"), translateKnownPhrase("Cloud platform"));
+    setButtonCopy("native:azure", translateKnownPhrase("Microsoft Azure"), translateKnownPhrase("Cloud platform"));
+    setButtonCopy("native:bigquery", translateKnownPhrase("BigQuery"), translateKnownPhrase("Cloud data warehouse"));
+    setButtonCopy("native:snowflake", translateKnownPhrase("SnowFlake"), translateKnownPhrase("Cloud data warehouse"));
+    setButtonCopy("native:databricks", translateKnownPhrase("Databricks"), translateKnownPhrase("Lakehouse / analytics"));
+    setButtonCopy("native:redshift", translateKnownPhrase("Amazon Redshift"), translateKnownPhrase("Cloud data warehouse"));
+    setButtonCopy("native:fabric", translateKnownPhrase("Microsoft Fabric"), translateKnownPhrase("Analytics platform"));
     setButtonCopy("native:hightouch", translateKnownPhrase("High Touch"), translateKnownPhrase("CDP"));
     setButtonCopy("native:segment", translateKnownPhrase("Segment"), translateKnownPhrase("CDP"));
     setButtonCopy("native:rudderstack", translateKnownPhrase("RudderStack"), translateKnownPhrase("CDP"));
@@ -2313,28 +2329,53 @@
   }
 
   // ports definition
-  const PORTS = ["n","e","s","w"];
+  const PORTS = [
+    "n1","n2","n3",
+    "e1","e2","e3",
+    "s1","s2","s3",
+    "w1","w2","w3"
+  ];
   const STICKY_COLORS = ["#fef08a", "#fce7f3", "#dbeafe", "#dcfce7", "#ffedd5"];
+  function normalizePortKey(port){
+    if(port === "n") return "n2";
+    if(port === "e") return "e2";
+    if(port === "s") return "s2";
+    if(port === "w") return "w2";
+    return port || "n2";
+  }
+  function portSide(port){
+    return normalizePortKey(port).charAt(0) || "n";
+  }
+  function portSlot(port){
+    const key = normalizePortKey(port);
+    const slot = Number(key.slice(1));
+    return [1,2,3].includes(slot) ? slot : 2;
+  }
   function portPos(n, port){
     const w = n.w || 280;
     const h = Math.max(n.h || 92, 92);
     const pad = 0;
-    if(port==="n") return { x: n.x + w/2, y: n.y - pad };
-    if(port==="s") return { x: n.x + w/2, y: n.y + h + pad };
-    if(port==="e") return { x: n.x + w + pad, y: n.y + h/2 };
-    return { x: n.x - pad, y: n.y + h/2 }; // w
+    const ratios = [0.25, 0.5, 0.75];
+    const ratio = ratios[portSlot(port) - 1] ?? 0.5;
+    const side = portSide(port);
+    if(side === "n") return { x: n.x + w * ratio, y: n.y - pad };
+    if(side === "s") return { x: n.x + w * ratio, y: n.y + h + pad };
+    if(side === "e") return { x: n.x + w + pad, y: n.y + h * ratio };
+    return { x: n.x - pad, y: n.y + h * ratio }; // w
   }
 
   function outwardDir(port){
-    if(port === "n") return { x: 0, y: -1 };
-    if(port === "s") return { x: 0, y: 1 };
-    if(port === "e") return { x: 1, y: 0 };
+    const side = portSide(port);
+    if(side === "n") return { x: 0, y: -1 };
+    if(side === "s") return { x: 0, y: 1 };
+    if(side === "e") return { x: 1, y: 0 };
     return { x: -1, y: 0 };
   }
   function inwardDir(port){
-    if(port === "n") return { x: 0, y: 1 };
-    if(port === "s") return { x: 0, y: -1 };
-    if(port === "e") return { x: -1, y: 0 };
+    const side = portSide(port);
+    if(side === "n") return { x: 0, y: 1 };
+    if(side === "s") return { x: 0, y: -1 };
+    if(side === "e") return { x: -1, y: 0 };
     return { x: 1, y: 0 };
   }
   function drawCurve(a, b, fromPort, toPort){
@@ -2347,7 +2388,8 @@
     return `M ${a.x} ${a.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${b.x} ${b.y}`;
   }
   function drawOrthogonal(a, b, _fromPort, toPort){
-    if(toPort === "n" || toPort === "s"){
+    const side = portSide(toPort);
+    if(side === "n" || side === "s"){
       const midY = (a.y + b.y) / 2;
       return `M ${a.x} ${a.y} L ${a.x} ${midY} L ${b.x} ${midY} L ${b.x} ${b.y}`;
     }
@@ -2371,7 +2413,8 @@
   }
   function edgeMid(a, b, _fromPort, toPort){
     if((edgeCfg.connectorType || "curved") === "straight"){
-      if(toPort === "n" || toPort === "s"){
+      const side = portSide(toPort);
+      if(side === "n" || side === "s"){
         return { x: b.x, y: (a.y + b.y) / 2 };
       }
       return { x: (a.x + b.x) / 2, y: b.y };
@@ -3017,10 +3060,10 @@
           port.style.top  = (pos.y - n.y - 6) + "px";
 
           // active state if currently selected as connectFrom
-          if(connectFrom && connectFrom.nodeId===n.id && connectFrom.port===p){
+          if(connectFrom && connectFrom.nodeId===n.id && normalizePortKey(connectFrom.port)===p){
             port.classList.add("active");
           }
-          if(connectDrag?.target && connectDrag.target.nodeId===n.id && connectDrag.target.port===p){
+          if(connectDrag?.target && connectDrag.target.nodeId===n.id && normalizePortKey(connectDrag.target.port)===p){
             port.classList.add("preview");
           }
 
@@ -3427,7 +3470,7 @@
 
     // first click
     if(!connectFrom){
-      connectFrom = { nodeId, port };
+      connectFrom = { nodeId, port: normalizePortKey(port) };
       setSingleNodeSelection(nodeId);
       showToast("Port de origem definido. Clique no próximo port para conectar.");
       render();
@@ -3435,7 +3478,7 @@
     }
 
     // second click
-    if(connectFrom.nodeId === nodeId && connectFrom.port === port){
+    if(connectFrom.nodeId === nodeId && normalizePortKey(connectFrom.port) === normalizePortKey(port)){
       showToast("Escolha um PORT diferente para conectar.");
       return;
     }
@@ -3444,9 +3487,11 @@
   }
   function createConnection(from, to){
     if(!from || !to) return false;
+    const fromPort = normalizePortKey(from.port);
+    const toPort = normalizePortKey(to.port);
     const exists = edges.some(e =>
-      e.from.node===from.nodeId && e.from.port===from.port &&
-      e.to.node===to.nodeId && e.to.port===to.port
+      e.from.node===from.nodeId && normalizePortKey(e.from.port)===fromPort &&
+      e.to.node===to.nodeId && normalizePortKey(e.to.port)===toPort
     );
     if(exists){
       showToast("Essa conexão já existe.");
@@ -3457,8 +3502,8 @@
     rememberActionState();
     edges.push({
       id: "e_" + uid(),
-      from: { node: from.nodeId, port: from.port },
-      to:   { node: to.nodeId, port: to.port },
+      from: { node: from.nodeId, port: fromPort },
+      to:   { node: to.nodeId, port: toPort },
       edgeType: "generic"
     });
     showToast("Conexao criada (fluxo animado).");
@@ -3475,7 +3520,7 @@
     for(const n of nodes){
       if(n.variant === "text" || n.variant === "sticky") continue;
       for(const p of PORTS){
-        if(exclude && exclude.nodeId===n.id && exclude.port===p) continue;
+        if(exclude && exclude.nodeId===n.id && normalizePortKey(exclude.port)===p) continue;
         const pos = portPos(n, p);
         const dx = pos.x - x;
         const dy = pos.y - y;
@@ -3500,27 +3545,29 @@
   }
   function bestPortForNode(targetNode, from){
     const fromNode = nodes.find(n=>n.id===from.nodeId);
-    if(!fromNode) return { nodeId: targetNode.id, port: "w" };
+    if(!fromNode) return { nodeId: targetNode.id, port: "w2" };
     const src = portPos(fromNode, from.port);
-    const cx = targetNode.x + (targetNode.w || 280) / 2;
-    const cy = targetNode.y + Math.max(targetNode.h || 92, 92) / 2;
-    const dx = src.x - cx;
-    const dy = src.y - cy;
-    let preferred = Math.abs(dx) >= Math.abs(dy)
-      ? (dx < 0 ? "w" : "e")
-      : (dy < 0 ? "n" : "s");
-
-    if(from.nodeId === targetNode.id && preferred === from.port){
-      const options = PORTS.filter(p => p !== from.port);
-      preferred = options[0];
+    let preferred = null;
+    let best = Infinity;
+    for(const p of PORTS){
+      if(from.nodeId === targetNode.id && normalizePortKey(from.port) === p) continue;
+      const pos = portPos(targetNode, p);
+      const dx = src.x - pos.x;
+      const dy = src.y - pos.y;
+      const d2 = dx*dx + dy*dy;
+      if(d2 < best){
+        best = d2;
+        preferred = p;
+      }
     }
-    return { nodeId: targetNode.id, port: preferred };
+    return { nodeId: targetNode.id, port: preferred || "w2" };
   }
   function portLabel(port){
-    if(port === "n") return "Topo";
-    if(port === "s") return "Base";
-    if(port === "e") return "Direita";
-    if(port === "w") return "Esquerda";
+    const side = portSide(port);
+    if(side === "n") return "Topo";
+    if(side === "s") return "Base";
+    if(side === "e") return "Direita";
+    if(side === "w") return "Esquerda";
     return port || "";
   }
   function startConnectDrag(e, nodeId, port){
@@ -3537,7 +3584,7 @@
       const moveMin = screenPxToWorld(3);
       if(!dragStarted && (Math.abs(p.x - start.x) > moveMin || Math.abs(p.y - start.y) > moveMin)){
         const pos = portPos(nodes.find(n=>n.id===nodeId), port);
-        connectFrom = { ...from };
+        connectFrom = { nodeId, port: normalizePortKey(from.port) };
         connectDrag = { from:{ ...from }, to:{ x:pos.x, y:pos.y }, moved:true, target:null, hoverKey:"" };
         setSingleNodeSelection(nodeId);
         dragStarted = true;
@@ -4151,6 +4198,15 @@
     "native:singular":     { icon:"SG", kind:"Attribution", type:"blue", title:"Singular", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"https://www.businessofapps.com/wp-content/uploads/2019/05/singular_logo_2019.png" },
     "native:shopify":      { icon:"SH", kind:"E-commerce", type:"blue", title:"Shopify", desc:"Plataforma de e-commerce com conexão nativa.", logoUrl:"https://www.pngall.com/wp-content/uploads/13/Shopify-Logo-PNG.png" },
     "native:vtex":         { icon:"VT", kind:"E-commerce", type:"blue", title:"VTEX", desc:"Plataforma de e-commerce com conexão nativa.", logoUrl:"https://companieslogo.com/img/orig/VTEX-64045aa2.png?t=1720244494" },
+    "native:eventbridge":  { icon:"EB", kind:"Cloud Storage", type:"blue", title:"Amazon EventBridge", desc:"Event routing / orchestration", logoUrl:"https://www.awsicon.com/static/images/Service-Icons/App-Integration/64/png5x/EventBridge.png" },
+    "native:s3":           { icon:"S3", kind:"Cloud Storage", type:"blue", title:"AWS S3", desc:"Object storage", logoUrl:"https://logowik.com/content/uploads/images/amazon-s37765.jpg" },
+    "native:gcp":          { icon:"GCP", kind:"Cloud Storage", type:"blue", title:"Google Cloud Platform", desc:"Cloud platform", logoUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8bqoxPxauHlIQdvfMHPRKRWB-SoZaDhwc-w&s" },
+    "native:azure":        { icon:"AZ", kind:"Cloud Storage", type:"blue", title:"Microsoft Azure", desc:"Cloud platform", logoUrl:"https://www.northware.mx/wp-content/uploads/2022/09/northware-microsoft-azure-logo.png" },
+    "native:bigquery":     { icon:"BQ", kind:"Data Warehouse", type:"blue", title:"BigQuery", desc:"Cloud data warehouse", logoUrl:"https://cdn.worldvectorlogo.com/logos/google-bigquery-logo-1.svg" },
+    "native:snowflake":    { icon:"SN", kind:"Data Warehouse", type:"blue", title:"SnowFlake", desc:"Cloud data warehouse", logoUrl:"https://companieslogo.com/img/orig/SNOW-35164165.png?t=1751096598" },
+    "native:databricks":   { icon:"DB", kind:"Data Warehouse", type:"blue", title:"Databricks", desc:"Lakehouse / analytics", logoUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSA9evqOC59ZcPyjL2-nnMXboMeUbhr3e266w&s" },
+    "native:redshift":     { icon:"RS", kind:"Data Warehouse", type:"blue", title:"Amazon Redshift", desc:"Cloud data warehouse", logoUrl:"https://www.shareicon.net/download/2015/08/28/92232_database.ico" },
+    "native:fabric":       { icon:"FB", kind:"Data Warehouse", type:"blue", title:"Microsoft Fabric", desc:"Analytics platform", logoUrl:"https://davidalzamendi.com/wp-content/uploads/2023/05/Fabric_final_x256.png" },
     "native:hightouch":    { icon:"HT", kind:"CDP", type:"blue", title:"High Touch", desc:"CDP com conexão nativa.", logoUrl:"https://static.amplitude.com/data-connections/icons/HIGHTOUCH.png" },
     "native:segment":      { icon:"SE", kind:"CDP", type:"blue", title:"Segment", desc:"CDP com conexão nativa.", logoUrl:"https://logo.svgcdn.com/logos/segment.png" },
     "native:rudderstack":  { icon:"RS", kind:"CDP", type:"blue", title:"RudderStack", desc:"CDP com conexão nativa.", logoUrl:"https://cdn.prod.website-files.com/685d3f27e667cdf05fe197f8/685d3f27e667cdf05fe1aa8b_64d3ddaa31ad7172011fd9b5_rudderstack-1.svg" },
