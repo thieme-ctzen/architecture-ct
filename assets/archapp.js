@@ -122,6 +122,7 @@
   let connectFrom = null; // {nodeId, port}
   let connectDrag = null; // {from:{nodeId,port}, to:{x,y}, moved}
   let hoveredNodeId = null;
+  let hoveredPortHint = null; // { nodeId, port }
   let dragSolutionItem = null; // {nodeId, index}
   let marquee = null; // {x1,y1,x2,y2, append}
   let suppressWrapClick = false;
@@ -1752,7 +1753,7 @@
     }
     return node;
   }
-  function nodePointToPort(node, clientX, clientY, excludePort = ""){
+  function nodePointToPortInfo(node, clientX, clientY, excludePort = ""){
     const world = worldFromClient(clientX, clientY);
     const exclude = normalizePortKey(excludePort || "");
     let best = null;
@@ -1768,7 +1769,10 @@
         best = port;
       }
     }
-    return best || "e2";
+    return { port: best || "e2", distance: Math.sqrt(bestD) };
+  }
+  function nodePointToPort(node, clientX, clientY, excludePort = ""){
+    return nodePointToPortInfo(node, clientX, clientY, excludePort).port;
   }
   function buildPortableExportPayload(){
     snapshotCanvasLanguage(currentLanguage);
@@ -2650,7 +2654,8 @@
       }
       if(selectedNodeIds.has(n.id) || (selected.type==="node" && selected.id===n.id)) el.classList.add("selected");
       if(!matches(n)) el.style.opacity = "0.25";
-      const showPorts = connectMode && !!connectFrom && (hoveredNodeId === n.id || connectFrom.nodeId === n.id);
+      const hoveredPort = hoveredPortHint?.nodeId === n.id ? hoveredPortHint.port : null;
+      const showPorts = connectMode && (hoveredPort !== null || (connectFrom && connectFrom.nodeId === n.id));
       if(showPorts) el.classList.add("ports-visible");
       if(connectMode && connectFrom && connectFrom.nodeId === n.id) el.classList.add("connect-source");
 
@@ -3050,16 +3055,23 @@
       }
 
       nodesLayer.appendChild(el);
-      el.addEventListener("mouseenter", ()=>{
-        if(!connectMode || !connectFrom) return;
+      el.addEventListener("mouseenter", (e)=>{
+        if(!connectMode) return;
         hoveredNodeId = n.id;
-        render();
+        updateHoveredPortHint(n.id, e.clientX, e.clientY);
+      });
+      el.addEventListener("mousemove", (e)=>{
+        if(!connectMode) return;
+        hoveredNodeId = n.id;
+        updateHoveredPortHint(n.id, e.clientX, e.clientY);
       });
       el.addEventListener("mouseleave", ()=>{
-        if(!connectMode || !connectFrom) return;
-        if(hoveredNodeId !== n.id) return;
-        hoveredNodeId = null;
-        render();
+        if(!connectMode) return;
+        if(hoveredNodeId === n.id) hoveredNodeId = null;
+        if(hoveredPortHint?.nodeId === n.id){
+          hoveredPortHint = null;
+          render();
+        }
       });
       if(n.variant !== "solution" && n.variant !== "text"){
         const iconEl = el.querySelector(".nodeIcon");
@@ -3179,6 +3191,9 @@
           // active state if currently selected as connectFrom
           if(connectFrom && connectFrom.nodeId===n.id && normalizePortKey(connectFrom.port)===p){
             port.classList.add("active");
+          }
+          if(hoveredPort === p){
+            port.classList.add("preview");
           }
           if(connectDrag?.target && connectDrag.target.nodeId===n.id && normalizePortKey(connectDrag.target.port)===p){
             port.classList.add("preview");
@@ -3577,6 +3592,7 @@
     if(!connectMode){
       connectFrom = null;
       hoveredNodeId = null;
+      hoveredPortHint = null;
     }
     if(!silent) showToast(`Conectar ${connectMode ? "habilitado" : "desabilitado"}.`);
     render();
@@ -3623,6 +3639,7 @@
     if(!connectFrom){
       connectFrom = { nodeId, port };
       setSingleNodeSelection(nodeId);
+      hoveredPortHint = null;
       showToast("Port de origem definido. Clique em outro bloco para conectar.");
       render();
       return true;
@@ -3632,6 +3649,28 @@
       return true;
     }
     createConnection(connectFrom, { nodeId, port });
+    return true;
+  }
+  function updateHoveredPortHint(nodeId, clientX, clientY){
+    if(!connectMode) return false;
+    const node = getNodeById(nodeId);
+    if(!node || node.variant === "text" || node.variant === "sticky") return false;
+    if(connectFrom && connectFrom.nodeId === nodeId){
+      if(hoveredPortHint !== null){
+        hoveredPortHint = null;
+        render();
+      }
+      return true;
+    }
+    const exclude = connectFrom?.nodeId === nodeId ? connectFrom.port : "";
+    const info = nodePointToPortInfo(node, clientX, clientY, exclude);
+    const threshold = Math.max(22, Math.min(Number(node.w || 280), Number(node.h || 92)) * 0.30);
+    const next = info.distance <= threshold ? { nodeId, port: info.port } : null;
+    const prevNode = hoveredPortHint?.nodeId || null;
+    const prevPort = hoveredPortHint?.port || null;
+    if(prevNode === (next?.nodeId || null) && prevPort === (next?.port || null)) return true;
+    hoveredPortHint = next;
+    render();
     return true;
   }
   function createConnection(from, to){
@@ -3645,6 +3684,7 @@
     if(exists){
       showToast("Essa conexão já existe.");
       connectFrom = null;
+      hoveredPortHint = null;
       render();
       return false;
     }
@@ -3657,6 +3697,7 @@
     });
     showToast("Conexao criada (fluxo animado).");
     connectFrom = null;
+    hoveredPortHint = null;
     clearNodeSelection();
     selected = { type:null, id:null };
     render();
