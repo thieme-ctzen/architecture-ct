@@ -4667,8 +4667,8 @@
   };
 
   function addFromTemplateAt(key, clientX, clientY){
-    const t = templates[key];
-    if(!t) return;
+    const template = templates[key];
+    if(!template) return;
 
     rememberActionState();
     const p = worldFromClient(clientX, clientY);
@@ -4677,31 +4677,31 @@
       id: newId,
       x: Math.round(p.x - 140),
       y: Math.round(p.y - 60),
-      w: t.w || 280,
-      h: t.h || 92,
-      title: t.title,
-      desc: t.desc,
-      type: t.type,
-      logoUrl: t.logoUrl || "",
+      w: template.w || 280,
+      h: template.h || 92,
+      title: template.title,
+      desc: template.desc,
+      type: template.type,
+      logoUrl: template.logoUrl || "",
       logoInvalid: false,
-      icon: t.icon,
-      kind: t.kind,
-      variant: t.variant || "default",
-      items: Array.isArray(t.items) ? t.items.map(deepCopyItem) : [],
-      stacks: Array.isArray(t.stacks) ? [...t.stacks] : [],
-      stackCatalog: t.stackCatalog || "",
-      organizerPreset: t.organizerPreset || "",
-      userMinH: t.userMinH || 0,
-      solutionLayout: t.solutionLayout || "pills",
-      solutionLogo: t.solutionLogo || "",
-      orgOptions: Array.isArray(t.orgOptions) ? [...t.orgOptions] : [],
-      text: t.text || "",
-      fontSize: t.fontSize || defaultFontSizeForVariant(t.variant),
-      fontFamily: t.fontFamily || "Georgia",
-      color: t.color || "#1e293b",
-      align: t.align || "left",
-      stickyColor: t.stickyColor || "#fef08a",
-      unboundedResize: !!t.unboundedResize
+      icon: template.icon,
+      kind: template.kind,
+      variant: template.variant || "default",
+      items: Array.isArray(template.items) ? template.items.map(deepCopyItem) : [],
+      stacks: Array.isArray(template.stacks) ? [...template.stacks] : [],
+      stackCatalog: template.stackCatalog || "",
+      organizerPreset: template.organizerPreset || "",
+      userMinH: template.userMinH || 0,
+      solutionLayout: template.solutionLayout || "pills",
+      solutionLogo: template.solutionLogo || "",
+      orgOptions: Array.isArray(template.orgOptions) ? [...template.orgOptions] : [],
+      text: template.text || "",
+      fontSize: template.fontSize || defaultFontSizeForVariant(template.variant),
+      fontFamily: template.fontFamily || "Georgia",
+      color: template.color || "#1e293b",
+      align: template.align || "left",
+      stickyColor: template.stickyColor || "#fef08a",
+      unboundedResize: !!template.unboundedResize
     };
     ensureNodeI18n(newNode);
     applyNodeLanguage(newNode, currentLanguage);
