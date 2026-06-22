@@ -628,60 +628,6 @@
         transform .24s ease;
       will-change: width, height, transform, padding, border-radius, box-shadow;
     }
-    .node .hdr,
-    .node .leftHdr,
-    .node .nodeIcon,
-    .node .nodeTitle,
-    .node .nodeDesc,
-    .node .solutionCard,
-    .node .solutionShell,
-    .node .solutionRail,
-    .node .solutionBrand,
-    .node .solutionContent,
-    .node .solutionDescription,
-    .node .solutionList,
-    .node .solutionGrid,
-    .node .solutionLogoWrap,
-    .node .organizerCard,
-    .node .organizerHead,
-    .node .organizerBody,
-    .node .aiCard,
-    .node .aiInner,
-    .node .aiHead,
-    .node .aiTitleRow,
-    .node .aiIconBadge,
-    .node .aiTitle,
-    .node .aiDesc,
-    .node .stackWrap,
-    .node .stackMain,
-    .node .stackPills,
-    .node .stackPill,
-    .node .textWrap,
-    .node .textNodeBody{
-      pointer-events:none;
-    }
-    .node .solutionItem,
-    .node .solutionGridItem,
-    .node .tesseractItem,
-    .node .stickyBody,
-    .node .stackAdd,
-    .node .stackMenu,
-    .node .stackOption,
-    .node .stackDel,
-    .node .orgTitleBtn,
-    .node .orgMenu,
-    .node .orgOpt,
-    .node .stickyColorBtn,
-    .node .textCtl,
-    .node .textFont,
-    .node .nodeActions,
-    .node .nodeActions *,
-    .node .solTool,
-    .node .solItemDel,
-    .node .nodeResize,
-    .node .port{
-      pointer-events:auto;
-    }
     .node.compact{
       width:84px;
       min-width:84px;
@@ -2043,8 +1989,9 @@
       transform: scale(.55);
       transition: opacity .12s ease, transform .12s ease, border-color .12s ease, box-shadow .12s ease;
     }
-    .node.ports-visible .port,
-    .node.connect-source .port{
+    .node:hover .port,
+    .node.selected .port,
+    .port.active{
       opacity:1;
       pointer-events:auto;
       transform: scale(1);
