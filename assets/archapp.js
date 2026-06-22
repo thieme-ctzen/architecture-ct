@@ -162,6 +162,14 @@
   let html2canvasLoader = null;
   let jsPdfLoader = null;
   const DUP_ICON_URL = "https://www.pngall.com/wp-content/uploads/16/Black-Copy-Icon-PNG-Photos.png";
+  const COMPACT_ICON_URL = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+      <path d="M9 6.5h3.1a3.4 3.4 0 0 1 3.4 3.4v1.2a3.4 3.4 0 0 1-3.4 3.4H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M9 9.5h3.2M9 12.5h3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M6.2 10.1h2.6v3.8H6.2a1.7 1.7 0 0 1-1.7-1.7v-.4a1.7 1.7 0 0 1 1.7-1.7Z" fill="currentColor" opacity=".18"/>
+      <path d="M6.2 10.1h2.6v3.8H6.2a1.7 1.7 0 0 1-1.7-1.7v-.4a1.7 1.7 0 0 1 1.7-1.7Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+    </svg>
+  `);
   const TEMPLATE_LIBRARY_KEY = "clevertap_canvas_templates_v1";
   const DRIVE_PROJECT_WEBHOOK_URL = "";
   let projectOverallInfo = {
@@ -446,7 +454,7 @@
   const LANGUAGES = ["pt", "es", "en"];
   const UI_MESSAGES = {
     pt: {
-      hintHtml: `<b>Como conectar:</b> clique e arraste de um <b>port</b> para outro (ou clique em um port e depois no destino).<br><br><b>Atalhos:</b> apagar seleção <span class="kbd">Del</span> • editar bloco: <b>duplo clique</b> • multi seleção: <span class="kbd">Shift</span> + clique ou arraste no fundo • pan: arrastar fundo • zoom: <span class="kbd">Ctrl</span> + scroll`,
+      hintHtml: `<b>Como conectar:</b> clique em qualquer ponto do bloco para usar o port mais próximo, ou arraste de um <b>port</b> para outro.<br><br><b>Atalhos:</b> apagar seleção <span class="kbd">Del</span> • editar bloco: <b>duplo clique</b> • multi seleção: <span class="kbd">Shift</span> + clique ou arraste no fundo • pan: arrastar fundo • zoom: <span class="kbd">Ctrl</span> + scroll`,
       searchPlaceholder: "Buscar blocos...",
       freeTextPlaceholder: "Digite aqui sua anotação...",
       stickyToolbarPlaceholder: "Duplo clique no sticky para editar o texto",
@@ -477,7 +485,7 @@
       blockAdded: "Bloco adicionado. Duplo clique para editar."
     },
     es: {
-      hintHtml: `<b>Cómo conectar:</b> haz clic y arrastra desde un <b>port</b> hasta otro (o haz clic en un port y luego en el destino).<br><br><b>Atajos:</b> borrar selección <span class="kbd">Del</span> • editar bloque: <b>doble clic</b> • selección múltiple: <span class="kbd">Shift</span> + clic o arrastra sobre el fondo • pan: arrastrar el fondo • zoom: <span class="kbd">Ctrl</span> + scroll`,
+      hintHtml: `<b>Cómo conectar:</b> haz clic en cualquier punto del bloque para usar el port más cercano, o arrastra de un <b>port</b> a otro.<br><br><b>Atajos:</b> borrar selección <span class="kbd">Del</span> • editar bloque: <b>doble clic</b> • selección múltiple: <span class="kbd">Shift</span> + clic o arrastra sobre el fondo • pan: arrastrar el fondo • zoom: <span class="kbd">Ctrl</span> + scroll`,
       searchPlaceholder: "Buscar bloques...",
       freeTextPlaceholder: "Escribe tu anotación aquí...",
       stickyToolbarPlaceholder: "Haz doble clic en la nota para editar el texto",
@@ -508,7 +516,7 @@
       blockAdded: "Bloque añadido. Haz doble clic para editar."
     },
     en: {
-      hintHtml: `<b>How to connect:</b> click and drag from one <b>port</b> to another (or click a port and then the target).<br><br><b>Shortcuts:</b> delete selection <span class="kbd">Del</span> • edit block: <b>double click</b> • multi-select: <span class="kbd">Shift</span> + click or drag on the background • pan: drag background • zoom: <span class="kbd">Ctrl</span> + scroll`,
+      hintHtml: `<b>How to connect:</b> click any point on a block to use the nearest port, or drag from one <b>port</b> to another.<br><br><b>Shortcuts:</b> delete selection <span class="kbd">Del</span> • edit block: <b>double click</b> • multi-select: <span class="kbd">Shift</span> + click or drag on the background • pan: drag background • zoom: <span class="kbd">Ctrl</span> + scroll`,
       searchPlaceholder: "Search blocks...",
       freeTextPlaceholder: "Type your note here...",
       stickyToolbarPlaceholder: "Double-click the sticky note to edit the text",
@@ -1718,6 +1726,56 @@
   function deepCopyItem(item){
     return (typeof item === "string") ? item : { ...(item || {}) };
   }
+  function getNodeBaseSize(node){
+    const variant = node?.variant || "default";
+    const w = Number(node?.w || (variant === "sticky" ? 200 : 280));
+    const h = Number(node?.h || (variant === "sticky" ? 110 : (variant === "solution" || variant === "organizer" || variant === "ai" ? 180 : 92)));
+    return { w, h };
+  }
+  function getCompactSize(node){
+    const size = Number(node?.compactSize?.w || node?.compactSize?.h || 0);
+    const base = getNodeBaseSize(node);
+    const diameter = clamp(size || Math.round(Math.min(base.w, Math.max(base.h, 120)) * 0.46), 72, 112);
+    return { w: diameter, h: diameter };
+  }
+  function applyNodeCompactState(node){
+    if(!node || node.variant === "text" || node.variant === "sticky") return node;
+    if(node.compact){
+      if(!node.compactSize || typeof node.compactSize !== "object"){
+        const base = getNodeBaseSize(node);
+        node.compactSize = { w: base.w, h: base.h, userMinH: Number(node.userMinH || 0) };
+      }
+      const compactSize = getCompactSize(node);
+      node.w = compactSize.w;
+      node.h = compactSize.h;
+      node.userMinH = compactSize.h;
+    } else if(node.compactSize && typeof node.compactSize === "object"){
+      const prev = node.compactSize;
+      if(prev.w) node.w = prev.w;
+      if(prev.h) node.h = prev.h;
+      if(prev.userMinH !== undefined) node.userMinH = Number(prev.userMinH || 0);
+      delete node.compactSize;
+    }
+    return node;
+  }
+  function nodePointToPort(node, clientX, clientY, excludePort = ""){
+    const world = worldFromClient(clientX, clientY);
+    const exclude = normalizePortKey(excludePort || "");
+    let best = null;
+    let bestD = Infinity;
+    for(const port of PORTS){
+      if(exclude && port === exclude) continue;
+      const pos = portPos(node, port);
+      const dx = pos.x - world.x;
+      const dy = pos.y - world.y;
+      const d2 = dx*dx + dy*dy;
+      if(d2 < bestD){
+        bestD = d2;
+        best = port;
+      }
+    }
+    return best || "e2";
+  }
   function buildPortableExportPayload(){
     snapshotCanvasLanguage(currentLanguage);
     ensureCanvasNameI18n();
@@ -1753,7 +1811,13 @@
           align: n.align || "left",
           solutionLayout: n.solutionLayout || "pills",
           solutionLogo: n.solutionLogo || "",
-          stackCatalog: n.stackCatalog || ""
+          stackCatalog: n.stackCatalog || "",
+          compact: !!n.compact,
+          compactSize: n.compactSize ? {
+            w: Number(n.compactSize.w || 0),
+            h: Number(n.compactSize.h || 0),
+            userMinH: Number(n.compactSize.userMinH || 0)
+          } : null
         },
         content: {
           description: n.desc || "",
@@ -1841,6 +1905,20 @@
         stickyColor: (n?.style?.stickyColor ?? n.stickyColor ?? "#fef08a").toString(),
         stackCatalog: (n?.style?.stackCatalog ?? n.stackCatalog ?? "").toString(),
         organizerPreset: (n?.style?.organizerPreset ?? n.organizerPreset ?? "").toString(),
+        compact: !!(n?.style?.compact ?? n.compact ?? false),
+        compactSize: (n?.style?.compactSize && typeof n.style.compactSize === "object")
+          ? {
+            w: Number(n.style.compactSize.w || 0),
+            h: Number(n.style.compactSize.h || 0),
+            userMinH: Number(n.style.compactSize.userMinH || 0)
+          }
+          : (n?.compactSize && typeof n.compactSize === "object"
+            ? {
+              w: Number(n.compactSize.w || 0),
+              h: Number(n.compactSize.h || 0),
+              userMinH: Number(n.compactSize.userMinH || 0)
+            }
+            : null),
         i18n: (n?.i18n && typeof n.i18n === "object") ? JSON.parse(JSON.stringify(n.i18n)) : null
       };
       });
@@ -2520,6 +2598,8 @@
       el.dataset.id = n.id;
       el.style.left = n.x + "px";
       el.style.top = n.y + "px";
+      applyNodeCompactState(n);
+      const isCompactNode = !!n.compact && n.variant !== "text" && n.variant !== "sticky";
       if(n.variant === "text"){
         el.style.width = "auto";
         el.style.minWidth = "0";
@@ -2535,7 +2615,10 @@
       } else {
         el.style.width = (n.w || 280) + "px";
       }
-      if(n.variant === "solution" || n.variant === "ai"){
+      if(isCompactNode){
+        el.style.removeProperty("--blockScale");
+        el.style.removeProperty("--tessScale");
+      } else if(n.variant === "solution" || n.variant === "ai"){
         const baseW = n.variant === "ai" ? 360 : 300;
         const scale = clamp((n.w || baseW) / baseW, 0.78, 1.9);
         el.style.setProperty("--blockScale", String(scale));
@@ -2544,7 +2627,9 @@
       }
       const isTesseractNode = n.variant === "solution"
         && ((n.solutionLayout || "") === "tesseract" || (n.title || "").toLowerCase().includes("tesseractdb"));
-      if(isTesseractNode){
+      if(isCompactNode){
+        el.style.removeProperty("--tessScale");
+      } else if(isTesseractNode){
         const baseW = 600;
         const baseH = 264;
         const currH = Math.max(n.h || 0, n.userMinH || 132, 132);
@@ -2570,7 +2655,24 @@
       if(selectedNodeIds.has(n.id) || (selected.type==="node" && selected.id===n.id)) el.classList.add("selected");
       if(!matches(n)) el.style.opacity = "0.25";
 
-      if(n.variant === "text"){
+      if(isCompactNode){
+        el.classList.add("compact");
+        el.title = n.title || "Bloco";
+        el.style.width = `${n.w || 84}px`;
+        el.style.height = `${n.h || 84}px`;
+        el.style.minHeight = `${n.h || 84}px`;
+        el.style.minWidth = `${n.w || 84}px`;
+        el.innerHTML = `
+          <div class="compactFace">
+            <div class="nodeIcon compactIcon">${escapeHTML(n.icon || "BL")}</div>
+          </div>
+          <div class="nodeActions">
+            <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+            <button class="nact comp compactToggle" type="button" title="Expandir bloco" aria-label="Expandir bloco"><img src="${COMPACT_ICON_URL}" alt="Expandir" /></button>
+            <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
+          </div>
+        `;
+      } else if(n.variant === "text"){
         const fontSize = clamp(Number(n.fontSize || 28), 12, 92);
         const fontFamily = (n.fontFamily || "Georgia").toString();
         const color = (n.color || "#1e293b").toString();
@@ -2758,6 +2860,7 @@
           </div>
           <div class="nodeActions">
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+            <button class="nact comp compactToggle" type="button" title="Minimizar bloco" aria-label="Minimizar bloco"><img src="${COMPACT_ICON_URL}" alt="Minimizar" /></button>
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
           <div class="nodeResize" title="Redimensionar bloco" aria-hidden="true"></div>
@@ -2786,6 +2889,7 @@
             <button class="nact back" type="button" title="Enviar para trás" aria-label="Enviar para trás"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Enviar para trás" /></button>
             <button class="nact front" type="button" title="Trazer para frente" aria-label="Trazer para frente"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Trazer para frente" /></button>
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+            <button class="nact comp compactToggle" type="button" title="Minimizar bloco" aria-label="Minimizar bloco"><img src="${COMPACT_ICON_URL}" alt="Minimizar" /></button>
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
           <div class="nodeResize" title="Redimensionar bloco" aria-hidden="true"></div>
@@ -2866,6 +2970,7 @@
           </div>
           <div class="nodeActions">
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+            <button class="nact comp compactToggle" type="button" title="Minimizar bloco" aria-label="Minimizar bloco"><img src="${COMPACT_ICON_URL}" alt="Minimizar" /></button>
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
           <div class="nodeResize" title="Redimensionar bloco" aria-hidden="true"></div>
@@ -2921,6 +3026,7 @@
           </div>
           <div class="nodeActions">
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+            <button class="nact comp compactToggle" type="button" title="Minimizar bloco" aria-label="Minimizar bloco"><img src="${COMPACT_ICON_URL}" alt="Minimizar" /></button>
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
         `;
@@ -2938,6 +3044,7 @@
           </div>
           <div class="nodeActions">
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+            <button class="nact comp compactToggle" type="button" title="Minimizar bloco" aria-label="Minimizar bloco"><img src="${COMPACT_ICON_URL}" alt="Minimizar" /></button>
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
         `;
@@ -3075,12 +3182,17 @@
       }
 
       const btnDup = el.querySelector(".nact.dup");
+      const btnCompact = el.querySelector(".compactToggle");
       const btnDel = el.querySelector(".nact.del");
       const btnFront = el.querySelector(".nact.front");
       const btnBack = el.querySelector(".nact.back");
       btnDup?.addEventListener("click", (e)=>{
         e.stopPropagation();
         duplicateNode(n.id);
+      });
+      btnCompact?.addEventListener("click", (e)=>{
+        e.stopPropagation();
+        toggleNodeCompact(n.id);
       });
       btnDel?.addEventListener("click", (e)=>{
         e.stopPropagation();
@@ -3265,7 +3377,12 @@
       el.addEventListener("click", (e)=>{
         e.stopPropagation();
         if(e.target.closest(".orgTitleBtn") || e.target.closest(".orgMenu")) return;
+        if(e.target.closest(".compactToggle")) return;
+        if(e.target.closest(".port")) return;
         if(suppressNodeClick) return;
+        if(connectMode){
+          if(handleNodeConnectClick(n.id, e.clientX, e.clientY)) return;
+        }
         selectNode(n.id, !!e.shiftKey);
       });
       if(n.variant !== "text" && n.variant !== "sticky"){
@@ -3484,6 +3601,25 @@
     }
 
     createConnection(connectFrom, { nodeId, port });
+  }
+  function handleNodeConnectClick(nodeId, clientX, clientY){
+    const node = getNodeById(nodeId);
+    if(!node || node.variant === "text" || node.variant === "sticky") return false;
+    const exclude = connectFrom?.nodeId === nodeId ? connectFrom.port : "";
+    const port = nodePointToPort(node, clientX, clientY, exclude);
+    if(!connectFrom){
+      connectFrom = { nodeId, port };
+      setSingleNodeSelection(nodeId);
+      showToast("Port de origem definido. Clique em outro bloco para conectar.");
+      render();
+      return true;
+    }
+    if(connectFrom.nodeId === nodeId && normalizePortKey(connectFrom.port) === normalizePortKey(port)){
+      showToast("Escolha um PORT diferente para conectar.");
+      return true;
+    }
+    createConnection(connectFrom, { nodeId, port });
+    return true;
   }
   function createConnection(from, to){
     if(!from || !to) return false;
@@ -3711,6 +3847,8 @@
       fontFamily: src.fontFamily || "Georgia",
       color: src.color || "#1e293b",
       align: src.align || "left",
+      compact: !!src.compact,
+      compactSize: src.compactSize ? JSON.parse(JSON.stringify(src.compactSize)) : null,
       highlightPulse: !!src.highlightPulse,
       i18n: src.i18n ? JSON.parse(JSON.stringify(src.i18n)) : undefined
     };
@@ -3720,6 +3858,18 @@
     setSingleNodeSelection(copy.id);
     render();
     showToast("Bloco duplicado.");
+  }
+  function toggleNodeCompact(nodeId){
+    const n = nodes.find(x=>x.id===nodeId);
+    if(!n || n.variant === "text" || n.variant === "sticky") return;
+    rememberActionState();
+    n.compact = !n.compact;
+    applyNodeCompactState(n);
+    if(!n.compact){
+      n.compactSize = null;
+    }
+    render();
+    showToast(n.compact ? "Bloco minimizado." : "Bloco expandido.");
   }
 
   // --- Drag node ---
@@ -3735,6 +3885,7 @@
     if(e.target.closest(".stackMenu")) return;
     if(e.target.closest(".stackOption")) return;
     if(e.target.closest(".stackDel")) return;
+    if(e.target.closest(".compactToggle")) return;
     if(e.target.closest(".solutionItem")) return;
     if(e.target.closest(".solutionGridItem")) return;
     if(e.target.closest(".stickyColorBtn")) return;
