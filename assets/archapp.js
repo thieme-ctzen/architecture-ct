@@ -2649,8 +2649,11 @@
       }
       if(selectedNodeIds.has(n.id) || (selected.type==="node" && selected.id===n.id)) el.classList.add("selected");
       if(!matches(n)) el.style.opacity = "0.25";
-      const hoveredPort = hoveredPortHint?.nodeId === n.id ? hoveredPortHint.port : null;
-      const showPorts = connectMode && (hoveredPort !== null || (connectFrom && connectFrom.nodeId === n.id));
+      const showPorts = connectMode && (
+        selectedNodeIds.has(n.id) ||
+        hoveredNodeId === n.id ||
+        (connectFrom && connectFrom.nodeId === n.id)
+      );
       if(showPorts) el.classList.add("ports-visible");
       if(connectMode && connectFrom && connectFrom.nodeId === n.id) el.classList.add("connect-source");
 
@@ -3053,20 +3056,19 @@
       el.addEventListener("mouseenter", (e)=>{
         if(!connectMode) return;
         hoveredNodeId = n.id;
-        updateHoveredPortHint(n.id, e.clientX, e.clientY);
+        render();
       });
       el.addEventListener("mousemove", (e)=>{
         if(!connectMode) return;
-        hoveredNodeId = n.id;
-        updateHoveredPortHint(n.id, e.clientX, e.clientY);
+        if(hoveredNodeId !== n.id){
+          hoveredNodeId = n.id;
+          render();
+        }
       });
       el.addEventListener("mouseleave", ()=>{
         if(!connectMode) return;
         if(hoveredNodeId === n.id) hoveredNodeId = null;
-        if(hoveredPortHint?.nodeId === n.id){
-          hoveredPortHint = null;
-          render();
-        }
+        render();
       });
       if(n.variant !== "solution" && n.variant !== "text"){
         const iconEl = el.querySelector(".nodeIcon");
@@ -3186,9 +3188,6 @@
           // active state if currently selected as connectFrom
           if(connectFrom && connectFrom.nodeId===n.id && normalizePortKey(connectFrom.port)===p){
             port.classList.add("active");
-          }
-          if(hoveredPort === p){
-            port.classList.add("preview");
           }
           if(connectDrag?.target && connectDrag.target.nodeId===n.id && normalizePortKey(connectDrag.target.port)===p){
             port.classList.add("preview");
@@ -3400,9 +3399,6 @@
         if(e.target.closest(".compactToggle")) return;
         if(e.target.closest(".port")) return;
         if(suppressNodeClick) return;
-        if(connectMode){
-          if(handleNodeConnectClick(n.id, e.clientX, e.clientY)) return;
-        }
         selectNode(n.id, !!e.shiftKey);
       });
       if(n.variant !== "text" && n.variant !== "sticky"){
@@ -3695,6 +3691,7 @@
     showToast("Conexao criada (fluxo animado).");
     connectFrom = null;
     hoveredPortHint = null;
+    hoveredNodeId = null;
     clearNodeSelection();
     selected = { type:null, id:null };
     render();
