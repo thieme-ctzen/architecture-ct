@@ -113,6 +113,8 @@
   // flags
   let connectMode = true;
   let flowOn = true;
+  let hoveredNodeId = null;
+  let hoveredPortHint = null;
 
   // data
   let nodes = []; // {id, x,y,w,h, title, desc, type, icon, kind}
