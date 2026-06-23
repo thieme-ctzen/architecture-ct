@@ -2082,6 +2082,18 @@
       pointer-events:none;
       transition: opacity .12s ease;
     }
+    @keyframes edgeFlowDash{
+      from{
+        stroke-dashoffset: 0;
+      }
+      to{
+        stroke-dashoffset: calc(var(--edge-flow-cycle, 30px) * -1);
+      }
+    }
+    svg .edgeFlowLine{
+      pointer-events:none;
+      will-change: stroke-dashoffset;
+    }
 
     /* Toast */
     .toast{
