@@ -3528,33 +3528,33 @@
       g.appendChild(t);
       svg.appendChild(g);
 
-      // flow animation: a small dot moving along path
+      // continuous flow layer: an animated dash band that loops seamlessly
       if(flowOn){
         const flowColor = isSel ? edgeCfg.activeColor : edgeCfg.flowColor;
-        const dotCount = clamp(Number(edgeCfg.flowDots || 2), 1, 3);
-        const duration = 2.2;
-        const appendFlowDot = (beginOffset)=>{
-          const dot = document.createElementNS("http://www.w3.org/2000/svg","circle");
-          dot.setAttribute("r","3.9");
-          dot.setAttribute("fill", flowColor);
-          dot.setAttribute("opacity","0.92");
-
-          const anim = document.createElementNS("http://www.w3.org/2000/svg","animateMotion");
-          anim.setAttribute("dur", `${duration}s`);
-          anim.setAttribute("repeatCount", "indefinite");
-          anim.setAttribute("rotate", "auto");
-          anim.setAttribute("begin", beginOffset);
-
-          const mpath = document.createElementNS("http://www.w3.org/2000/svg","mpath");
-          mpath.setAttributeNS("http://www.w3.org/1999/xlink","href", `#${pid}`);
-
-          anim.appendChild(mpath);
-          dot.appendChild(anim);
-          svg.appendChild(dot);
-        };
-        for(let i = 0; i < dotCount; i++){
-          const offset = -((duration / dotCount) * i).toFixed(3);
-          appendFlowDot(`${offset}s`);
+        const flowLayers = clamp(Number(edgeCfg.flowDots || 2), 1, 3);
+        const flowWidth = isSel ? (etype.width + 1.4) : (etype.width + 1.1);
+        const dash = Math.max(8, Math.round(10 + etype.width * 2));
+        const gap = Math.max(14, Math.round(dash * 1.75));
+        const cycle = dash + gap;
+        const travel = Math.max(120, Math.hypot(B.x - A.x, B.y - A.y));
+        const duration = clamp(travel / 120, 1.9, 4.8);
+        for(let i = 0; i < flowLayers; i++){
+          const flowPath = document.createElementNS("http://www.w3.org/2000/svg","path");
+          flowPath.setAttribute("class", "edgeFlowLine");
+          flowPath.setAttribute("d", d);
+          flowPath.setAttribute("fill","none");
+          flowPath.setAttribute("stroke", flowColor);
+          flowPath.setAttribute("stroke-width", String(Math.max(1.5, flowWidth - (i * 0.18))));
+          flowPath.setAttribute("stroke-dasharray", `${dash} ${gap}`);
+          flowPath.setAttribute("stroke-linecap", "round");
+          flowPath.setAttribute("stroke-linejoin", "round");
+          flowPath.setAttribute("opacity", String(clamp((isSel ? 0.95 : 0.82) - (i * 0.14), 0.25, 0.98)));
+          flowPath.setAttribute("vector-effect", "non-scaling-stroke");
+          flowPath.style.pointerEvents = "none";
+          flowPath.style.setProperty("--edge-flow-cycle", `${cycle}px`);
+          flowPath.style.animation = `edgeFlowDash ${duration}s linear infinite`;
+          flowPath.style.animationDelay = `${-(duration / flowLayers) * i}s`;
+          svg.appendChild(flowPath);
         }
       }
     }
