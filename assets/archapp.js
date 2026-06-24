@@ -39,6 +39,11 @@
   const tbFont = document.getElementById("tbFont");
   const tbColor = document.getElementById("tbColor");
   const tbAlign = document.getElementById("tbAlign");
+  const tbAreaTitle = document.getElementById("tbAreaTitle");
+  const tbAreaPattern = document.getElementById("tbAreaPattern");
+  const tbAreaWidth = document.getElementById("tbAreaWidth");
+  const tbAreaAnimate = document.getElementById("tbAreaAnimate");
+  const tbAreaLock = document.getElementById("tbAreaLock");
   const btnSettings = document.getElementById("btnSettings");
   const btnSidebar = document.getElementById("btnSidebar");
   const nativeLaunchWrap = document.getElementById("nativeLaunchWrap");
@@ -1240,6 +1245,14 @@
     return variant === "sticky" ? STICKY_DEFAULT_FONT : 28;
   }
 
+  function isConnectableNode(node){
+    if(!node) return false;
+    return node.variant !== "text"
+      && node.variant !== "sticky"
+      && node.variant !== "area"
+      && node.variant !== "profile";
+  }
+
   function firstSelectedNodeId(){
     const it = selectedNodeIds.values().next();
     return it.done ? null : it.value;
@@ -1791,18 +1804,28 @@
   }
   function getNodeBaseSize(node){
     const variant = node?.variant || "default";
-    const w = Number(node?.w || (variant === "sticky" ? 200 : 280));
-    const h = Number(node?.h || (variant === "sticky" ? 110 : (variant === "solution" || variant === "organizer" || variant === "ai" ? 180 : 92)));
+    const w = Number(node?.w || (variant === "sticky" ? 200 : (variant === "profile" ? 420 : variant === "area" ? 420 : 280)));
+    const h = Number(node?.h || (variant === "sticky" ? 110 : (variant === "solution" || variant === "organizer" || variant === "ai" ? 180 : variant === "profile" ? 280 : variant === "area" ? 220 : 92)));
     return { w, h };
   }
   function getCompactSize(node){
+    if(node?.variant === "profile"){
+      const base = {
+        w: Number(node?.compactSize?.w || node?.w || 420),
+        h: Number(node?.compactSize?.h || node?.h || 280)
+      };
+      return {
+        w: clamp(Math.round(Math.max(base.w * 0.85, 320)), 320, 540),
+        h: clamp(Math.round(Math.max(base.h * 0.72, 190)), 190, 320)
+      };
+    }
     const size = Number(node?.compactSize?.w || node?.compactSize?.h || 0);
     const base = getNodeBaseSize(node);
     const diameter = clamp(size || Math.round(Math.min(base.w, Math.max(base.h, 120)) * 0.46), 72, 112);
     return { w: diameter, h: diameter };
   }
   function applyNodeCompactState(node){
-    if(!node || node.variant === "text" || node.variant === "sticky") return node;
+    if(!node || node.variant === "text" || node.variant === "sticky" || node.variant === "area") return node;
     if(node.compact){
       if(!node.compactSize || typeof node.compactSize !== "object"){
         const base = getNodeBaseSize(node);
@@ -1878,6 +1901,10 @@
           solutionLayout: n.solutionLayout || "pills",
           solutionLogo: n.solutionLogo || "",
           stackCatalog: n.stackCatalog || "",
+          areaPattern: n.areaPattern || "dotted",
+          areaStrokeWidth: Number(n.areaStrokeWidth || 2),
+          areaAnimated: !!n.areaAnimated,
+          areaLocked: !!n.areaLocked,
           compact: !!n.compact,
           compactSize: n.compactSize ? {
             w: Number(n.compactSize.w || 0),
@@ -1890,6 +1917,9 @@
           text: n.text || "",
           items: Array.isArray(n.items) ? n.items.map(deepCopyItem) : [],
           orgOptions: Array.isArray(n.orgOptions) ? [...n.orgOptions] : [],
+          profileProperties: Array.isArray(n.profileProperties) ? JSON.parse(JSON.stringify(n.profileProperties)) : [],
+          profileEvents: Array.isArray(n.profileEvents) ? JSON.parse(JSON.stringify(n.profileEvents)) : [],
+          profileChannels: Array.isArray(n.profileChannels) ? JSON.parse(JSON.stringify(n.profileChannels)) : [],
           stacks: stacks.map((sid)=>{
             const s = stackById(sid, n);
             return { id: sid, label: s?.label || sid };
@@ -1971,6 +2001,19 @@
         stickyColor: (n?.style?.stickyColor ?? n.stickyColor ?? "#fef08a").toString(),
         stackCatalog: (n?.style?.stackCatalog ?? n.stackCatalog ?? "").toString(),
         organizerPreset: (n?.style?.organizerPreset ?? n.organizerPreset ?? "").toString(),
+        areaPattern: (n?.style?.areaPattern ?? n.areaPattern ?? "dotted").toString(),
+        areaStrokeWidth: Number(n?.style?.areaStrokeWidth ?? n.areaStrokeWidth ?? 2),
+        areaAnimated: !!(n?.style?.areaAnimated ?? n.areaAnimated ?? false),
+        areaLocked: !!(n?.style?.areaLocked ?? n.areaLocked ?? false),
+        profileProperties: Array.isArray(n?.content?.profileProperties)
+          ? JSON.parse(JSON.stringify(n.content.profileProperties))
+          : (Array.isArray(n.profileProperties) ? JSON.parse(JSON.stringify(n.profileProperties)) : []),
+        profileEvents: Array.isArray(n?.content?.profileEvents)
+          ? JSON.parse(JSON.stringify(n.content.profileEvents))
+          : (Array.isArray(n.profileEvents) ? JSON.parse(JSON.stringify(n.profileEvents)) : []),
+        profileChannels: Array.isArray(n?.content?.profileChannels)
+          ? JSON.parse(JSON.stringify(n.content.profileChannels))
+          : (Array.isArray(n.profileChannels) ? JSON.parse(JSON.stringify(n.profileChannels)) : []),
         compact: !!(n?.style?.compact ?? n.compact ?? false),
         compactSize: (n?.style?.compactSize && typeof n.style.compactSize === "object")
           ? {
@@ -2367,19 +2410,22 @@
   function refreshTextBar(){
     const node = (selected.type === "node") ? getNodeById(selected.id) : null;
     const isSticky = !!node && node.variant === "sticky";
+    const isArea = !!node && node.variant === "area";
     const isTextLike = !!node && (node.variant === "text" || isSticky);
-    if(!isTextLike){
+    if(!isTextLike && !isArea){
       textBar?.classList.remove("show");
       textBar?.classList.remove("sticky-mode");
+      textBar?.classList.remove("area-mode");
       textBar?.setAttribute("aria-hidden","true");
       return;
     }
     textBar?.classList.add("show");
     textBar?.classList.toggle("sticky-mode", isSticky);
+    textBar?.classList.toggle("area-mode", isArea);
     textBar?.setAttribute("aria-hidden","false");
     if(tbText){
       tbText.disabled = isSticky;
-      tbText.placeholder = isSticky ? t("stickyToolbarPlaceholder") : t("freeTextPlaceholder");
+      tbText.placeholder = isSticky ? t("stickyToolbarPlaceholder") : (isArea ? "Nome da área" : t("freeTextPlaceholder"));
       tbText.value = isSticky ? "" : (node.text || "");
     }
     if(tbFont){
@@ -2393,6 +2439,30 @@
     if(tbAlign){
       tbAlign.disabled = isSticky;
       tbAlign.value = node.align || "left";
+    }
+    if(tbAreaTitle){
+      tbAreaTitle.value = isArea ? (node.title || "") : "";
+      tbAreaTitle.disabled = !isArea;
+    }
+    if(tbAreaPattern){
+      tbAreaPattern.value = isArea ? (node.areaPattern || "dotted") : "dotted";
+      tbAreaPattern.disabled = !isArea;
+    }
+    if(tbAreaWidth){
+      tbAreaWidth.value = isArea ? String(clamp(Number(node.areaStrokeWidth || 2), 1, 12)) : "2";
+      tbAreaWidth.disabled = !isArea;
+    }
+    if(tbAreaAnimate){
+      const on = isArea && !!node.areaAnimated;
+      tbAreaAnimate.disabled = !isArea;
+      tbAreaAnimate.setAttribute("aria-pressed", on ? "true" : "false");
+      tbAreaAnimate.classList.toggle("active", on);
+    }
+    if(tbAreaLock){
+      const on = isArea && !!node.areaLocked;
+      tbAreaLock.disabled = !isArea;
+      tbAreaLock.setAttribute("aria-pressed", on ? "true" : "false");
+      tbAreaLock.classList.toggle("active", on);
     }
   }
   function refreshSettingsUI(){
@@ -2624,10 +2694,36 @@
       "comportamental":"https://idecbrasil.com.br/wp-content/uploads/2025/03/processo-1.png"
     };
     const SEGMENTS_MONO = new Set(["psicográfica", "psicografica", "comportamental"]);
+    const PROFILE_CHANNELS = [
+      { label:"WhatsApp", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png" },
+      { label:"RCS", icon:"https://www.messangi.com/wp-content/uploads/2023/06/rcs-1.png" },
+      { label:"App", icon:"https://cdn-icons-png.flaticon.com/512/8766/8766948.png" },
+      { label:"Web", icon:"https://cdn-icons-png.flaticon.com/512/5339/5339181.png" },
+      { label:"Email", icon:"https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small/email-message-icon-design-in-blue-circle-png.png" },
+      { label:"SMS", icon:"https://cdn-icons-png.flaticon.com/512/733/733533.png" },
+      { label:"Facebook Ads", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/960px-2023_Facebook_icon.svg.png" },
+      { label:"TikTok Ads", icon:"https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png" },
+      { label:"Google Ads", icon:"https://static.vecteezy.com/system/resources/previews/042/712/671/non_2x/google-ads-icon-logo-symbol-free-png.png" }
+    ];
+    const PROFILE_PROPERTIES = [
+      { label:"Idade", value:"34 anos" },
+      { label:"Cidade", value:"São Paulo" },
+      { label:"Nascimento", value:"12/03/1991" },
+      { label:"Categoria favorita", value:"Premium" }
+    ];
+    const PROFILE_EVENTS = [
+      "Comprou produto",
+      "Viu página de oferta",
+      "Iniciou app",
+      "Abriu push",
+      "Clicou em campanha"
+    ];
     const baseHeightFor = (variant) => {
       if(variant === "solution") return 180;
       if(variant === "organizer") return 220;
       if(variant === "ai") return 180;
+      if(variant === "profile") return 280;
+      if(variant === "area") return 220;
       if(variant === "stack") return 104;
       if(variant === "sticky") return 80;
       if(variant === "text") return 0;
@@ -2655,6 +2751,8 @@
       if(n.variant === "solution") el.classList.add("solution");
       if(n.variant === "organizer") el.classList.add("organizer");
       if(n.variant === "ai") el.classList.add("ai");
+      if(n.variant === "profile") el.classList.add("profile");
+      if(n.variant === "area") el.classList.add("area");
       if(n.variant === "text") el.classList.add("text-node");
       if(n.variant === "sticky") el.classList.add("sticky-node");
       if(n.highlightPulse) el.classList.add("highlightPulse");
@@ -2662,7 +2760,7 @@
       el.style.left = n.x + "px";
       el.style.top = n.y + "px";
       applyNodeCompactState(n);
-      const isCompactNode = !!n.compact && n.variant !== "text" && n.variant !== "sticky";
+      const isCompactNode = !!n.compact && n.variant !== "text" && n.variant !== "sticky" && n.variant !== "area";
       if(n.variant === "text"){
         el.style.width = "auto";
         el.style.minWidth = "0";
@@ -2675,6 +2773,15 @@
         el.style.minWidth = `${STICKY_MIN_W}px`;
         el.style.minHeight = `${STICKY_MIN_H}px`;
         el.style.height = n.h + "px";
+      } else if(n.variant === "profile"){
+        el.style.width = (n.w || 420) + "px";
+        el.style.minWidth = "320px";
+        el.style.minHeight = "220px";
+      } else if(n.variant === "area"){
+        el.style.width = (n.w || 420) + "px";
+        el.style.minWidth = "220px";
+        el.style.minHeight = "140px";
+        el.style.height = (n.h || 220) + "px";
       } else {
         el.style.width = (n.w || 280) + "px";
       }
@@ -2702,13 +2809,18 @@
         const byH = rightH / 220;
         const tessScale = clamp(Math.min(byW, byH) * 1.12, 0.9, 2.2);
         el.style.setProperty("--tessScale", String(tessScale));
+      } else if(n.variant === "profile" || n.variant === "area"){
+        el.style.removeProperty("--tessScale");
       } else {
         el.style.removeProperty("--tessScale");
       }
-      const variantMinH = isTesseractNode ? 132 : 180;
-      if(n.variant === "solution" || n.variant === "organizer" || n.variant === "ai"){
+      const variantMinH = isTesseractNode ? 132 : (n.variant === "profile" ? 220 : n.variant === "area" ? 140 : 180);
+      if(n.variant === "solution" || n.variant === "organizer" || n.variant === "ai" || n.variant === "profile"){
         el.style.height = Math.max(n.h || 0, n.userMinH || variantMinH, variantMinH) + "px";
         el.style.minHeight = "0px";
+      } else if(n.variant === "area"){
+        el.style.height = Math.max(n.h || 0, variantMinH) + "px";
+        el.style.minHeight = `${variantMinH}px`;
       } else {
         if(n.variant !== "text" && n.variant !== "sticky"){
           el.style.height = "auto";
@@ -2727,16 +2839,77 @@
         el.style.height = `${n.h || 84}px`;
         el.style.minHeight = `${n.h || 84}px`;
         el.style.minWidth = `${n.w || 84}px`;
-        el.innerHTML = `
-          <div class="compactFace">
-            <div class="nodeIcon compactIcon">${escapeHTML(n.icon || "BL")}</div>
-          </div>
-          <div class="nodeActions">
-            <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
-            ${compactToggleButtonHtml(n)}
-            <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
-          </div>
-        `;
+        if(n.variant === "profile"){
+          const compactProfileProperties = Array.isArray(n.profileProperties) && n.profileProperties.length
+            ? n.profileProperties
+            : PROFILE_PROPERTIES;
+          const compactProfileEvents = Array.isArray(n.profileEvents) && n.profileEvents.length
+            ? n.profileEvents
+            : PROFILE_EVENTS;
+          const compactProfileChannels = Array.isArray(n.profileChannels) && n.profileChannels.length
+            ? n.profileChannels
+            : PROFILE_CHANNELS;
+          const compactChannels = compactProfileChannels.slice(0, 4)
+            .map((ch)=>{
+              const label = typeof ch === "string" ? ch : (ch?.label || "");
+              const icon = typeof ch === "string" ? "" : (ch?.icon || "");
+              return `<span class="profileChannel"><img src="${escapeHTML(captureSafeUrl(icon) || icon)}" alt="${escapeHTML(label)}" /></span>`;
+            })
+            .join("");
+          const compactProps = compactProfileProperties.slice(0, 3)
+            .map((prop)=>{
+              const label = typeof prop === "string" ? prop : (prop?.label || "");
+              const value = typeof prop === "string" ? "" : (prop?.value || "");
+              return `<div class="profileProp"><span class="label">${escapeHTML(label)}</span><span class="value">${escapeHTML(value)}</span></div>`;
+            })
+            .join("");
+          const compactEvents = compactProfileEvents.slice(0, 2)
+            .map((evt)=>{
+              const label = typeof evt === "string" ? evt : (evt?.label || "");
+              return `<div class="profileEvent">${escapeHTML(label)}</div>`;
+            })
+            .join("");
+          el.innerHTML = `
+            <div class="profileCard">
+              <div class="profileTop">
+                <img class="profileAvatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="John Smith" />
+                <div class="profileIdentity">
+                  <div class="profileName">${escapeHTML(n.title || "John Smith")}</div>
+                  <div class="profileKind">${escapeHTML(n.desc || "Profile / CDP")}</div>
+                </div>
+              </div>
+              <div class="profileMeta">
+                <div class="profilePanel">
+                  <div class="profilePanelTitle">Propriedades</div>
+                  <div class="profileProps">${compactProps}</div>
+                  <div class="profilePanelTitle">Canais favoritos</div>
+                  <div class="profileChannels">${compactChannels}</div>
+                </div>
+                <div class="profilePanel">
+                  <div class="profilePanelTitle">Eventos recentes</div>
+                  <div class="profileEvents">${compactEvents}</div>
+                </div>
+              </div>
+            </div>
+            <div class="nodeActions">
+              <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+              ${compactToggleButtonHtml(n)}
+              <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
+            </div>
+            <div class="nodeResize" title="Redimensionar bloco" aria-hidden="true"></div>
+          `;
+        } else {
+          el.innerHTML = `
+            <div class="compactFace">
+              <div class="nodeIcon compactIcon">${escapeHTML(n.icon || "BL")}</div>
+            </div>
+            <div class="nodeActions">
+              <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+              ${compactToggleButtonHtml(n)}
+              <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
+            </div>
+          `;
+        }
       } else if(compactToggleAnim?.nodeId === n.id){
         el.classList.add("compactAnim", `compactAnim-${compactToggleAnim.mode}`);
       } else if(n.variant === "text"){
@@ -2766,6 +2939,89 @@
           <div class="stickyBody" contenteditable="false" spellcheck="false" style="font-size:${stickyFontSize}px;">${stickyText}</div>
           <div class="stickyFooter">
             <div class="stickyColors">${colorsHtml}</div>
+          </div>
+          <div class="nodeActions">
+            <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+            <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
+          </div>
+          <div class="nodeResize" title="Redimensionar bloco" aria-hidden="true"></div>
+        `;
+      } else if(n.variant === "profile"){
+        const profileName = escapeHTML(n.title || "John Smith");
+        const profileKind = escapeHTML(n.desc || "Profile / CDP");
+        const profileProperties = Array.isArray(n.profileProperties) && n.profileProperties.length
+          ? n.profileProperties
+          : PROFILE_PROPERTIES;
+        const profileEvents = Array.isArray(n.profileEvents) && n.profileEvents.length
+          ? n.profileEvents
+          : PROFILE_EVENTS;
+        const profileChannels = Array.isArray(n.profileChannels) && n.profileChannels.length
+          ? n.profileChannels
+          : PROFILE_CHANNELS;
+        const propsHtml = profileProperties.map((prop)=>{
+          const label = typeof prop === "string" ? prop : (prop?.label || "");
+          const value = typeof prop === "string" ? "" : (prop?.value || "");
+          return `<div class="profileProp"><span class="label">${escapeHTML(label)}</span><span class="value">${escapeHTML(value)}</span></div>`;
+        }).join("");
+        const channelsHtml = profileChannels.map((ch)=>{
+          const label = typeof ch === "string" ? ch : (ch?.label || "");
+          const icon = typeof ch === "string" ? "" : (ch?.icon || "");
+          return `<span class="profileChannel" title="${escapeHTML(label)}"><img src="${escapeHTML(captureSafeUrl(icon) || icon)}" alt="${escapeHTML(label)}" /></span>`;
+        }).join("");
+        const eventsHtml = profileEvents.map((evt)=>{
+          const label = typeof evt === "string" ? evt : (evt?.label || "");
+          return `<div class="profileEvent">${escapeHTML(label)}</div>`;
+        }).join("");
+        el.innerHTML = `
+          <div class="profileCard">
+            <div class="profileTop">
+              <img class="profileAvatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="John Smith" />
+              <div class="profileIdentity">
+                <div class="profileName">${profileName}</div>
+                <div class="profileKind">${profileKind}</div>
+              </div>
+            </div>
+            <div class="profileMeta">
+              <div class="profilePanel">
+                <div class="profilePanelTitle">Propriedades</div>
+                <div class="profileProps">${propsHtml}</div>
+                <div class="profilePanelTitle">Canais favoritos</div>
+                <div class="profileChannels">${channelsHtml}</div>
+              </div>
+              <div class="profilePanel">
+                <div class="profilePanelTitle">Eventos recentes</div>
+                <div class="profileEvents">${eventsHtml}</div>
+              </div>
+            </div>
+          </div>
+          <div class="nodeActions">
+            <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
+            ${compactToggleButtonHtml(n)}
+            <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
+          </div>
+          <div class="nodeResize" title="Redimensionar bloco" aria-hidden="true"></div>
+        `;
+      } else if(n.variant === "area"){
+        const areaPattern = (n.areaPattern || "dotted").toString();
+        const areaStrokeWidth = clamp(Number(n.areaStrokeWidth || 2), 1, 12);
+        const areaAnimated = !!n.areaAnimated;
+        const areaLocked = !!n.areaLocked;
+        const frameW = Math.max(80, Number(n.w || 420));
+        const frameH = Math.max(60, Number(n.h || 220));
+        const dashArray = areaPattern === "solid"
+          ? ""
+          : areaPattern === "dashed"
+            ? `${areaStrokeWidth * 5} ${areaStrokeWidth * 3}`
+            : `${Math.max(1, areaStrokeWidth)} ${Math.max(2, areaStrokeWidth * 2)}`;
+        el.classList.toggle("is-animated", areaAnimated);
+        el.classList.toggle("locked", areaLocked);
+        el.innerHTML = `
+          <div class="areaCard">
+            <div class="areaCanvasHint"></div>
+            <svg class="areaFrame" viewBox="0 0 ${frameW} ${frameH}" preserveAspectRatio="none" aria-hidden="true">
+              <rect class="areaStroke" x="${areaStrokeWidth / 2}" y="${areaStrokeWidth / 2}" width="${Math.max(0, frameW - areaStrokeWidth)}" height="${Math.max(0, frameH - areaStrokeWidth)}" rx="18" ry="18" stroke-width="${areaStrokeWidth}" stroke-dasharray="${escapeHTML(dashArray)}"></rect>
+            </svg>
+            <div class="areaLabel"><span class="areaBadge"></span>${escapeHTML(n.title || "Ações Gerais")}</div>
           </div>
           <div class="nodeActions">
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
@@ -3122,7 +3378,7 @@
         img.draggable = false;
         img.addEventListener("dragstart", (ev)=>ev.preventDefault());
       });
-      if(n.variant !== "solution" && n.variant !== "text"){
+      if(n.variant !== "solution" && n.variant !== "text" && n.variant !== "profile" && n.variant !== "area"){
         const iconEl = el.querySelector(".nodeIcon");
         const logoUrl = normalizeLogoUrl(n.logoUrl);
         if(iconEl && logoUrl && !n.logoInvalid){
@@ -3226,7 +3482,7 @@
       }
 
       // ports
-      if(n.variant !== "text" && n.variant !== "sticky"){
+      if(isConnectableNode(n)){
         for(const p of PORTS){
           const port = document.createElement("div");
           port.className = "port";
@@ -3689,7 +3945,7 @@
   }
   function handleNodeConnectClick(nodeId, clientX, clientY){
     const node = getNodeById(nodeId);
-    if(!node || node.variant === "text" || node.variant === "sticky") return false;
+    if(!isConnectableNode(node)) return false;
     const exclude = connectFrom?.nodeId === nodeId ? connectFrom.port : "";
     const port = nodePointToPort(node, clientX, clientY, exclude);
     if(!connectFrom){
@@ -3710,7 +3966,7 @@
   function updateHoveredPortHint(nodeId, clientX, clientY){
     if(!connectMode) return false;
     const node = getNodeById(nodeId);
-    if(!node || node.variant === "text" || node.variant === "sticky") return false;
+    if(!isConnectableNode(node)) return false;
     if(connectFrom && connectFrom.nodeId === nodeId){
       if(hoveredPortHint !== null){
         hoveredPortHint = null;
@@ -3766,7 +4022,7 @@
     let hit = null;
     let best = worldRadius * worldRadius;
     for(const n of nodes){
-      if(n.variant === "text" || n.variant === "sticky") continue;
+      if(!isConnectableNode(n)) continue;
       for(const p of PORTS){
         if(exclude && exclude.nodeId===n.id && normalizePortKey(exclude.port)===p) continue;
         const pos = portPos(n, p);
@@ -3977,6 +4233,13 @@
       fontFamily: src.fontFamily || "Georgia",
       color: src.color || "#1e293b",
       align: src.align || "left",
+      areaPattern: src.areaPattern || "dotted",
+      areaStrokeWidth: Number(src.areaStrokeWidth || 2),
+      areaAnimated: !!src.areaAnimated,
+      areaLocked: !!src.areaLocked,
+      profileProperties: Array.isArray(src.profileProperties) ? JSON.parse(JSON.stringify(src.profileProperties)) : [],
+      profileEvents: Array.isArray(src.profileEvents) ? JSON.parse(JSON.stringify(src.profileEvents)) : [],
+      profileChannels: Array.isArray(src.profileChannels) ? JSON.parse(JSON.stringify(src.profileChannels)) : [],
       compact: !!src.compact,
       compactSize: src.compactSize ? JSON.parse(JSON.stringify(src.compactSize)) : null,
       highlightPulse: !!src.highlightPulse,
@@ -3991,7 +4254,7 @@
   }
   function toggleNodeCompact(nodeId){
     const n = nodes.find(x=>x.id===nodeId);
-    if(!n || n.variant === "text" || n.variant === "sticky") return;
+    if(!n || n.variant === "text" || n.variant === "sticky" || n.variant === "area") return;
     rememberActionState();
     n.compact = !n.compact;
     applyNodeCompactState(n);
@@ -4021,6 +4284,8 @@
     if(pointerSession){
       if(e.pointerType === "mouse" && e.button !== 0) return;
     } else if(e.button !== 0) return;
+    const n = nodes.find(x=>x.id===nodeId);
+    if(n?.variant === "area" && n.areaLocked) return;
     if(e.target.closest(".port")) return;
     if(e.target.closest(".nact")) return;
     if(e.target.closest(".solTool")) return;
@@ -4079,6 +4344,7 @@
     for(const s of dragging.starts){
       const n = nodes.find(x=>x.id===s.id);
       if(!n) continue;
+      if(n.variant === "area" && n.areaLocked) continue;
       n.x = s.x + dx;
       n.y = s.y + dy;
     }
@@ -4112,7 +4378,7 @@
       }
     } else if(e.button !== 0) return;
     const n = nodes.find(x=>x.id===nodeId);
-    if(!n || (n.variant !== "solution" && n.variant !== "organizer" && n.variant !== "ai" && n.variant !== "sticky")) return;
+    if(!n || (n.variant !== "solution" && n.variant !== "organizer" && n.variant !== "ai" && n.variant !== "sticky" && n.variant !== "profile" && n.variant !== "area")) return;
     if(!pointerSession || e.pointerType === "mouse"){
       e.stopPropagation();
       e.preventDefault();
@@ -4123,8 +4389,8 @@
     resizing = {
       id: nodeId,
       startWorld: p,
-      w: n.w || (n.variant === "sticky" ? 200 : 360),
-      h: Math.max(n.h || (n.variant === "sticky" ? 110 : 240), n.variant === "sticky" ? STICKY_MIN_H : 180),
+      w: n.w || (n.variant === "sticky" ? 200 : n.variant === "profile" ? 420 : n.variant === "area" ? 420 : 360),
+      h: Math.max(n.h || (n.variant === "sticky" ? 110 : n.variant === "profile" ? 280 : n.variant === "area" ? 220 : 240), n.variant === "sticky" ? STICKY_MIN_H : n.variant === "profile" ? 220 : n.variant === "area" ? 140 : 180),
       minH: Math.max(n.userMinH || 0, n.h || 240)
     };
     setSingleNodeSelection(nodeId);
@@ -4139,6 +4405,17 @@
       if(node.variant === "sticky"){
         node.w = clamp(resizing.w + dx, STICKY_MIN_W, STICKY_MAX_W);
         node.h = clamp(resizing.h + dy, STICKY_MIN_H, STICKY_MAX_H);
+        render();
+        return;
+      }
+      if(node.variant === "area"){
+        if(node.areaLocked){
+          node.h = Math.max(140, resizing.h + dy);
+          node.w = Math.max(220, resizing.w + dx);
+        } else {
+          node.w = Math.max(220, resizing.w + dx);
+          node.h = Math.max(140, resizing.h + dy);
+        }
         render();
         return;
       }
@@ -4805,6 +5082,38 @@
         "Product Recommendations"
       ]
     },
+    "solution:profile": {
+      icon:"USR", kind:"Solução", type:"blue", variant:"profile",
+      title:"John Smith",
+      desc:"Profile / CDP",
+      w: 460,
+      h: 280,
+      userMinH: 240,
+      profileProperties: [
+        { label:"Idade", value:"34 anos" },
+        { label:"Cidade", value:"São Paulo" },
+        { label:"Nascimento", value:"12/03/1991" },
+        { label:"Categoria favorita", value:"Premium" }
+      ],
+      profileEvents: [
+        "Comprou produto",
+        "Viu página de oferta",
+        "Iniciou app",
+        "Abriu push",
+        "Clicou em campanha"
+      ],
+      profileChannels: [
+        { label:"WhatsApp", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png" },
+        { label:"RCS", icon:"https://www.messangi.com/wp-content/uploads/2023/06/rcs-1.png" },
+        { label:"App", icon:"https://cdn-icons-png.flaticon.com/512/8766/8766948.png" },
+        { label:"Web", icon:"https://cdn-icons-png.flaticon.com/512/5339/5339181.png" },
+        { label:"Email", icon:"https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small/email-message-icon-design-in-blue-circle-png.png" },
+        { label:"SMS", icon:"https://cdn-icons-png.flaticon.com/512/733/733533.png" },
+        { label:"Facebook Ads", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/960px-2023_Facebook_icon.svg.png" },
+        { label:"TikTok Ads", icon:"https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png" },
+        { label:"Google Ads", icon:"https://static.vecteezy.com/system/resources/previews/042/712/671/non_2x/google-ads-icon-logo-symbol-free-png.png" }
+      ]
+    },
     "text:note": {
       icon:"T", kind:"Texto", type:"gray", variant:"text",
       title:"Texto Livre",
@@ -4814,6 +5123,17 @@
       color:"#1e293b",
       align:"left",
       w: 220
+    },
+    "general:area": {
+      icon:"AR", kind:"Anotação", type:"gray", variant:"area",
+      title:"Ações Gerais",
+      desc:"Área pontilhada redimensionável",
+      w: 420,
+      h: 220,
+      areaPattern: "dotted",
+      areaStrokeWidth: 2,
+      areaAnimated: false,
+      areaLocked: false
     },
     "text:sticky": {
       icon:"📌", kind:"Nota", type:"gray", variant:"sticky",
@@ -4849,12 +5169,19 @@
       variant: template.variant || "default",
       items: Array.isArray(template.items) ? template.items.map(deepCopyItem) : [],
       stacks: Array.isArray(template.stacks) ? [...template.stacks] : [],
+      profileProperties: Array.isArray(template.profileProperties) ? JSON.parse(JSON.stringify(template.profileProperties)) : [],
+      profileEvents: Array.isArray(template.profileEvents) ? JSON.parse(JSON.stringify(template.profileEvents)) : [],
+      profileChannels: Array.isArray(template.profileChannels) ? JSON.parse(JSON.stringify(template.profileChannels)) : [],
       stackCatalog: template.stackCatalog || "",
       organizerPreset: template.organizerPreset || "",
       userMinH: template.userMinH || 0,
       solutionLayout: template.solutionLayout || "pills",
       solutionLogo: template.solutionLogo || "",
       orgOptions: Array.isArray(template.orgOptions) ? [...template.orgOptions] : [],
+      areaPattern: template.areaPattern || "dotted",
+      areaStrokeWidth: Number(template.areaStrokeWidth || 2),
+      areaAnimated: !!template.areaAnimated,
+      areaLocked: !!template.areaLocked,
       text: template.text || "",
       fontSize: template.fontSize || defaultFontSizeForVariant(template.variant),
       fontFamily: template.fontFamily || "Georgia",
@@ -5188,6 +5515,43 @@
     n.align = tbAlign.value;
     render();
   });
+  tbAreaTitle?.addEventListener("input", ()=>{
+    const n = (selected.type==="node") ? getNodeById(selected.id) : null;
+    if(!n || n.variant !== "area") return;
+    n.title = (tbAreaTitle.value || "").trim() || "Ações Gerais";
+    ensureNodeI18n(n);
+    n.i18n.title[currentLanguage] = n.title;
+    queuePersist();
+    render();
+  });
+  tbAreaPattern?.addEventListener("change", ()=>{
+    const n = (selected.type==="node") ? getNodeById(selected.id) : null;
+    if(!n || n.variant !== "area") return;
+    n.areaPattern = tbAreaPattern.value || "dotted";
+    queuePersist();
+    render();
+  });
+  tbAreaWidth?.addEventListener("input", ()=>{
+    const n = (selected.type==="node") ? getNodeById(selected.id) : null;
+    if(!n || n.variant !== "area") return;
+    n.areaStrokeWidth = clamp(Number(tbAreaWidth.value || 2), 1, 12);
+    queuePersist();
+    render();
+  });
+  tbAreaAnimate?.addEventListener("click", ()=>{
+    const n = (selected.type==="node") ? getNodeById(selected.id) : null;
+    if(!n || n.variant !== "area") return;
+    n.areaAnimated = !n.areaAnimated;
+    queuePersist();
+    render();
+  });
+  tbAreaLock?.addEventListener("click", ()=>{
+    const n = (selected.type==="node") ? getNodeById(selected.id) : null;
+    if(!n || n.variant !== "area") return;
+    n.areaLocked = !n.areaLocked;
+    queuePersist();
+    render();
+  });
   tbText?.addEventListener("input", ()=>{
     const n = (selected.type==="node") ? getNodeById(selected.id) : null;
     if(!n || n.variant !== "text") return;
@@ -5355,7 +5719,7 @@
   document.getElementById("ctx-connect")?.addEventListener("click", ()=>{
     if(ctxTargetNodeId){
       const n = getNodeById(ctxTargetNodeId);
-      if(n && n.variant !== "text" && n.variant !== "sticky"){
+      if(isConnectableNode(n)){
         connectFrom = { nodeId: ctxTargetNodeId, port: "e" };
         showToast("Agora clique no PORT de destino…");
         render();
@@ -5371,6 +5735,10 @@
   });
   document.getElementById("ctx-addNote")?.addEventListener("click", ()=>{
     if(ctxClickPos) addFromTemplateAtWorld("text:sticky", ctxClickPos.x, ctxClickPos.y);
+    closeAllCtxMenus();
+  });
+  document.getElementById("ctx-addArea")?.addEventListener("click", ()=>{
+    if(ctxClickPos) addFromTemplateAtWorld("general:area", ctxClickPos.x, ctxClickPos.y);
     closeAllCtxMenus();
   });
   document.getElementById("ctx-addText")?.addEventListener("click", ()=>{
