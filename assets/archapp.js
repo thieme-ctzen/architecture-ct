@@ -1385,11 +1385,11 @@
     const ids = new Set();
     for(let i = 0; i < nodes.length; i++){
       const a = nodes[i];
-      if(a.variant === "text" || a.variant === "sticky" || a.variant === "organizer") continue;
+      if(a.variant === "text" || a.variant === "sticky" || a.variant === "organizer" || a.variant === "area") continue;
       const ab = nodeBounds(a);
       for(let j = i + 1; j < nodes.length; j++){
         const b = nodes[j];
-        if(b.variant === "text" || b.variant === "sticky" || b.variant === "organizer") continue;
+        if(b.variant === "text" || b.variant === "sticky" || b.variant === "organizer" || b.variant === "area") continue;
         const bb = nodeBounds(b);
         const overlap = !(ab.x + ab.w <= bb.x || ab.x >= bb.x + bb.w || ab.y + ab.h <= bb.y || ab.y >= bb.y + bb.h);
         if(overlap){
@@ -2442,6 +2442,7 @@
     }
     if(tbAreaTitle){
       tbAreaTitle.value = isArea ? (node.title || "") : "";
+      tbAreaTitle.placeholder = "Bloco de área";
       tbAreaTitle.disabled = !isArea;
     }
     if(tbAreaPattern){
@@ -2463,6 +2464,7 @@
       tbAreaLock.disabled = !isArea;
       tbAreaLock.setAttribute("aria-pressed", on ? "true" : "false");
       tbAreaLock.classList.toggle("active", on);
+      tbAreaLock.innerHTML = on ? "🔒" : "🔓";
     }
   }
   function refreshSettingsUI(){
@@ -2696,14 +2698,10 @@
     const SEGMENTS_MONO = new Set(["psicográfica", "psicografica", "comportamental"]);
     const PROFILE_CHANNELS = [
       { label:"WhatsApp", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png" },
-      { label:"RCS", icon:"https://www.messangi.com/wp-content/uploads/2023/06/rcs-1.png" },
-      { label:"App", icon:"https://cdn-icons-png.flaticon.com/512/8766/8766948.png" },
-      { label:"Web", icon:"https://cdn-icons-png.flaticon.com/512/5339/5339181.png" },
       { label:"Email", icon:"https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small/email-message-icon-design-in-blue-circle-png.png" },
       { label:"SMS", icon:"https://cdn-icons-png.flaticon.com/512/733/733533.png" },
-      { label:"Facebook Ads", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/960px-2023_Facebook_icon.svg.png" },
-      { label:"TikTok Ads", icon:"https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png" },
-      { label:"Google Ads", icon:"https://static.vecteezy.com/system/resources/previews/042/712/671/non_2x/google-ads-icon-logo-symbol-free-png.png" }
+      { label:"App", icon:"https://cdn-icons-png.flaticon.com/512/8766/8766948.png" },
+      { label:"Web", icon:"https://cdn-icons-png.flaticon.com/512/5339/5339181.png" }
     ];
     const PROFILE_PROPERTIES = [
       { label:"Idade", value:"34 anos" },
@@ -3021,9 +3019,11 @@
             <svg class="areaFrame" viewBox="0 0 ${frameW} ${frameH}" preserveAspectRatio="none" aria-hidden="true">
               <rect class="areaStroke" x="${areaStrokeWidth / 2}" y="${areaStrokeWidth / 2}" width="${Math.max(0, frameW - areaStrokeWidth)}" height="${Math.max(0, frameH - areaStrokeWidth)}" rx="18" ry="18" stroke-width="${areaStrokeWidth}" stroke-dasharray="${escapeHTML(dashArray)}"></rect>
             </svg>
-            <div class="areaLabel"><span class="areaBadge"></span>${escapeHTML(n.title || "Ações Gerais")}</div>
+            <div class="areaLabel"><span class="areaBadge"></span>${escapeHTML(n.title || "Bloco de área")}</div>
           </div>
           <div class="nodeActions">
+            <button class="nact back" type="button" title="Enviar para trás" aria-label="Enviar para trás"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Enviar para trás" /></button>
+            <button class="nact front" type="button" title="Trazer para frente" aria-label="Trazer para frente"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Trazer para frente" /></button>
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
@@ -5086,9 +5086,9 @@
       icon:"USR", kind:"Solução", type:"blue", variant:"profile",
       title:"John Smith",
       desc:"Profile / CDP",
-      w: 460,
-      h: 280,
-      userMinH: 240,
+      w: 320,
+      h: 220,
+      userMinH: 220,
       profileProperties: [
         { label:"Idade", value:"34 anos" },
         { label:"Cidade", value:"São Paulo" },
@@ -5104,14 +5104,10 @@
       ],
       profileChannels: [
         { label:"WhatsApp", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png" },
-        { label:"RCS", icon:"https://www.messangi.com/wp-content/uploads/2023/06/rcs-1.png" },
-        { label:"App", icon:"https://cdn-icons-png.flaticon.com/512/8766/8766948.png" },
-        { label:"Web", icon:"https://cdn-icons-png.flaticon.com/512/5339/5339181.png" },
         { label:"Email", icon:"https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small/email-message-icon-design-in-blue-circle-png.png" },
         { label:"SMS", icon:"https://cdn-icons-png.flaticon.com/512/733/733533.png" },
-        { label:"Facebook Ads", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/960px-2023_Facebook_icon.svg.png" },
-        { label:"TikTok Ads", icon:"https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png" },
-        { label:"Google Ads", icon:"https://static.vecteezy.com/system/resources/previews/042/712/671/non_2x/google-ads-icon-logo-symbol-free-png.png" }
+        { label:"App", icon:"https://cdn-icons-png.flaticon.com/512/8766/8766948.png" },
+        { label:"Web", icon:"https://cdn-icons-png.flaticon.com/512/5339/5339181.png" }
       ]
     },
     "text:note": {
@@ -5126,7 +5122,7 @@
     },
     "general:area": {
       icon:"AR", kind:"Anotação", type:"gray", variant:"area",
-      title:"Ações Gerais",
+      title:"Bloco de área",
       desc:"Área pontilhada redimensionável",
       w: 420,
       h: 220,
@@ -5518,7 +5514,7 @@
   tbAreaTitle?.addEventListener("input", ()=>{
     const n = (selected.type==="node") ? getNodeById(selected.id) : null;
     if(!n || n.variant !== "area") return;
-    n.title = (tbAreaTitle.value || "").trim() || "Ações Gerais";
+    n.title = (tbAreaTitle.value || "").trim() || "Bloco de área";
     ensureNodeI18n(n);
     n.i18n.title[currentLanguage] = n.title;
     queuePersist();
