@@ -40,6 +40,7 @@
   const tbColor = document.getElementById("tbColor");
   const tbAlign = document.getElementById("tbAlign");
   const tbAreaTitle = document.getElementById("tbAreaTitle");
+  const tbAreaColor = document.getElementById("tbAreaColor");
   const tbAreaPattern = document.getElementById("tbAreaPattern");
   const tbAreaWidth = document.getElementById("tbAreaWidth");
   const tbAreaAnimate = document.getElementById("tbAreaAnimate");
@@ -564,6 +565,30 @@
     { pt:"Canais", es:"Canales", en:"Channels" },
     { pt:"Conectores de Dados", es:"Conectores de Datos", en:"Data Connectors" },
     { pt:"Soluções CleverTap", es:"Soluciones CleverTap", en:"CleverTap Solutions" },
+    { pt:"Profile", es:"Perfil", en:"Profile" },
+    { pt:"Profile / CDP", es:"Perfil / CDP", en:"Profile / CDP" },
+    { pt:"Visão de CDP do cliente", es:"Vista CDP del cliente", en:"Customer CDP view" },
+    { pt:"Propriedades", es:"Propiedades", en:"Properties" },
+    { pt:"Canais favoritos", es:"Canales favoritos", en:"Favorite channels" },
+    { pt:"Eventos recentes", es:"Eventos recientes", en:"Recent events" },
+    { pt:"Idade", es:"Edad", en:"Age" },
+    { pt:"Cidade", es:"Ciudad", en:"City" },
+    { pt:"Nascimento", es:"Nacimiento", en:"Birth date" },
+    { pt:"Categoria favorita", es:"Categoría favorita", en:"Favorite category" },
+    { pt:"34 anos", es:"34 años", en:"34 years old" },
+    { pt:"Comprou produto", es:"Compró un producto", en:"Bought product" },
+    { pt:"Viu página de oferta", es:"Vio la página de oferta", en:"Viewed offer page" },
+    { pt:"Iniciou app", es:"Inició la app", en:"Started app" },
+    { pt:"Abriu push", es:"Abrió un push", en:"Opened push" },
+    { pt:"Clicou em campanha", es:"Hizo clic en una campaña", en:"Clicked campaign" },
+    { pt:"Bloco de área", es:"Bloque de área", en:"Area block" },
+    { pt:"Área pontilhada redimensionável", es:"Área punteada redimensionable", en:"Resizable dotted area" },
+    { pt:"Adicionar Bloco de área aqui", es:"Añadir bloque de área aquí", en:"Add area block here" },
+    { pt:"Nome da área", es:"Nombre del área", en:"Area name" },
+    { pt:"Animar linha pontilhada", es:"Animar línea punteada", en:"Animate dotted line" },
+    { pt:"Bloquear movimentação", es:"Bloquear movimiento", en:"Lock movement" },
+    { pt:"Desbloquear movimentação", es:"Desbloquear movimiento", en:"Unlock movement" },
+    { pt:"Espessura do pixel", es:"Grosor del píxel", en:"Pixel thickness" },
     { pt:"Anotações", es:"Anotaciones", en:"Notes" },
     { pt:"Texto Livre", es:"Texto Libre", en:"Free Text" },
     { pt:"Nota flutuante no canvas", es:"Nota flotante en el lienzo", en:"Floating note on the canvas" },
@@ -953,7 +978,7 @@
     if(sectionTitles[2]) sectionTitles[2].textContent = translateKnownPhrase("Canais");
     if(sectionTitles[3]) sectionTitles[3].textContent = translateKnownPhrase("Conectores de Dados");
     if(sectionTitles[4]) sectionTitles[4].textContent = translateKnownPhrase("Soluções CleverTap");
-    if(sectionTitles[5]) sectionTitles[5].textContent = translateKnownPhrase("Anotações");
+    if(sectionTitles[5]) sectionTitles[5].textContent = translateKnownPhrase("Bloco de área");
     const brandTitle = document.querySelector(".brand h1");
     const nativeFlyoutHead = document.getElementById("nativeFlyoutHead");
     const featuresFlyoutHead = document.getElementById("featuresFlyoutHead");
@@ -1016,6 +1041,7 @@
     setButtonCopy("data:warehouse", translateKnownPhrase("Data Warehouse"), translateKnownPhrase("BI / modelado"));
     setButtonCopy("data:queue", translateKnownPhrase("Data Queue"), translateKnownPhrase("Streaming buffer"));
     setButtonCopy("solution:martech", translateKnownPhrase("Martech"), translateKnownPhrase("Bloco completo editável"));
+    setButtonCopy("solution:profile", translateKnownPhrase("Profile"), translateKnownPhrase("Visão de CDP do cliente"));
     setButtonCopy("solution:segments", translateKnownPhrase("Segments"), translateKnownPhrase("Bloco completo editável"));
     setButtonCopy("solution:analytics", translateKnownPhrase("Analytics"), translateKnownPhrase("Bloco completo editável"));
     setButtonCopy("solution:features", translateKnownPhrase("Features"), translateKnownPhrase("Bloco completo editável"));
@@ -1034,6 +1060,7 @@
     setButtonCopy("solution:agentai", translateKnownPhrase("AI Agent"), translateKnownPhrase("Bloco AI especial"));
     setButtonCopy("text:note", translateKnownPhrase("Texto Livre"), translateKnownPhrase("Nota flutuante no canvas"));
     setButtonCopy("text:sticky", translateKnownPhrase("Sticky Note"), translateKnownPhrase("Post-it colorido"));
+    setButtonCopy("general:area", translateKnownPhrase("Bloco de área"), translateKnownPhrase("Área pontilhada redimensionável"));
     if(nativeFlyoutArrow) nativeFlyoutArrow.setAttribute("aria-label", translateKnownPhrase("Abrir conexões nativas"));
     if(featuresFlyoutArrow) featuresFlyoutArrow.setAttribute("aria-label", translateKnownPhrase("Abrir features"));
     if(btnTemplate) btnTemplate.textContent = translateKnownPhrase("Templates");
@@ -1073,6 +1100,12 @@
       const opts = cfgConnectorType.querySelectorAll("option");
       if(opts[0]) opts[0].textContent = translateKnownPhrase("Livre");
       if(opts[1]) opts[1].textContent = translateKnownPhrase("Reto");
+    }
+    if(tbAreaPattern){
+      const opts = tbAreaPattern.querySelectorAll("option");
+      if(opts[0]) opts[0].textContent = translateKnownPhrase("Pontilhada");
+      if(opts[1]) opts[1].textContent = translateKnownPhrase("Tracejada");
+      if(opts[2]) opts[2].textContent = translateKnownPhrase("Sólida");
     }
     if(cfgMarker){
       const opts = cfgMarker.querySelectorAll("option");
@@ -1206,10 +1239,12 @@
       if(del) del.textContent = `✕ ${translateKnownPhrase("Excluir")}`;
     }
     const ctxAddNote = document.getElementById("ctx-addNote");
+    const ctxAddArea = document.getElementById("ctx-addArea");
     const ctxAddText = document.getElementById("ctx-addText");
     const ctxSelectAll = document.getElementById("ctx-selectAll");
     const ctxFitAll = document.getElementById("ctx-fitAll");
     if(ctxAddNote) ctxAddNote.textContent = translateKnownPhrase("Adicionar Sticky Note aqui");
+    if(ctxAddArea) ctxAddArea.textContent = translateKnownPhrase("Adicionar Bloco de área aqui");
     if(ctxAddText) ctxAddText.textContent = translateKnownPhrase("Adicionar Texto aqui");
     if(ctxSelectAll) ctxSelectAll.textContent = translateKnownPhrase("Selecionar todos");
     if(ctxFitAll) ctxFitAll.textContent = translateKnownPhrase("Centralizar tudo");
@@ -1804,19 +1839,19 @@
   }
   function getNodeBaseSize(node){
     const variant = node?.variant || "default";
-    const w = Number(node?.w || (variant === "sticky" ? 200 : (variant === "profile" ? 420 : variant === "area" ? 420 : 280)));
-    const h = Number(node?.h || (variant === "sticky" ? 110 : (variant === "solution" || variant === "organizer" || variant === "ai" ? 180 : variant === "profile" ? 280 : variant === "area" ? 220 : 92)));
+    const w = Number(node?.w || (variant === "sticky" ? 200 : (variant === "profile" ? 300 : variant === "area" ? 420 : 280)));
+    const h = Number(node?.h || (variant === "sticky" ? 110 : (variant === "solution" || variant === "organizer" || variant === "ai" ? 180 : variant === "profile" ? 198 : variant === "area" ? 220 : 92)));
     return { w, h };
   }
   function getCompactSize(node){
     if(node?.variant === "profile"){
       const base = {
-        w: Number(node?.compactSize?.w || node?.w || 420),
-        h: Number(node?.compactSize?.h || node?.h || 280)
+        w: Number(node?.compactSize?.w || node?.w || 300),
+        h: Number(node?.compactSize?.h || node?.h || 198)
       };
       return {
-        w: clamp(Math.round(Math.max(base.w * 0.85, 320)), 320, 540),
-        h: clamp(Math.round(Math.max(base.h * 0.72, 190)), 190, 320)
+        w: clamp(Math.round(Math.max(base.w * 0.86, 240)), 240, 460),
+        h: clamp(Math.round(Math.max(base.h * 0.8, 162)), 162, 260)
       };
     }
     const size = Number(node?.compactSize?.w || node?.compactSize?.h || 0);
@@ -1905,6 +1940,7 @@
           areaStrokeWidth: Number(n.areaStrokeWidth || 2),
           areaAnimated: !!n.areaAnimated,
           areaLocked: !!n.areaLocked,
+          areaColor: n.areaColor || "#94a3b8",
           compact: !!n.compact,
           compactSize: n.compactSize ? {
             w: Number(n.compactSize.w || 0),
@@ -2005,6 +2041,7 @@
         areaStrokeWidth: Number(n?.style?.areaStrokeWidth ?? n.areaStrokeWidth ?? 2),
         areaAnimated: !!(n?.style?.areaAnimated ?? n.areaAnimated ?? false),
         areaLocked: !!(n?.style?.areaLocked ?? n.areaLocked ?? false),
+        areaColor: (n?.style?.areaColor ?? n.areaColor ?? "#94a3b8").toString(),
         profileProperties: Array.isArray(n?.content?.profileProperties)
           ? JSON.parse(JSON.stringify(n.content.profileProperties))
           : (Array.isArray(n.profileProperties) ? JSON.parse(JSON.stringify(n.profileProperties)) : []),
@@ -2425,7 +2462,7 @@
     textBar?.setAttribute("aria-hidden","false");
     if(tbText){
       tbText.disabled = isSticky;
-      tbText.placeholder = isSticky ? t("stickyToolbarPlaceholder") : (isArea ? "Nome da área" : t("freeTextPlaceholder"));
+      tbText.placeholder = isSticky ? t("stickyToolbarPlaceholder") : (isArea ? translateKnownPhrase("Nome da área") : t("freeTextPlaceholder"));
       tbText.value = isSticky ? "" : (node.text || "");
     }
     if(tbFont){
@@ -2442,15 +2479,22 @@
     }
     if(tbAreaTitle){
       tbAreaTitle.value = isArea ? (node.title || "") : "";
-      tbAreaTitle.placeholder = "Bloco de área";
+      tbAreaTitle.placeholder = translateKnownPhrase("Bloco de área");
       tbAreaTitle.disabled = !isArea;
+    }
+    if(tbAreaColor){
+      tbAreaColor.value = isArea ? (node.areaColor || "#94a3b8") : "#94a3b8";
+      tbAreaColor.title = translateKnownPhrase("Cor");
+      tbAreaColor.disabled = !isArea;
     }
     if(tbAreaPattern){
       tbAreaPattern.value = isArea ? (node.areaPattern || "dotted") : "dotted";
+      tbAreaPattern.title = translateKnownPhrase("Pontilhada");
       tbAreaPattern.disabled = !isArea;
     }
     if(tbAreaWidth){
       tbAreaWidth.value = isArea ? String(clamp(Number(node.areaStrokeWidth || 2), 1, 12)) : "2";
+      tbAreaWidth.title = translateKnownPhrase("Espessura do pixel");
       tbAreaWidth.disabled = !isArea;
     }
     if(tbAreaAnimate){
@@ -2458,13 +2502,15 @@
       tbAreaAnimate.disabled = !isArea;
       tbAreaAnimate.setAttribute("aria-pressed", on ? "true" : "false");
       tbAreaAnimate.classList.toggle("active", on);
+      tbAreaAnimate.title = translateKnownPhrase("Animar linha pontilhada");
     }
     if(tbAreaLock){
       const on = isArea && !!node.areaLocked;
       tbAreaLock.disabled = !isArea;
       tbAreaLock.setAttribute("aria-pressed", on ? "true" : "false");
       tbAreaLock.classList.toggle("active", on);
-      tbAreaLock.innerHTML = on ? "🔒" : "🔓";
+      tbAreaLock.title = on ? translateKnownPhrase("Desbloquear movimentação") : translateKnownPhrase("Bloquear movimentação");
+      tbAreaLock.innerHTML = `<img src="https://us.123rf.com/450wm/sumberejeki/sumberejeki2007/sumberejeki200702918/151738175-ilustra%C3%A7%C3%A3o-gr%C3%A1fico-vetorial-do-%C3%ADcone-do-cadeado-apto-para-chave-seguro-senha-prote%C3%A7%C3%A3o-seguro.jpg?ver=6" alt="" aria-hidden="true" />`;
     }
   }
   function refreshSettingsUI(){
@@ -2720,7 +2766,7 @@
       if(variant === "solution") return 180;
       if(variant === "organizer") return 220;
       if(variant === "ai") return 180;
-      if(variant === "profile") return 280;
+      if(variant === "profile") return 198;
       if(variant === "area") return 220;
       if(variant === "stack") return 104;
       if(variant === "sticky") return 80;
@@ -2773,8 +2819,8 @@
         el.style.height = n.h + "px";
       } else if(n.variant === "profile"){
         el.style.width = (n.w || 420) + "px";
-        el.style.minWidth = "320px";
-        el.style.minHeight = "220px";
+        el.style.minWidth = "260px";
+        el.style.minHeight = "160px";
       } else if(n.variant === "area"){
         el.style.width = (n.w || 420) + "px";
         el.style.minWidth = "220px";
@@ -2812,7 +2858,7 @@
       } else {
         el.style.removeProperty("--tessScale");
       }
-      const variantMinH = isTesseractNode ? 132 : (n.variant === "profile" ? 220 : n.variant === "area" ? 140 : 180);
+      const variantMinH = isTesseractNode ? 132 : (n.variant === "profile" ? 170 : n.variant === "area" ? 140 : 180);
       if(n.variant === "solution" || n.variant === "organizer" || n.variant === "ai" || n.variant === "profile"){
         el.style.height = Math.max(n.h || 0, n.userMinH || variantMinH, variantMinH) + "px";
         el.style.minHeight = "0px";
@@ -2858,13 +2904,13 @@
             .map((prop)=>{
               const label = typeof prop === "string" ? prop : (prop?.label || "");
               const value = typeof prop === "string" ? "" : (prop?.value || "");
-              return `<div class="profileProp"><span class="label">${escapeHTML(label)}</span><span class="value">${escapeHTML(value)}</span></div>`;
+              return `<div class="profileProp"><span class="label">${escapeHTML(translateKnownPhrase(label))}</span><span class="value">${escapeHTML(translateKnownPhrase(value))}</span></div>`;
             })
             .join("");
           const compactEvents = compactProfileEvents.slice(0, 2)
             .map((evt)=>{
               const label = typeof evt === "string" ? evt : (evt?.label || "");
-              return `<div class="profileEvent">${escapeHTML(label)}</div>`;
+              return `<div class="profileEvent">${escapeHTML(translateKnownPhrase(label))}</div>`;
             })
             .join("");
           el.innerHTML = `
@@ -2873,18 +2919,18 @@
                 <img class="profileAvatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="John Smith" />
                 <div class="profileIdentity">
                   <div class="profileName">${escapeHTML(n.title || "John Smith")}</div>
-                  <div class="profileKind">${escapeHTML(n.desc || "Profile / CDP")}</div>
+                  <div class="profileKind">${escapeHTML(translateKnownPhrase(n.desc || "Profile / CDP"))}</div>
                 </div>
               </div>
               <div class="profileMeta">
                 <div class="profilePanel">
-                  <div class="profilePanelTitle">Propriedades</div>
+                  <div class="profilePanelTitle">${escapeHTML(translateKnownPhrase("Propriedades"))}</div>
                   <div class="profileProps">${compactProps}</div>
-                  <div class="profilePanelTitle">Canais favoritos</div>
+                  <div class="profilePanelTitle">${escapeHTML(translateKnownPhrase("Canais favoritos"))}</div>
                   <div class="profileChannels">${compactChannels}</div>
                 </div>
                 <div class="profilePanel">
-                  <div class="profilePanelTitle">Eventos recentes</div>
+                  <div class="profilePanelTitle">${escapeHTML(translateKnownPhrase("Eventos recentes"))}</div>
                   <div class="profileEvents">${compactEvents}</div>
                 </div>
               </div>
@@ -2946,7 +2992,7 @@
         `;
       } else if(n.variant === "profile"){
         const profileName = escapeHTML(n.title || "John Smith");
-        const profileKind = escapeHTML(n.desc || "Profile / CDP");
+        const profileKind = escapeHTML(translateKnownPhrase(n.desc || "Profile / CDP"));
         const profileProperties = Array.isArray(n.profileProperties) && n.profileProperties.length
           ? n.profileProperties
           : PROFILE_PROPERTIES;
@@ -2959,7 +3005,7 @@
         const propsHtml = profileProperties.map((prop)=>{
           const label = typeof prop === "string" ? prop : (prop?.label || "");
           const value = typeof prop === "string" ? "" : (prop?.value || "");
-          return `<div class="profileProp"><span class="label">${escapeHTML(label)}</span><span class="value">${escapeHTML(value)}</span></div>`;
+          return `<div class="profileProp"><span class="label">${escapeHTML(translateKnownPhrase(label))}</span><span class="value">${escapeHTML(translateKnownPhrase(value))}</span></div>`;
         }).join("");
         const channelsHtml = profileChannels.map((ch)=>{
           const label = typeof ch === "string" ? ch : (ch?.label || "");
@@ -2968,7 +3014,7 @@
         }).join("");
         const eventsHtml = profileEvents.map((evt)=>{
           const label = typeof evt === "string" ? evt : (evt?.label || "");
-          return `<div class="profileEvent">${escapeHTML(label)}</div>`;
+          return `<div class="profileEvent">${escapeHTML(translateKnownPhrase(label))}</div>`;
         }).join("");
         el.innerHTML = `
           <div class="profileCard">
@@ -2981,13 +3027,13 @@
             </div>
             <div class="profileMeta">
               <div class="profilePanel">
-                <div class="profilePanelTitle">Propriedades</div>
+                <div class="profilePanelTitle">${escapeHTML(translateKnownPhrase("Propriedades"))}</div>
                 <div class="profileProps">${propsHtml}</div>
-                <div class="profilePanelTitle">Canais favoritos</div>
+                <div class="profilePanelTitle">${escapeHTML(translateKnownPhrase("Canais favoritos"))}</div>
                 <div class="profileChannels">${channelsHtml}</div>
               </div>
               <div class="profilePanel">
-                <div class="profilePanelTitle">Eventos recentes</div>
+                <div class="profilePanelTitle">${escapeHTML(translateKnownPhrase("Eventos recentes"))}</div>
                 <div class="profileEvents">${eventsHtml}</div>
               </div>
             </div>
@@ -3004,6 +3050,7 @@
         const areaStrokeWidth = clamp(Number(n.areaStrokeWidth || 2), 1, 12);
         const areaAnimated = !!n.areaAnimated;
         const areaLocked = !!n.areaLocked;
+        const areaColor = (n.areaColor || "#94a3b8").toString();
         const frameW = Math.max(80, Number(n.w || 420));
         const frameH = Math.max(60, Number(n.h || 220));
         const dashArray = areaPattern === "solid"
@@ -3013,6 +3060,7 @@
             : `${Math.max(1, areaStrokeWidth)} ${Math.max(2, areaStrokeWidth * 2)}`;
         el.classList.toggle("is-animated", areaAnimated);
         el.classList.toggle("locked", areaLocked);
+        el.style.setProperty("--areaStroke", areaColor);
         el.innerHTML = `
           <div class="areaCard">
             <div class="areaCanvasHint"></div>
@@ -4237,6 +4285,7 @@
       areaStrokeWidth: Number(src.areaStrokeWidth || 2),
       areaAnimated: !!src.areaAnimated,
       areaLocked: !!src.areaLocked,
+      areaColor: src.areaColor || "#94a3b8",
       profileProperties: Array.isArray(src.profileProperties) ? JSON.parse(JSON.stringify(src.profileProperties)) : [],
       profileEvents: Array.isArray(src.profileEvents) ? JSON.parse(JSON.stringify(src.profileEvents)) : [],
       profileChannels: Array.isArray(src.profileChannels) ? JSON.parse(JSON.stringify(src.profileChannels)) : [],
@@ -4389,9 +4438,9 @@
     resizing = {
       id: nodeId,
       startWorld: p,
-      w: n.w || (n.variant === "sticky" ? 200 : n.variant === "profile" ? 420 : n.variant === "area" ? 420 : 360),
-      h: Math.max(n.h || (n.variant === "sticky" ? 110 : n.variant === "profile" ? 280 : n.variant === "area" ? 220 : 240), n.variant === "sticky" ? STICKY_MIN_H : n.variant === "profile" ? 220 : n.variant === "area" ? 140 : 180),
-      minH: Math.max(n.userMinH || 0, n.h || 240)
+      w: n.w || (n.variant === "sticky" ? 200 : n.variant === "profile" ? 300 : n.variant === "area" ? 420 : 360),
+      h: Math.max(n.h || (n.variant === "sticky" ? 110 : n.variant === "profile" ? 198 : n.variant === "area" ? 220 : 240), n.variant === "sticky" ? STICKY_MIN_H : n.variant === "profile" ? 160 : n.variant === "area" ? 140 : 180),
+      minH: Math.max(n.userMinH || 0, n.variant === "profile" ? 160 : (n.h || 240))
     };
     setSingleNodeSelection(nodeId);
 
@@ -4424,8 +4473,8 @@
         node.w = Math.max(280, resizing.w + dx);
         node.userMinH = Math.max(180, resizing.minH + dy);
       } else {
-        node.w = clamp(resizing.w + dx, 280, 980);
-        node.userMinH = clamp(resizing.minH + dy, 180, 900);
+        node.w = clamp(resizing.w + dx, node.variant === "profile" ? 260 : 280, 980);
+        node.userMinH = clamp(resizing.minH + dy, node.variant === "profile" ? 160 : 180, 900);
       }
       render();
     };
@@ -5086,9 +5135,9 @@
       icon:"USR", kind:"Solução", type:"blue", variant:"profile",
       title:"John Smith",
       desc:"Profile / CDP",
-      w: 320,
-      h: 220,
-      userMinH: 220,
+      w: 300,
+      h: 198,
+      userMinH: 160,
       profileProperties: [
         { label:"Idade", value:"34 anos" },
         { label:"Cidade", value:"São Paulo" },
@@ -5129,7 +5178,8 @@
       areaPattern: "dotted",
       areaStrokeWidth: 2,
       areaAnimated: false,
-      areaLocked: false
+      areaLocked: false,
+      areaColor: "#94a3b8"
     },
     "text:sticky": {
       icon:"📌", kind:"Nota", type:"gray", variant:"sticky",
@@ -5178,6 +5228,7 @@
       areaStrokeWidth: Number(template.areaStrokeWidth || 2),
       areaAnimated: !!template.areaAnimated,
       areaLocked: !!template.areaLocked,
+      areaColor: template.areaColor || "#94a3b8",
       text: template.text || "",
       fontSize: template.fontSize || defaultFontSizeForVariant(template.variant),
       fontFamily: template.fontFamily || "Georgia",
@@ -5524,6 +5575,13 @@
     const n = (selected.type==="node") ? getNodeById(selected.id) : null;
     if(!n || n.variant !== "area") return;
     n.areaPattern = tbAreaPattern.value || "dotted";
+    queuePersist();
+    render();
+  });
+  tbAreaColor?.addEventListener("input", ()=>{
+    const n = (selected.type==="node") ? getNodeById(selected.id) : null;
+    if(!n || n.variant !== "area") return;
+    n.areaColor = tbAreaColor.value || "#94a3b8";
     queuePersist();
     render();
   });
