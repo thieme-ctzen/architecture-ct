@@ -3767,6 +3767,15 @@
         if(e.target.closest(".compactToggle")) return;
         if(e.target.closest(".port")) return;
         if(suppressNodeClick) return;
+        if(connectMode){
+          if(connectFrom){
+            connectFrom = null;
+            connectDrag = null;
+            hoveredPortHint = null;
+          }
+          selectNode(n.id, !!e.shiftKey);
+          return;
+        }
         selectNode(n.id, !!e.shiftKey);
       });
       if(n.variant !== "text" && n.variant !== "sticky"){
