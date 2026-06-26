@@ -23,13 +23,6 @@
   const btnZoomIn = document.getElementById("btnZoomIn");
   const btnZoomOut = document.getElementById("btnZoomOut");
   const zoomPct = document.getElementById("zoomPct");
-  const mobileDock = document.getElementById("mobileDock");
-  const btnMobileSidebar = document.getElementById("btnMobileSidebar");
-  const btnMobileSettings = document.getElementById("btnMobileSettings");
-  const btnMobileCenter = document.getElementById("btnMobileCenter");
-  const btnMobileZoomOut = document.getElementById("btnMobileZoomOut");
-  const btnMobileZoomIn = document.getElementById("btnMobileZoomIn");
-  const btnMobilePreview = document.getElementById("btnMobilePreview");
   const marqueeEl = document.getElementById("marquee");
   const previewPickEl = document.getElementById("previewPick");
   const textBar = document.getElementById("textBar");
@@ -121,14 +114,10 @@
   let isPanning = false;
   let isMiddlePanning = false;
   let panStart = { x: 0, y: 0, vx: 0, vy: 0 };
-  let pinchState = null;
-  let touchPanState = null;
-
   // flags
   let connectMode = true;
   let flowOn = true;
   let hoveredNodeId = null;
-  let hoveredPortHint = null;
 
   // data
   let nodes = []; // {id, x,y,w,h, title, desc, type, icon, kind}
@@ -1618,21 +1607,8 @@
     edgeTypeBar.style.display = "none";
     edgeTypeBar.innerHTML = "";
   }
-  function isCompactViewport(){
-    return window.matchMedia("(max-width: 1024px)").matches;
-  }
-  function isTouchLikeInput(){
-    return window.matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0;
-  }
-  function isMobileLikeViewport(){
-    return isCompactViewport() || isTouchLikeInput();
-  }
   function syncResponsiveUi(){
-    appEl?.classList.toggle("touch-ui", isTouchLikeInput());
-    appEl?.classList.toggle("mobile-ui", isMobileLikeViewport());
-    if(isMobileLikeViewport()){
-      setSidebarCollapsed(true);
-    }
+    appEl?.classList.remove("touch-ui", "mobile-ui");
   }
   function getClientPoint(e){
     if(typeof e.clientX === "number" && typeof e.clientY === "number"){
@@ -1640,37 +1616,6 @@
     }
     return { x: 0, y: 0 };
   }
-  function bindGestureSession(startEvent, onMove, onUp){
-    const pointerSession = typeof startEvent.pointerId === "number" && startEvent.type.startsWith("pointer");
-    const moveEvt = pointerSession ? "pointermove" : "mousemove";
-    const upEvt = pointerSession ? "pointerup" : "mouseup";
-    const cancelEvt = pointerSession ? "pointercancel" : null;
-    const pointerId = pointerSession ? startEvent.pointerId : null;
-    const move = (ev)=>{
-      if(pointerSession && ev.pointerId !== pointerId) return;
-      onMove(ev);
-    };
-    const up = (ev)=>{
-      if(pointerSession && ev.pointerId !== pointerId) return;
-      cleanup();
-      onUp(ev);
-    };
-    const cancel = (ev)=>{
-      if(pointerSession && ev.pointerId !== pointerId) return;
-      cleanup();
-      onUp(ev, true);
-    };
-    const cleanup = ()=>{
-      document.removeEventListener(moveEvt, move);
-      document.removeEventListener(upEvt, up);
-      if(cancelEvt) document.removeEventListener(cancelEvt, cancel);
-    };
-    document.addEventListener(moveEvt, move);
-    document.addEventListener(upEvt, up);
-    if(cancelEvt) document.addEventListener(cancelEvt, cancel);
-    return cleanup;
-  }
-
   function setTransform(){
     nodesLayer.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.z})`;
     svg.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.z})`;
@@ -2703,6 +2648,16 @@
     });
   }
 
+  let renderQueued = false;
+  function requestRender(){
+    if(renderQueued) return;
+    renderQueued = true;
+    requestAnimationFrame(()=>{
+      renderQueued = false;
+      render();
+    });
+  }
+
   // --- Render ---
   function render(){
     const ORGANIZER_OPTIONS = [
@@ -3552,11 +3507,7 @@
           port.addEventListener("mousedown", (e)=>{
             startConnectDrag(e, n.id, p);
           });
-          port.addEventListener("pointerdown", (e)=>{
-            if(e.pointerType === "mouse") return;
-            startConnectDrag(e, n.id, p);
-          });
-          el.appendChild(port);
+      el.appendChild(port);
         }
       }
 
@@ -3751,31 +3702,13 @@
       });
       const resizeHandle = el.querySelector(".nodeResize");
       resizeHandle?.addEventListener("mousedown", (e)=>startResizeNode(e, n.id));
-      resizeHandle?.addEventListener("pointerdown", (e)=>{
-        if(e.pointerType === "mouse") return;
-        startResizeNode(e, n.id);
-      });
-
       el.addEventListener("mousedown", (e)=>startDragNode(e, n.id));
-      el.addEventListener("pointerdown", (e)=>{
-        if(e.pointerType === "mouse") return;
-        startDragNode(e, n.id);
-      });
       el.addEventListener("click", (e)=>{
         e.stopPropagation();
         if(e.target.closest(".orgTitleBtn") || e.target.closest(".orgMenu")) return;
         if(e.target.closest(".compactToggle")) return;
         if(e.target.closest(".port")) return;
         if(suppressNodeClick) return;
-        if(connectMode){
-          if(connectFrom){
-            connectFrom = null;
-            connectDrag = null;
-            hoveredPortHint = null;
-          }
-          selectNode(n.id, !!e.shiftKey);
-          return;
-        }
         selectNode(n.id, !!e.shiftKey);
       });
       if(n.variant !== "text" && n.variant !== "sticky"){
@@ -3961,7 +3894,6 @@
       connectFrom = null;
       connectDrag = null;
       hoveredNodeId = null;
-      hoveredPortHint = null;
     }
     if(!silent) showToast(`Conectar ${connectMode ? "habilitado" : "desabilitado"}.`);
     render();
@@ -4000,49 +3932,6 @@
 
     createConnection(connectFrom, { nodeId, port });
   }
-  function handleNodeConnectClick(nodeId, clientX, clientY){
-    const node = getNodeById(nodeId);
-    if(!isConnectableNode(node)) return false;
-    const exclude = connectFrom?.nodeId === nodeId ? connectFrom.port : "";
-    const port = nodePointToPort(node, clientX, clientY, exclude);
-    if(!connectFrom){
-      connectFrom = { nodeId, port };
-      setSingleNodeSelection(nodeId);
-      hoveredPortHint = null;
-      showToast("Port de origem definido. Clique em outro bloco para conectar.");
-      render();
-      return true;
-    }
-    if(connectFrom.nodeId === nodeId && normalizePortKey(connectFrom.port) === normalizePortKey(port)){
-      showToast("Escolha um PORT diferente para conectar.");
-      return true;
-    }
-    createConnection(connectFrom, { nodeId, port });
-    return true;
-  }
-  function updateHoveredPortHint(nodeId, clientX, clientY){
-    if(!connectMode) return false;
-    const node = getNodeById(nodeId);
-    if(!isConnectableNode(node)) return false;
-    if(connectFrom && connectFrom.nodeId === nodeId){
-      if(hoveredPortHint !== null){
-        hoveredPortHint = null;
-        render();
-      }
-      return true;
-    }
-    const exclude = connectFrom?.nodeId === nodeId ? connectFrom.port : "";
-    const info = nodePointToPortInfo(node, clientX, clientY, exclude);
-    const thresholdPx = portHoverThresholdPx(node);
-    const distancePx = info.distance * Math.max(view.z, 0.0001);
-    const next = distancePx <= thresholdPx ? { nodeId, port: info.port } : null;
-    const prevNode = hoveredPortHint?.nodeId || null;
-    const prevPort = hoveredPortHint?.port || null;
-    if(prevNode === (next?.nodeId || null) && prevPort === (next?.port || null)) return true;
-    hoveredPortHint = next;
-    render();
-    return true;
-  }
   function createConnection(from, to){
     if(!from || !to) return false;
     const fromPort = normalizePortKey(from.port);
@@ -4054,7 +3943,6 @@
     if(exists){
       showToast("Essa conexão já existe.");
       connectFrom = null;
-      hoveredPortHint = null;
       render();
       return false;
     }
@@ -4067,7 +3955,6 @@
     });
     showToast("Conexao criada (fluxo animado).");
     connectFrom = null;
-    hoveredPortHint = null;
     hoveredNodeId = null;
     clearNodeSelection();
     selected = { type:null, id:null };
@@ -4094,35 +3981,6 @@
     }
     return hit;
   }
-  function findNodeAtPoint(x, y){
-    for(let i = nodes.length - 1; i >= 0; i--){
-      const n = nodes[i];
-      if(n.variant === "text" || n.variant === "sticky") continue;
-      const w = n.w || 280;
-      const h = Math.max(n.h || 92, 92);
-      if(x >= n.x && x <= n.x + w && y >= n.y && y <= n.y + h) return n;
-    }
-    return null;
-  }
-  function bestPortForNode(targetNode, from){
-    const fromNode = nodes.find(n=>n.id===from.nodeId);
-    if(!fromNode) return { nodeId: targetNode.id, port: "w2" };
-    const src = portPos(fromNode, from.port);
-    let preferred = null;
-    let best = Infinity;
-    for(const p of PORTS){
-      if(from.nodeId === targetNode.id && normalizePortKey(from.port) === p) continue;
-      const pos = portPos(targetNode, p);
-      const dx = src.x - pos.x;
-      const dy = src.y - pos.y;
-      const d2 = dx*dx + dy*dy;
-      if(d2 < best){
-        best = d2;
-        preferred = p;
-      }
-    }
-    return { nodeId: targetNode.id, port: preferred || "w2" };
-  }
   function portLabel(port){
     const side = portSide(port);
     if(side === "n") return "Topo";
@@ -4132,34 +3990,29 @@
     return port || "";
   }
   function startConnectDrag(e, nodeId, port){
-    const pointerSession = typeof e.pointerId === "number" && e.type.startsWith("pointer");
-    if(pointerSession){
-      if(e.pointerType === "mouse" && e.button !== 0) return;
-      if(e.pointerType !== "mouse"){
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    } else if(e.button !== 0) return;
+    if(e.button !== 0) return;
     if(!connectMode) return;
-    if(!pointerSession || e.pointerType === "mouse"){
-      e.stopPropagation();
-      e.preventDefault();
-    }
+    e.stopPropagation();
+    e.preventDefault();
     const from = { nodeId, port };
     const start = worldFromClient(e.clientX, e.clientY);
     let dragStarted = false;
+    const cleanup = ()=>{
+      document.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseup", up);
+    };
 
     const move = (ev)=>{
       if(!connectMode){
         connectDrag = null;
+        cleanup();
         return;
       }
       const p = worldFromClient(ev.clientX, ev.clientY);
       const moveMin = screenPxToWorld(3);
       if(!dragStarted && (Math.abs(p.x - start.x) > moveMin || Math.abs(p.y - start.y) > moveMin)){
-        const pos = portPos(nodes.find(n=>n.id===nodeId), port);
         connectFrom = { nodeId, port: normalizePortKey(from.port) };
-        connectDrag = { from:{ ...from }, to:{ x:pos.x, y:pos.y }, moved:true, target:null, hoverKey:"" };
+        connectDrag = { from:{ ...from }, to:{ x:p.x, y:p.y }, moved:true, target:null, hoverKey:"" };
         setSingleNodeSelection(nodeId);
         dragStarted = true;
         showToast("Arraste até o port de destino.");
@@ -4167,10 +4020,6 @@
       if(!dragStarted || !connectDrag) return;
       connectDrag.to = p;
       let target = findPortNear(p.x, p.y, connectDrag.from, screenPxToWorld(26));
-      if(!target){
-        const hitNode = findNodeAtPoint(p.x, p.y);
-        if(hitNode) target = bestPortForNode(hitNode, connectDrag.from);
-      }
       connectDrag.target = target;
       const key = target ? `${target.nodeId}:${target.port}` : "";
       if(key !== connectDrag.hoverKey){
@@ -4180,14 +4029,16 @@
           showToast(`Solte para conectar em ${hit?.title || "bloco"} (${portLabel(target.port)}).`);
         }
       }
-      render();
+      requestRender();
     };
     const up = (ev)=>{
       if(!connectMode){
         connectDrag = null;
+        cleanup();
         return;
       }
       if(!dragStarted){
+        cleanup();
         onPortClick(nodeId, port);
         return;
       }
@@ -4197,27 +4048,20 @@
       let target = connectDrag.target;
       if(!target){
         target = findPortNear(p.x, p.y, connectDrag.from, screenPxToWorld(26));
-        if(!target){
-          const hitNode = findNodeAtPoint(p.x, p.y);
-          if(hitNode) target = bestPortForNode(hitNode, connectDrag.from);
-        }
       }
       const from = connectDrag.from;
       connectDrag = null;
+      cleanup();
 
       if(target){
         createConnection(from, target);
       } else {
         connectFrom = null;
-        render();
+        requestRender();
       }
     };
-    if(pointerSession && e.pointerType !== "mouse"){
-      bindGestureSession(e, move, up);
-    } else {
-      document.addEventListener("mousemove", move);
-      document.addEventListener("mouseup", up);
-    }
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", up);
   }
 
   function removeEdgeById(edgeId){
@@ -4226,7 +4070,7 @@
     if(selected.type === "edge" && selected.id === edgeId){
       selected = { type:null, id:null };
     }
-    render();
+    requestRender();
     showToast("Conexao removida.");
   }
 
@@ -4338,10 +4182,7 @@
   let dragging = null; // {ids, startWorld, starts, moved}
   let resizing = null; // {id, startWorld, w, minH}
   function startDragNode(e, nodeId){
-    const pointerSession = typeof e.pointerId === "number" && e.type.startsWith("pointer");
-    if(pointerSession){
-      if(e.pointerType === "mouse" && e.button !== 0) return;
-    } else if(e.button !== 0) return;
+    if(e.button !== 0) return;
     const n = nodes.find(x=>x.id===nodeId);
     if(n?.variant === "area" && n.areaLocked) return;
     if(e.target.closest(".port")) return;
@@ -4365,14 +4206,8 @@
     if(e.target.closest(".textFont")) return;
     if(e.target.closest('[contenteditable="true"]')) return;
     if(e.shiftKey) return;
-    if(pointerSession && e.pointerType !== "mouse"){
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    if(!pointerSession || e.pointerType === "mouse"){
-      e.stopPropagation();
-      e.preventDefault();
-    }
+    e.stopPropagation();
+    e.preventDefault();
     rememberActionState();
     if(!selectedNodeIds.has(nodeId)) setSingleNodeSelection(nodeId);
     syncSingleSelection();
@@ -4383,13 +4218,9 @@
       const n = nodes.find(x=>x.id===id);
       return { id, x:n?.x || 0, y:n?.y || 0 };
     });
-    dragging = { ids, startWorld: p, starts, moved:false, pointerType: e.pointerType || "mouse" };
-    if(pointerSession && e.pointerType !== "mouse"){
-      bindGestureSession(e, onDragNode, ()=>endDragNode());
-    } else {
-      document.addEventListener("mousemove", onDragNode);
-      document.addEventListener("mouseup", endDragNode, { once:true });
-    }
+    dragging = { ids, startWorld: p, starts, moved:false };
+    document.addEventListener("mousemove", onDragNode);
+    document.addEventListener("mouseup", endDragNode, { once:true });
   }
   function onDragNode(e){
     if(!dragging) return;
@@ -4406,7 +4237,7 @@
       n.x = s.x + dx;
       n.y = s.y + dy;
     }
-    render();
+    requestRender();
   }
   function endDragNode(){
     if(dragging?.moved){
@@ -4416,31 +4247,16 @@
         suppressNodeClick = false;
         suppressWrapClick = false;
       }, 0);
-    } else if(dragging && dragging.pointerType && dragging.pointerType !== "mouse"){
-      const firstId = dragging.ids?.[0];
-      if(firstId){
-        setSingleNodeSelection(firstId);
-        render();
-      }
     }
     dragging = null;
     document.removeEventListener("mousemove", onDragNode);
   }
   function startResizeNode(e, nodeId){
-    const pointerSession = typeof e.pointerId === "number" && e.type.startsWith("pointer");
-    if(pointerSession){
-      if(e.pointerType === "mouse" && e.button !== 0) return;
-      if(e.pointerType !== "mouse"){
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    } else if(e.button !== 0) return;
+    if(e.button !== 0) return;
     const n = nodes.find(x=>x.id===nodeId);
     if(!n || (n.variant !== "solution" && n.variant !== "organizer" && n.variant !== "ai" && n.variant !== "sticky" && n.variant !== "profile" && n.variant !== "area")) return;
-    if(!pointerSession || e.pointerType === "mouse"){
-      e.stopPropagation();
-      e.preventDefault();
-    }
+    e.stopPropagation();
+    e.preventDefault();
     rememberActionState();
 
     const p = worldFromClient(e.clientX, e.clientY);
@@ -4463,7 +4279,7 @@
       if(node.variant === "sticky"){
         node.w = clamp(resizing.w + dx, STICKY_MIN_W, STICKY_MAX_W);
         node.h = clamp(resizing.h + dy, STICKY_MIN_H, STICKY_MAX_H);
-        render();
+        requestRender();
         return;
       }
       if(node.variant === "area"){
@@ -4474,7 +4290,7 @@
           node.w = Math.max(220, resizing.w + dx);
           node.h = Math.max(140, resizing.h + dy);
         }
-        render();
+        requestRender();
         return;
       }
       const isUnlimited = !!node.unboundedResize || node.variant === "organizer" || (node.title || "").toLowerCase().includes("tesseractdb");
@@ -4485,17 +4301,13 @@
         node.w = clamp(resizing.w + dx, node.variant === "profile" ? 260 : 280, 980);
         node.userMinH = clamp(resizing.minH + dy, node.variant === "profile" ? 160 : 180, 900);
       }
-      render();
+      requestRender();
     };
     const up = ()=>{
       resizing = null;
     };
-    if(pointerSession && e.pointerType !== "mouse"){
-      bindGestureSession(e, move, up);
-    } else {
-      document.addEventListener("mousemove", move);
-      document.addEventListener("mouseup", up);
-    }
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", up);
   }
 
   // --- Middle-click pan anywhere (navigation mode) ---
@@ -4581,7 +4393,7 @@
         const b = worldToScreen(Math.max(marquee.x1, marquee.x2), Math.max(marquee.y1, marquee.y2));
         showMarqueeRect({ x:a.x, y:a.y, w:Math.max(1, b.x - a.x), h:Math.max(1, b.y - a.y) });
         applyMarqueeSelection(marquee);
-        render();
+        requestRender();
       };
       const up = ()=>{
         document.removeEventListener("mousemove", move);
@@ -4590,7 +4402,7 @@
         marquee = null;
         suppressWrapClick = true;
         setTimeout(()=>{ suppressWrapClick = false; }, 0);
-        render();
+        requestRender();
       };
       document.addEventListener("mousemove", move);
       document.addEventListener("mouseup", up);
@@ -4635,95 +4447,7 @@
     setZoom(view.z + delta, e.clientX, e.clientY);
   }, { passive:false });
 
-  // Touch: 2-finger pinch + pan for tablet/mobile navigation
-  wrap.addEventListener("touchstart", (e)=>{
-    if(e.touches.length === 1){
-      if(e.target !== wrap && e.target.id !== "canvas" && e.target !== grid && e.target !== svg && e.target !== nodesLayer) return;
-      e.preventDefault();
-      const t = e.touches[0];
-      const r = wrap.getBoundingClientRect();
-      touchPanState = {
-        startX: t.clientX,
-        startY: t.clientY,
-        startVX: view.x,
-        startVY: view.y,
-        moved: false
-      };
-      mainEl?.classList.add("grabbing");
-      wrap.classList.add("grabbing");
-      return;
-    }
-    if(e.touches.length !== 2) return;
-    e.preventDefault();
-    const t1 = e.touches[0];
-    const t2 = e.touches[1];
-    const mid = touchMidpoint(t1, t2);
-    const r = wrap.getBoundingClientRect();
-    const lx = mid.x - r.left;
-    const ly = mid.y - r.top;
-    pinchState = {
-      distance: touchDistance(t1, t2),
-      startZ: view.z,
-      worldX: (lx - view.x) / view.z,
-      worldY: (ly - view.y) / view.z
-    };
-    mainEl?.classList.add("grabbing");
-  }, { passive:false });
-  wrap.addEventListener("touchmove", (e)=>{
-    if(touchPanState && e.touches.length === 1){
-      e.preventDefault();
-      const t = e.touches[0];
-      view.x = touchPanState.startVX + (t.clientX - touchPanState.startX);
-      view.y = touchPanState.startVY + (t.clientY - touchPanState.startY);
-      if(Math.abs(t.clientX - touchPanState.startX) > 2 || Math.abs(t.clientY - touchPanState.startY) > 2){
-        touchPanState.moved = true;
-      }
-      setTransform();
-      return;
-    }
-    if(!pinchState || e.touches.length !== 2) return;
-    e.preventDefault();
-    const t1 = e.touches[0];
-    const t2 = e.touches[1];
-    const ratio = touchDistance(t1, t2) / Math.max(pinchState.distance, 1);
-    const nextZ = clamp(pinchState.startZ * ratio, 0.35, 2.2);
-    const mid = touchMidpoint(t1, t2);
-    const r = wrap.getBoundingClientRect();
-    const lx = mid.x - r.left;
-    const ly = mid.y - r.top;
-    view.z = nextZ;
-    view.x = lx - pinchState.worldX * nextZ;
-    view.y = ly - pinchState.worldY * nextZ;
-    setTransform();
-  }, { passive:false });
-  wrap.addEventListener("touchend", (e)=>{
-    if(touchPanState && e.touches.length === 0){
-      if(touchPanState.moved){
-        suppressWrapClick = true;
-        setTimeout(()=>{ suppressWrapClick = false; }, 0);
-      }
-      touchPanState = null;
-      mainEl?.classList.remove("grabbing");
-      wrap.classList.remove("grabbing");
-      return;
-    }
-    if(!pinchState) return;
-    pinchState = null;
-    mainEl?.classList.remove("grabbing");
-    wrap.classList.remove("grabbing");
-  }, { passive:true });
-  wrap.addEventListener("touchcancel", ()=>{
-    if(touchPanState){
-      touchPanState = null;
-      mainEl?.classList.remove("grabbing");
-      wrap.classList.remove("grabbing");
-      return;
-    }
-    if(!pinchState) return;
-    pinchState = null;
-    mainEl?.classList.remove("grabbing");
-    wrap.classList.remove("grabbing");
-  }, { passive:true });
+  // Desktop only: no touch handlers.
 
   // --- Modal edit ---
   function openEdit(nodeId){
@@ -5255,7 +4979,6 @@
     const newEl = nodesLayer.querySelector(`[data-id="${newId}"]`);
     newEl?.classList.add("is-new");
     setTimeout(()=> newEl?.classList.remove("is-new"), 250);
-    if(isMobileLikeViewport()) setSidebarCollapsed(true);
     showToast(t("blockAdded"));
   }
 
@@ -5643,25 +5366,6 @@
     const next = !appEl?.classList.contains("sidebar-collapsed");
     setSidebarCollapsed(next);
   });
-  btnMobileSidebar?.addEventListener("click", ()=>{
-    const next = !appEl?.classList.contains("sidebar-collapsed");
-    setSidebarCollapsed(next);
-  });
-  btnMobileSettings?.addEventListener("click", ()=>{
-    btnSettings?.click();
-  });
-  btnMobileCenter?.addEventListener("click", ()=>{
-    btnCenter?.click();
-  });
-  btnMobileZoomOut?.addEventListener("click", ()=>{
-    btnZoomOut?.click();
-  });
-  btnMobileZoomIn?.addEventListener("click", ()=>{
-    btnZoomIn?.click();
-  });
-  btnMobilePreview?.addEventListener("click", ()=>{
-    btnPreview?.click();
-  });
   cfgLineType?.addEventListener("change", ()=>{
     edgeCfg.lineType = cfgLineType.value;
     render();
@@ -5724,7 +5428,6 @@
     }
     const ok = (e.target === wrap || e.target.id==="canvas" || e.target===grid || e.target===svg || e.target===nodesLayer);
     if(!ok) return;
-    if(isMobileLikeViewport()) setSidebarCollapsed(true);
     settingsPanel?.classList.remove("show");
     settingsPanel?.setAttribute("aria-hidden","true");
     nodes.forEach((n)=>{ if(n.variant === "organizer") n.orgMenuOpen = false; });
@@ -6368,7 +6071,6 @@
   ensureCanvasNameI18n();
   setTransform();
   syncResponsiveUi();
-  const collapseSidebarSectionsOnInit = isMobileLikeViewport();
   window.addEventListener("resize", ()=>{
     syncResponsiveUi();
     if(nativeFlyout?.classList.contains("open")) positionNativeFlyout();
@@ -6379,11 +6081,6 @@
   btnFlow.classList.toggle("active", flowOn);
   refreshSettingsUI();
   setLanguage(currentLanguage, { silent:true, skipSnapshot:true, render:false });
-  if(collapseSidebarSectionsOnInit){
-    document.querySelectorAll(".section").forEach((section)=>{
-      setSectionCollapsed(section, true);
-    });
-  }
   positionToastBelowHeader();
   render();
 
