@@ -611,32 +611,38 @@
       </div>
       <button class="settingsFab" id="btnSettings" type="button" title="Configuracoes">⚙</button>
       <div class="textBar" id="textBar" aria-hidden="true">
-        <input id="tbText" type="text" placeholder="Digite aqui sua anotacao..." style="width:230px;height:24px;border:1px solid #dbe4f0;border-radius:999px;padding:0 10px;font-size:12px;outline:none;" />
-        <button class="textCtl" id="tbDec" type="button" title="Diminuir fonte">A-</button>
-        <button class="textCtl" id="tbInc" type="button" title="Aumentar fonte">A+</button>
-        <select class="textFont" id="tbFont" title="Fonte">
-          <option value="Georgia">Georgia</option>
-          <option value="'Trebuchet MS'">Trebuchet</option>
-          <option value="Verdana">Verdana</option>
-          <option value="'Courier New'">Courier</option>
-          <option value="'Times New Roman'">Times</option>
-        </select>
-        <input id="tbColor" type="color" title="Cor" style="width:30px;height:24px;border:none;background:transparent;padding:0;" />
-        <select class="textFont" id="tbAlign" title="Alinhamento">
-          <option value="left">Esq</option>
-          <option value="center">Centro</option>
-          <option value="right">Dir</option>
-        </select>
-        <input id="tbAreaTitle" type="text" placeholder="Bloco de área" style="width:170px;height:24px;border:1px solid #dbe4f0;border-radius:999px;padding:0 10px;font-size:12px;outline:none;display:none;" />
-        <select class="textFont" id="tbAreaPattern" title="Pontilhado" style="display:none;">
-          <option value="dotted">Pontilhado</option>
-          <option value="dashed">Tracejado</option>
-          <option value="solid">Contínuo</option>
-        </select>
-        <input id="tbAreaColor" type="color" title="Cor" value="#94a3b8" style="width:30px;height:24px;border:none;background:transparent;padding:0;display:none;" />
-        <input id="tbAreaWidth" type="number" min="1" max="12" step="1" value="2" title="Espessura do pixel" style="width:58px;height:24px;border:1px solid #dbe4f0;border-radius:999px;padding:0 8px;font-size:12px;outline:none;display:none;" />
-        <button class="textCtl" id="tbAreaAnimate" type="button" title="Animar linha pontilhada" aria-pressed="false" style="display:none;">Anim</button>
-        <button class="textCtl" id="tbAreaLock" type="button" title="Bloquear movimentação" aria-pressed="false" style="display:none;"><img src="https://us.123rf.com/450wm/sumberejeki/sumberejeki2007/sumberejeki200702918/151738175-ilustra%C3%A7%C3%A3o-gr%C3%A1fico-vetorial-do-%C3%ADcone-do-cadeado-apto-para-chave-seguro-senha-prote%C3%A7%C3%A3o-seguro.jpg?ver=6" alt="" aria-hidden="true" /></button>
+        <div class="textBarRow textBarPrimary">
+          <textarea id="tbText" rows="2" placeholder="Digite aqui sua anotação..." spellcheck="false"></textarea>
+          <div class="textBarZoom">
+            <button class="textCtl" id="tbDec" type="button" title="Diminuir fonte">A-</button>
+            <button class="textCtl" id="tbInc" type="button" title="Aumentar fonte">A+</button>
+          </div>
+        </div>
+        <div class="textBarRow textBarSecondary">
+          <select class="textFont" id="tbFont" title="Fonte">
+            <option value="Georgia">Georgia</option>
+            <option value="'Trebuchet MS'">Trebuchet</option>
+            <option value="Verdana">Verdana</option>
+            <option value="'Courier New'">Courier</option>
+            <option value="'Times New Roman'">Times</option>
+          </select>
+          <input id="tbColor" type="color" title="Cor" />
+          <select class="textFont" id="tbAlign" title="Alinhamento">
+            <option value="left">Esq</option>
+            <option value="center">Centro</option>
+            <option value="right">Dir</option>
+          </select>
+          <input id="tbAreaTitle" type="text" placeholder="Bloco de área" style="display:none;" />
+          <select class="textFont" id="tbAreaPattern" title="Pontilhado" style="display:none;">
+            <option value="dotted">Pontilhado</option>
+            <option value="dashed">Tracejado</option>
+            <option value="solid">Contínuo</option>
+          </select>
+          <input id="tbAreaColor" type="color" title="Cor" value="#94a3b8" style="display:none;" />
+          <input id="tbAreaWidth" type="number" min="1" max="12" step="1" value="2" title="Espessura do pixel" style="display:none;" />
+          <button class="textCtl" id="tbAreaAnimate" type="button" title="Animar linha pontilhada" aria-pressed="false" style="display:none;">Anim</button>
+          <button class="textCtl" id="tbAreaLock" type="button" title="Bloquear movimentação" aria-pressed="false" style="display:none;"><img src="https://us.123rf.com/450wm/sumberejeki/sumberejeki2007/sumberejeki200702918/151738175-ilustra%C3%A7%C3%A3o-gr%C3%A1fico-vetorial-do-%C3%ADcone-do-cadeado-apto-para-chave-seguro-senha-prote%C3%A7%C3%A3o-seguro.jpg?ver=6" alt="" aria-hidden="true" /></button>
+        </div>
       </div>
 
       <div class="wrap" id="wrap">
@@ -652,14 +658,6 @@
         <svg id="svg" aria-hidden="true"></svg>
         <div class="nodes" id="nodes"></div>
         <div class="toast" id="toast"></div>
-      </div>
-      <div class="mobileDock" id="mobileDock" aria-label="Ações rápidas do canvas">
-        <button class="mobileDockBtn" id="btnMobileSidebar" type="button" title="Sidebar" aria-label="Sidebar">☰</button>
-        <button class="mobileDockBtn" id="btnMobileSettings" type="button" title="Configurações" aria-label="Configurações">⚙</button>
-        <button class="mobileDockBtn" id="btnMobileCenter" type="button" title="Centralizar" aria-label="Centralizar">◎</button>
-        <button class="mobileDockBtn" id="btnMobileZoomOut" type="button" title="Zoom out" aria-label="Zoom out">−</button>
-        <button class="mobileDockBtn" id="btnMobileZoomIn" type="button" title="Zoom in" aria-label="Zoom in">+</button>
-        <button class="mobileDockBtn primary" id="btnMobilePreview" type="button" title="Selecionar área" aria-label="Selecionar área">⌁</button>
       </div>
     </main>
   </div>
