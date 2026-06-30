@@ -2409,6 +2409,10 @@
       tbText.disabled = isSticky;
       tbText.placeholder = isSticky ? t("stickyToolbarPlaceholder") : (isArea ? translateKnownPhrase("Nome da área") : t("freeTextPlaceholder"));
       tbText.value = isSticky ? "" : (node.text || "");
+      tbText.style.height = "auto";
+      const maxH = isArea ? 66 : 124;
+      const minH = isSticky ? 40 : (isArea ? 40 : 86);
+      tbText.style.height = `${Math.max(minH, Math.min(tbText.scrollHeight, maxH))}px`;
     }
     if(tbFont){
       tbFont.disabled = isSticky;
@@ -2761,9 +2765,11 @@
       applyNodeCompactState(n);
       const isCompactNode = !!n.compact && n.variant !== "text" && n.variant !== "sticky" && n.variant !== "area";
       if(n.variant === "text"){
-        el.style.width = "auto";
-        el.style.minWidth = "0";
-        el.style.minHeight = "0";
+        const textWidth = clamp(Number(n.w || 320), 260, 520);
+        el.style.width = textWidth + "px";
+        el.style.minWidth = "260px";
+        el.style.maxWidth = "520px";
+        el.style.minHeight = "124px";
         el.style.height = "auto";
       } else if(n.variant === "sticky"){
         n.w = clamp(Number(n.w || 200), STICKY_MIN_W, STICKY_MAX_W);
@@ -2912,7 +2918,7 @@
       } else if(compactToggleAnim?.nodeId === n.id){
         el.classList.add("compactAnim", `compactAnim-${compactToggleAnim.mode}`);
       } else if(n.variant === "text"){
-        const fontSize = clamp(Number(n.fontSize || 28), 12, 92);
+        const fontSize = clamp(Number(n.fontSize || 24), 12, 60);
         const fontFamily = (n.fontFamily || "Georgia").toString();
         const color = (n.color || "#1e293b").toString();
         const align = (n.align || "left").toString();
@@ -4896,11 +4902,11 @@
       icon:"T", kind:"Texto", type:"gray", variant:"text",
       title:"Texto Livre",
       text:"Digite aqui sua anotação...",
-      fontSize:28,
+      fontSize:24,
       fontFamily:"Georgia",
       color:"#1e293b",
       align:"left",
-      w: 220
+      w: 320
     },
     "general:area": {
       icon:"AR", kind:"Anotação", type:"gray", variant:"area",
@@ -5346,6 +5352,8 @@
     n.i18n.text[currentLanguage] = n.text;
     const textEl = nodesLayer.querySelector(`.node[data-id="${n.id}"] .textNodeBody`);
     if(textEl) textEl.textContent = n.text || "";
+    tbText.style.height = "auto";
+    tbText.style.height = `${Math.max(86, Math.min(tbText.scrollHeight, 124))}px`;
     queuePersist();
   });
   tbText?.addEventListener("change", ()=>{
