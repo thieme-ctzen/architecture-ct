@@ -2765,11 +2765,10 @@
       applyNodeCompactState(n);
       const isCompactNode = !!n.compact && n.variant !== "text" && n.variant !== "sticky" && n.variant !== "area";
       if(n.variant === "text"){
-        const textWidth = clamp(Number(n.w || 320), 260, 520);
-        el.style.width = textWidth + "px";
-        el.style.minWidth = "260px";
-        el.style.maxWidth = "520px";
-        el.style.minHeight = "124px";
+        el.style.width = "auto";
+        el.style.minWidth = "0";
+        el.style.maxWidth = "none";
+        el.style.minHeight = "0";
         el.style.height = "auto";
       } else if(n.variant === "sticky"){
         n.w = clamp(Number(n.w || 200), STICKY_MIN_W, STICKY_MAX_W);
