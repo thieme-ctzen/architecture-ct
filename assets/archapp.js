@@ -410,7 +410,7 @@
     {
       "id": "n_0bc8b132","nodeRef": "solucao:tesseractdb:n_0bc8b132","order": 26,"kind": "Solução","variant": "solution","title": "TesseractDB™",
       "position": { "x": -173, "y": 530 },"size": { "w": 1095, "h": 211, "userMinH": 211 },
-      "style": { "type": "red","icon": "T","logoUrl": "","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "tesseract","solutionLogo": "https://clevertap.com/wp-content/uploads/2024/03/Hyper-personalization-image.png","stackCatalog": "" },
+      "style": { "type": "red","icon": "T","logoUrl": "","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "tesseract","solutionLogo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8xaoF7Ur9YH164H8QTlfxqzyvOVIZ_XpYm8fJozOikA&s=10","stackCatalog": "" },
       "content": {
         "description": "","text": "",
         "items": [
