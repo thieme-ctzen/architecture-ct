@@ -368,7 +368,7 @@
     {
       "id": "n_dfa6e41e","nodeRef": "ads:tiktok-ads:n_dfa6e41e","order": 19,"kind": "Ads","variant": "default","title": "TikTok Ads",
       "position": { "x": 961, "y": 439 },"size": { "w": 280, "h": 92, "userMinH": 0 },
-      "style": { "type": "red","icon": "TT","logoUrl": "https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "red","icon": "TT","logoUrl": "https://img.magnific.com/vetores-premium/logo-do-tik-tok_578229-290.jpg?semt=ais_hybrid&w=740&q=80","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Export de audiencia para remarketing.","text": "","items": [],"orgOptions": [],"stacks": [] }
     },
     {
