@@ -1698,15 +1698,9 @@
     try{
       const u = new URL(clean);
       const host = u.hostname.toLowerCase();
-      const needsProxy = (
-        host === "icons.veryicon.com" ||
-        host === "images.icon-icons.com" ||
-        host === "www.messangi.com" ||
-        host === "messangi.com" ||
-        host === "encrypted-tbn0.gstatic.com" ||
-        host === "static.vecteezy.com"
-      );
-      if(!needsProxy) return clean;
+      const currentHost = window.location.hostname.toLowerCase();
+      const isLocalHost = !host || host === currentHost || host === "localhost" || host === "127.0.0.1";
+      if(isLocalHost) return clean;
       const urlNoScheme = clean.replace(/^https?:\/\//i, "");
       return `https://images.weserv.nl/?url=${encodeURIComponent(urlNoScheme)}`;
     } catch {
