@@ -95,6 +95,8 @@
   const fTitle = document.getElementById("fTitle");
   const fDesc = document.getElementById("fDesc");
   const fLogo = document.getElementById("fLogo");
+  const fSolutionLogo = document.getElementById("fSolutionLogo");
+  const fSolutionLogoRow = document.getElementById("fSolutionLogoRow");
   const fType = document.getElementById("fType");
   const btnSaveNode = document.getElementById("btnSaveNode");
   const btnDeleteNode = document.getElementById("btnDeleteNode");
@@ -368,7 +370,7 @@
     {
       "id": "n_dfa6e41e","nodeRef": "ads:tiktok-ads:n_dfa6e41e","order": 19,"kind": "Ads","variant": "default","title": "TikTok Ads",
       "position": { "x": 961, "y": 439 },"size": { "w": 280, "h": 92, "userMinH": 0 },
-      "style": { "type": "red","icon": "TT","logoUrl": "https://img.magnific.com/vetores-premium/logo-do-tik-tok_578229-290.jpg?semt=ais_hybrid&w=740&q=80","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "red","icon": "TT","logoUrl": "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%230f172a'/%3E%3Ctext%20x='32'%20y='40'%20font-size='24'%20text-anchor='middle'%20fill='%23ffffff'%20font-family='Arial'%20font-weight='700'%3ETT%3C/text%3E%3C/svg%3E","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Export de audiencia para remarketing.","text": "","items": [],"orgOptions": [],"stacks": [] }
     },
     {
@@ -410,7 +412,7 @@
     {
       "id": "n_0bc8b132","nodeRef": "solucao:tesseractdb:n_0bc8b132","order": 26,"kind": "Solução","variant": "solution","title": "TesseractDB™",
       "position": { "x": -173, "y": 530 },"size": { "w": 1095, "h": 211, "userMinH": 211 },
-      "style": { "type": "red","icon": "T","logoUrl": "","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "tesseract","solutionLogo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8xaoF7Ur9YH164H8QTlfxqzyvOVIZ_XpYm8fJozOikA&s=10","stackCatalog": "" },
+      "style": { "type": "red","icon": "T","logoUrl": "","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "tesseract","solutionLogo": "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%23ef4444'/%3E%3Cpath%20d='M14%2016h36l-4%2034H20z'%20fill='%23fff'/%3E%3Cpath%20d='M24%2026h16v4H24zM24%2034h16v4H24z'%20fill='%23ef4444'/%3E%3C/svg%3E","stackCatalog": "" },
       "content": {
         "description": "","text": "",
         "items": [
@@ -1164,6 +1166,11 @@
       const label = fLogo.closest(".row")?.querySelector("label");
       if(label) label.textContent = translateKnownPhrase("Logo URL");
     }
+    if(fSolutionLogo){
+      const label = fSolutionLogo.closest(".row")?.querySelector("label");
+      if(label) label.textContent = translateKnownPhrase("Logo do bloco");
+      fSolutionLogo.placeholder = "https://cliente.com/logo-do-bloco.png";
+    }
     if(btnDeleteNode) btnDeleteNode.textContent = translateKnownPhrase("Excluir");
     if(btnSaveNode) btnSaveNode.textContent = translateKnownPhrase("Salvar");
     const previewTitle = previewBack?.querySelector(".mh h3");
@@ -1678,9 +1685,10 @@
   function normalizeLogoUrl(v){
     const raw = (v || "").trim();
     if(!raw) return "";
+    if(/^data:image\//i.test(raw)) return raw;
     try{
       const u = new URL(raw, window.location.href);
-      if(u.protocol === "http:" || u.protocol === "https:") return u.href;
+      if(u.protocol === "http:" || u.protocol === "https:" || u.protocol === "data:") return u.href;
     } catch {}
     return "";
   }
@@ -1702,6 +1710,68 @@
     } catch {
       return clean;
     }
+  }
+  function svgDataUri(svg){
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg.replace(/\s+/g, " ").trim())}`;
+  }
+  const TIKTOK_ADS_LOGO_URL = svgDataUri(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="TikTok Ads">
+      <defs>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".18"/>
+        </filter>
+      </defs>
+      <rect width="128" height="128" rx="28" fill="#0f172a"/>
+      <path d="M67 28c5 11 11 16 20 18v17c-9 0-16-2-22-6v26c0 16-11 28-28 28-13 0-24-8-24-21 0-14 11-23 27-23 2 0 5 0 7 1V69c-4-1-8-1-12-1-20 0-39 11-39 34 0 21 17 34 38 34 23 0 42-16 42-39V53c7 5 16 8 26 8V44c-8-1-15-4-19-9-4-4-6-10-8-17H67z" fill="#25F4EE" filter="url(#shadow)"/>
+      <path d="M63 25c5 11 11 16 20 18v17c-9 0-16-2-22-6v26c0 16-11 28-28 28-13 0-24-8-24-21 0-14 11-23 27-23 2 0 5 0 7 1V66c-4-1-8-1-12-1-20 0-39 11-39 34 0 21 17 34 38 34 23 0 42-16 42-39V50c7 5 16 8 26 8V41c-8-1-15-4-19-9-4-4-6-10-8-17H63z" fill="#FE2C55" opacity=".8"/>
+      <path d="M66 31c4 9 10 14 18 16v13c-8 0-15-2-20-5v24c0 14-10 24-24 24-11 0-20-7-20-18 0-12 10-20 24-20 2 0 4 0 6 1V65c-3-1-6-1-10-1-18 0-34 10-34 30 0 19 15 30 34 30 20 0 37-14 37-34V51c7 4 15 7 24 7V46c-7-1-13-3-17-8-3-4-5-9-7-15H66z" fill="#fff"/>
+    </svg>
+  `);
+  const TESSERACT_LOGO_URL = svgDataUri(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="TesseractDB">
+      <defs>
+        <linearGradient id="g" x1="18" y1="18" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#ef4444"/>
+          <stop offset="1" stop-color="#b91c1c"/>
+        </linearGradient>
+        <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#7f1d1d" flood-opacity=".22"/>
+        </filter>
+      </defs>
+      <rect width="128" height="128" rx="28" fill="#fff7f7"/>
+      <path d="M64 17 99 35v39L64 111 29 74V35z" fill="url(#g)" filter="url(#s)"/>
+      <path d="M64 33 84 44v24L64 84 44 68V44z" fill="#fff" opacity=".95"/>
+      <path d="M64 39 75 45v13L64 64 53 58V45z" fill="#fecaca"/>
+      <circle cx="64" cy="58" r="6" fill="#b91c1c"/>
+      <path d="M45 92h38" stroke="#7f1d1d" stroke-width="6" stroke-linecap="round"/>
+    </svg>
+  `);
+  const LEGACY_TIKTOK_ADS_LOGO_URL = "https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png";
+  const LEGACY_TESSERACT_LOGO_URL = "https://clevertap.com/wp-content/uploads/2024/03/Hyper-personalization-image.png";
+  const TESSERACT_DEFAULT_ITEM_ICON = "https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png";
+  function normalizeSpecialNodeLogos(node){
+    if(!node || typeof node !== "object") return node;
+    const title = normalizeI18nText(node.title || "");
+    if(title.includes("tiktok ads")){
+      const current = normalizeLogoUrl(node.logoUrl);
+      if(!current || current === LEGACY_TIKTOK_ADS_LOGO_URL){
+        node.logoUrl = TIKTOK_ADS_LOGO_URL;
+        node.logoInvalid = false;
+      }
+    }
+    if(title.includes("tesseractdb")){
+      const current = normalizeLogoUrl(node.solutionLogo);
+      if(!current || current === LEGACY_TESSERACT_LOGO_URL){
+        node.solutionLogo = TESSERACT_LOGO_URL;
+      }
+    }
+    return node;
+  }
+  function syncSpecialLogoTargets(){
+    const tiktokImg = document.querySelector('[data-add="channel:tiktok"] img');
+    if(tiktokImg) tiktokImg.src = TIKTOK_ADS_LOGO_URL;
+    const tesseractSidebarImg = document.querySelector('[data-add="solution:tesseractdbtm"] img');
+    if(tesseractSidebarImg) tesseractSidebarImg.src = TESSERACT_LOGO_URL;
   }
   function getNodeById(id){
     return nodes.find(n=>n.id===id);
@@ -2014,6 +2084,7 @@
       };
       });
       importedNodes.forEach((node)=> ensureNodeI18n(node));
+      importedNodes.forEach((node)=> normalizeSpecialNodeLogos(node));
       const nodeIds = new Set(importedNodes.map(n => n.id));
       const importedEdges = obj.edges
         .map((e)=>({
@@ -2062,6 +2133,7 @@
     if(Array.isArray(obj.nodes)) nodes = obj.nodes;
     if(Array.isArray(obj.edges)) edges = obj.edges;
     nodes.forEach((node)=> ensureNodeI18n(node));
+    nodes.forEach((node)=> normalizeSpecialNodeLogos(node));
     clearNodeSelection();
     selected = { type:null, id:null };
     if(typeof obj.flowOn === "boolean") flowOn = obj.flowOn;
@@ -2330,6 +2402,7 @@
         canvasNameI18n = JSON.parse(JSON.stringify(data.canvasNameI18n));
       }
       nodes.forEach((node)=> ensureNodeI18n(node));
+      nodes.forEach((node)=> normalizeSpecialNodeLogos(node));
       ensureCanvasNameI18n();
       return true;
     } catch {
@@ -2673,8 +2746,7 @@
       "Clever.AI",
       "Remarketing"
     ];
-    const TESSERACT_ITEM_ICON = "https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png";
-    const TESSERACT_LOGO_URL = "https://clevertap.com/wp-content/uploads/2024/03/Hyper-personalization-image.png";
+    const TESSERACT_ITEM_ICON = TESSERACT_DEFAULT_ITEM_ICON;
     const TESSERACT_PILL_DEFAULTS = [
       { icon:TESSERACT_ITEM_ICON, label:"Retenção entre 3~10 anos" },
       { icon:TESSERACT_ITEM_ICON, label:"Escala e Performance" },
@@ -3127,7 +3199,7 @@
               <div class="tesseractLayout">
                 <div class="tesseractBrand">
                   <div class="solutionLogoBadge">
-                    <img src="${escapeHTML(captureSafeUrl(n.solutionLogo || TESSERACT_LOGO_URL) || TESSERACT_LOGO_URL)}" alt="TesseractDB" />
+                    <img class="tesseractBrandLogo" src="${escapeHTML(captureSafeUrl(n.solutionLogo || TESSERACT_LOGO_URL) || TESSERACT_LOGO_URL)}" alt="TesseractDB" data-fallback="${escapeHTML(TESSERACT_LOGO_URL)}" />
                   </div>
                   <div class="tesseractTitle">${escapeHTML(n.title || "TesseractDB™")}</div>
                 </div>
@@ -3385,6 +3457,14 @@
       el.querySelectorAll("img").forEach((img)=>{
         img.draggable = false;
         img.addEventListener("dragstart", (ev)=>ev.preventDefault());
+      });
+      el.querySelectorAll(".tesseractBrandLogo").forEach((img)=>{
+        img.addEventListener("error", ()=>{
+          const fallback = img.dataset.fallback || TESSERACT_LOGO_URL;
+          if(fallback && img.src !== fallback){
+            img.src = fallback;
+          }
+        });
       });
       if(n.variant !== "solution" && n.variant !== "text" && n.variant !== "profile" && n.variant !== "area"){
         const iconEl = el.querySelector(".nodeIcon");
@@ -4462,6 +4542,8 @@
     fTitle.value = n.title || "";
     fDesc.value = n.desc || "";
     fLogo.value = n.logoUrl || "";
+    if(fSolutionLogo) fSolutionLogo.value = n.solutionLogo || "";
+    if(fSolutionLogoRow) fSolutionLogoRow.style.display = n.variant === "solution" ? "" : "none";
     fType.value = n.type || "gray";
     modalBack.style.display = "flex";
     modalBack.setAttribute("aria-hidden","false");
@@ -4581,6 +4663,9 @@
     n.desc  = (fDesc.value.trim());
     n.logoUrl = normalizeLogoUrl(fLogo.value);
     n.logoInvalid = false;
+    if(n.variant === "solution"){
+      n.solutionLogo = normalizeLogoUrl(fSolutionLogo?.value || "");
+    }
     n.type  = fType.value;
     if(n.variant === "organizer"){
       const organizerOptions = [
@@ -4681,7 +4766,7 @@
     "channel:sms":         { icon:"SMS", kind:"Channel",     type:"red",   title:"SMS", desc:"Mensagens transacionais e promocionais.", logoUrl:"https://cdn-icons-png.flaticon.com/512/733/733533.png" },
     "channel:webhook":     { icon:"WH", kind:"Channel",     type:"red",   title:"Webhook", desc:"Recebe eventos em tempo real via callbacks HTTP para automações e integrações.", logoUrl:"https://www.svix.com/resources/assets/images/color-webhook-240-1deccb0e365ff4ea493396ad28638fb7.png" },
     "channel:fbads":       { icon:"FB", kind:"Ads",         type:"red",   title:"Facebook Ads", desc:"Export de audiencia para remarketing.", logoUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/960px-2023_Facebook_icon.svg.png" },
-    "channel:tiktok":      { icon:"TT", kind:"Ads",         type:"red",   title:"TikTok Ads", desc:"Export de audiencia para remarketing.", logoUrl:"https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png" },
+    "channel:tiktok":      { icon:"TT", kind:"Ads",         type:"red",   title:"TikTok Ads", desc:"Export de audiencia para remarketing.", logoUrl:TIKTOK_ADS_LOGO_URL },
     "channel:gads":        { icon:"GA", kind:"Ads",         type:"red",   title:"Google Ads", desc:"Export de audiencia para remarketing.", logoUrl:"https://static.vecteezy.com/system/resources/previews/042/712/671/non_2x/google-ads-icon-logo-symbol-free-png.png" },
 
     "data:datalake":       { icon:"DL", kind:"Data",        type:"green", title:"Data Lake", desc:"Armazenamento bruto/historico.", logoUrl:"https://images.icon-icons.com/1502/PNG/512/officedatabase_103574.png" },
@@ -4817,7 +4902,7 @@
       w: 600,
       userMinH: 264,
       solutionLayout: "tesseract",
-      solutionLogo: "https://clevertap.com/wp-content/uploads/2024/03/Hyper-personalization-image.png",
+      solutionLogo: TESSERACT_LOGO_URL,
       unboundedResize: true,
       items: [
         { icon:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png", label:"Retenção entre 3~10 anos" },
@@ -6031,6 +6116,7 @@
   loadTemplateLibrary();
   loadProjectOverallInfo();
   loadPersisted();
+  syncSpecialLogoTargets();
   const setSectionCollapsed = (section, collapsed)=>{
     const bd = section.querySelector(".bd");
     const toggle = section.querySelector(".secToggle");
