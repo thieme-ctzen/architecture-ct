@@ -1702,7 +1702,9 @@
         host === "icons.veryicon.com" ||
         host === "images.icon-icons.com" ||
         host === "www.messangi.com" ||
-        host === "messangi.com"
+        host === "messangi.com" ||
+        host === "encrypted-tbn0.gstatic.com" ||
+        host === "static.vecteezy.com"
       );
       if(!needsProxy) return clean;
       const urlNoScheme = clean.replace(/^https?:\/\//i, "");
@@ -1714,38 +1716,8 @@
   function svgDataUri(svg){
     return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg.replace(/\s+/g, " ").trim())}`;
   }
-  const TIKTOK_ADS_LOGO_URL = svgDataUri(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="TikTok Ads">
-      <defs>
-        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".18"/>
-        </filter>
-      </defs>
-      <rect width="128" height="128" rx="28" fill="#0f172a"/>
-      <path d="M67 28c5 11 11 16 20 18v17c-9 0-16-2-22-6v26c0 16-11 28-28 28-13 0-24-8-24-21 0-14 11-23 27-23 2 0 5 0 7 1V69c-4-1-8-1-12-1-20 0-39 11-39 34 0 21 17 34 38 34 23 0 42-16 42-39V53c7 5 16 8 26 8V44c-8-1-15-4-19-9-4-4-6-10-8-17H67z" fill="#25F4EE" filter="url(#shadow)"/>
-      <path d="M63 25c5 11 11 16 20 18v17c-9 0-16-2-22-6v26c0 16-11 28-28 28-13 0-24-8-24-21 0-14 11-23 27-23 2 0 5 0 7 1V66c-4-1-8-1-12-1-20 0-39 11-39 34 0 21 17 34 38 34 23 0 42-16 42-39V50c7 5 16 8 26 8V41c-8-1-15-4-19-9-4-4-6-10-8-17H63z" fill="#FE2C55" opacity=".8"/>
-      <path d="M66 31c4 9 10 14 18 16v13c-8 0-15-2-20-5v24c0 14-10 24-24 24-11 0-20-7-20-18 0-12 10-20 24-20 2 0 4 0 6 1V65c-3-1-6-1-10-1-18 0-34 10-34 30 0 19 15 30 34 30 20 0 37-14 37-34V51c7 4 15 7 24 7V46c-7-1-13-3-17-8-3-4-5-9-7-15H66z" fill="#fff"/>
-    </svg>
-  `);
-  const TESSERACT_LOGO_URL = svgDataUri(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="TesseractDB">
-      <defs>
-        <linearGradient id="g" x1="18" y1="18" x2="110" y2="110" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#ef4444"/>
-          <stop offset="1" stop-color="#b91c1c"/>
-        </linearGradient>
-        <filter id="s" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#7f1d1d" flood-opacity=".22"/>
-        </filter>
-      </defs>
-      <rect width="128" height="128" rx="28" fill="#fff7f7"/>
-      <path d="M64 17 99 35v39L64 111 29 74V35z" fill="url(#g)" filter="url(#s)"/>
-      <path d="M64 33 84 44v24L64 84 44 68V44z" fill="#fff" opacity=".95"/>
-      <path d="M64 39 75 45v13L64 64 53 58V45z" fill="#fecaca"/>
-      <circle cx="64" cy="58" r="6" fill="#b91c1c"/>
-      <path d="M45 92h38" stroke="#7f1d1d" stroke-width="6" stroke-linecap="round"/>
-    </svg>
-  `);
+  const TIKTOK_ADS_LOGO_URL = "https://static.vecteezy.com/system/resources/thumbnails/016/716/450/small/tiktok-icon-free-png.png";
+  const TESSERACT_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8xaoF7Ur9YH164H8QTlfxqzyvOVIZ_XpYm8fJozOikA&s=10";
   const LEGACY_TIKTOK_ADS_LOGO_URL = "https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png";
   const LEGACY_TESSERACT_LOGO_URL = "https://clevertap.com/wp-content/uploads/2024/03/Hyper-personalization-image.png";
   const TESSERACT_DEFAULT_ITEM_ICON = "https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png";
@@ -4541,9 +4513,17 @@
     editingNodeId = nodeId;
     fTitle.value = n.title || "";
     fDesc.value = n.desc || "";
-    fLogo.value = n.logoUrl || "";
+    if(n.variant === "solution"){
+      fLogo.value = n.solutionLogo || "";
+      const logoLabel = fLogo?.closest(".row")?.querySelector("label");
+      if(logoLabel) logoLabel.textContent = "Logo do bloco";
+    } else {
+      fLogo.value = n.logoUrl || "";
+      const logoLabel = fLogo?.closest(".row")?.querySelector("label");
+      if(logoLabel) logoLabel.textContent = "Logo URL";
+    }
     if(fSolutionLogo) fSolutionLogo.value = n.solutionLogo || "";
-    if(fSolutionLogoRow) fSolutionLogoRow.style.display = n.variant === "solution" ? "" : "none";
+    if(fSolutionLogoRow) fSolutionLogoRow.style.display = "none";
     fType.value = n.type || "gray";
     modalBack.style.display = "flex";
     modalBack.setAttribute("aria-hidden","false");
@@ -4661,10 +4641,11 @@
     rememberActionState();
     n.title = (fTitle.value.trim() || n.title || "Bloco");
     n.desc  = (fDesc.value.trim());
-    n.logoUrl = normalizeLogoUrl(fLogo.value);
-    n.logoInvalid = false;
     if(n.variant === "solution"){
-      n.solutionLogo = normalizeLogoUrl(fSolutionLogo?.value || "");
+      n.solutionLogo = normalizeLogoUrl(fLogo.value || fSolutionLogo?.value || "");
+    } else {
+      n.logoUrl = normalizeLogoUrl(fLogo.value);
+      n.logoInvalid = false;
     }
     n.type  = fType.value;
     if(n.variant === "organizer"){
