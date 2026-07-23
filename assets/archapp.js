@@ -1694,6 +1694,10 @@
   }
   function captureSafeUrl(v){
     const clean = normalizeLogoUrl(v);
+    return clean;
+  }
+  function proxyImageUrl(v){
+    const clean = normalizeLogoUrl(v);
     if(!clean) return "";
     try{
       const u = new URL(clean);
@@ -3425,27 +3429,57 @@
         img.addEventListener("dragstart", (ev)=>ev.preventDefault());
       });
       el.querySelectorAll(".tesseractBrandLogo").forEach((img)=>{
+        const originalSrc = img.getAttribute("src") || img.src;
+        img.dataset.originalSrc = originalSrc;
         img.addEventListener("error", ()=>{
+          if(img.dataset.proxyAttempted !== "1"){
+            img.dataset.proxyAttempted = "1";
+            const proxied = proxyImageUrl(img.dataset.originalSrc || originalSrc);
+            if(proxied && proxied !== img.src){
+              img.src = proxied;
+              return;
+            }
+          }
           const fallback = img.dataset.fallback || TESSERACT_LOGO_URL;
           if(fallback && img.src !== fallback){
             img.src = fallback;
           }
         });
       });
+      el.querySelectorAll("img").forEach((img)=>{
+        if(img.closest(".nodeIcon") || img.classList.contains("tesseractBrandLogo")) return;
+        const originalSrc = img.getAttribute("src") || img.src;
+        img.dataset.originalSrc = originalSrc;
+        img.addEventListener("error", ()=>{
+          if(img.dataset.proxyAttempted === "1") return;
+          img.dataset.proxyAttempted = "1";
+          const proxied = proxyImageUrl(img.dataset.originalSrc || originalSrc);
+          if(proxied && proxied !== img.src){
+            img.src = proxied;
+          }
+        });
+      });
       if(n.variant !== "solution" && n.variant !== "text" && n.variant !== "profile" && n.variant !== "area"){
         const iconEl = el.querySelector(".nodeIcon");
         const logoUrl = normalizeLogoUrl(n.logoUrl);
-        if(iconEl && logoUrl && !n.logoInvalid){
+        if(iconEl && logoUrl){
           const fallbackText = (n.icon || n.title || "BL").toString().slice(0, 3).toUpperCase();
           iconEl.textContent = "";
           const img = document.createElement("img");
-          img.src = captureSafeUrl(logoUrl) || logoUrl;
+          img.src = logoUrl;
+          img.dataset.originalSrc = logoUrl;
           img.alt = "Logo";
           img.loading = "lazy";
           img.onerror = ()=>{
-            n.logoInvalid = true;
+            if(img.dataset.proxyAttempted !== "1"){
+              img.dataset.proxyAttempted = "1";
+              const proxied = proxyImageUrl(img.dataset.originalSrc || logoUrl);
+              if(proxied && proxied !== img.src){
+                img.src = proxied;
+                return;
+              }
+            }
             iconEl.textContent = fallbackText;
-            showToast("Logo inválida: fallback aplicado.");
           };
           iconEl.appendChild(img);
         }
