@@ -259,19 +259,19 @@
       "id": "n_76f2698c","nodeRef": "solucao-ai:ai-agent:n_76f2698c","order": 2,"kind": "Solução AI","variant": "ai","title": "AI Agent",
       "position": { "x": 175, "y": 160 },"size": { "w": 368, "h": 345, "userMinH": 343 },
       "style": { "type": "blue","icon": "AI","logoUrl": "","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
-      "content": { "description": "Agentes inteligentes para estratégia, decisão e ação.","text": "","items": ["Strategy Agents","Decision Agents","Creative Agents","Action Agents","IntelliNODE","Product Recommendations"],"orgOptions": [],"stacks": [] }
+      "content": { "description": "Agentes inteligentes para estratégia, decisão e ação.","text": "","items": ["IntelliTime","IntelliChannel","IntelliNODE","IntelliAB","Recommendations"],"orgOptions": [],"stacks": [] }
     },
     {
       "id": "n_07322311","nodeRef": "solucao-ai:askai:n_07322311","order": 3,"kind": "Solução AI","variant": "ai","title": "AskAI",
       "position": { "x": -157, "y": 163 },"size": { "w": 331, "h": 260, "userMinH": 194 },
       "style": { "type": "blue","icon": "AI","logoUrl": "","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
-      "content": { "description": "Camada de decisão e recomendação da jornada com AI.","text": "","items": ["Best Time to Deliver","Preferred Channel","Predictive Segmentation","Lifecycle Optmizer"],"orgOptions": [],"stacks": [] }
+      "content": { "description": "Assistente de chat integrado ao dashboard para insights e suporte do produto.","text": "","items": ["Chat no dashboard","Suporte 24/7","Insights de produto","Baseado na documentação","Feedback nas respostas","CleverTap MCP"],"orgOptions": [],"stacks": [] }
     },
     {
       "id": "n_6aecb6a6","nodeRef": "solucao-ai:scribeai:n_6aecb6a6","order": 4,"kind": "Solução AI","variant": "ai","title": "ScribeAI",
       "position": { "x": 545, "y": 161 },"size": { "w": 360, "h": 291, "userMinH": 220 },
       "style": { "type": "blue","icon": "AI","logoUrl": "","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
-      "content": { "description": "Assistente de conteúdo com AI generativa.","text": "","items": ["Copy Generation","Emotion Signals","Content Rewrite","Emotion Optimization","Channel Support"],"orgOptions": [],"stacks": [] }
+      "content": { "description": "Assistente de conteúdo com AI generativa.","text": "","items": ["Copy Generation","Emotion Signals","Content Rewrite","Emotion Optimization","Channel Support","Image Creator","Brand Context","Brand Kit","Templates"],"orgOptions": [],"stacks": [] }
     },
     {
       "id": "n_9f068eef","nodeRef": "core:orquestrador:n_9f068eef","order": 5,"kind": "Core","variant": "organizer","title": "Orquestrador",
@@ -303,9 +303,9 @@
     },
     {
       "id": "n_22f14357","nodeRef": "solucao:analytics:n_22f14357","order": 8,"kind": "Solução","variant": "solution","title": "Analytics",
-      "position": { "x": 198, "y": -271 },"size": { "w": 324, "h": 314, "userMinH": 314 },
+      "position": { "x": 198, "y": -271 },"size": { "w": 324, "h": 440, "userMinH": 440 },
       "style": { "type": "red","icon": "A","logoUrl": "","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
-      "content": { "description": "","text": "","items": ["Drop offs","Desinstalações","Cortes de Retenção","Comportamental","Tendências","Impacto Real"],"orgOptions": [],"stacks": [] }
+      "content": { "description": "","text": "","items": ["Boards","Funnels","Cohorts","Flows","Trends","Pivots","Real Impact","Anomaly Detection","Conversions"],"orgOptions": [],"stacks": [] }
     },
     {
       "id": "n_d179f91a","nodeRef": "core:mecanismo-de-integracao:n_d179f91a","order": 9,"kind": "Core","variant": "organizer","title": "Mecanismo de integração",
@@ -818,7 +818,47 @@
     { pt:"Redução de Custo e Complexidade", es:"Reducción de costo y complejidad", en:"Reduced cost and complexity" },
     { pt:"Digite aqui sua anotação...", es:"Escribe tu anotación aquí...", en:"Type your note here..." },
     { pt:"Clique para editar...", es:"Haz doble clic para editar...", en:"Double-click to edit..." },
-    { pt:"Arquitetura da CleverTap", es:"Arquitectura de CleverTap", en:"CleverTap Architecture" }
+    { pt:"Arquitetura da CleverTap", es:"Arquitectura de CleverTap", en:"CleverTap Architecture" },
+    { pt:"Boards", es:"Tableros", en:"Boards" },
+    { pt:"Funnels", es:"Embudos", en:"Funnels" },
+    { pt:"Cohorts", es:"Cohortes", en:"Cohorts" },
+    { pt:"Flows", es:"Flujos", en:"Flows" },
+    { pt:"Trends", es:"Tendencias", en:"Trends" },
+    { pt:"Pivots", es:"Pivotes", en:"Pivots" },
+    { pt:"Real Impact", es:"Impacto real", en:"Real Impact" },
+    { pt:"Anomaly Detection", es:"Detección de anomalías", en:"Anomaly Detection" },
+    { pt:"Conversions", es:"Conversiones", en:"Conversions" },
+    { pt:"Loyalty Tiers", es:"Niveles de fidelidad", en:"Loyalty Tiers" },
+    { pt:"Promo Reports", es:"Informes de promociones", en:"Promo Reports" },
+    { pt:"Promo APIs (Wallet, Coupon e Voucher)", es:"Promo APIs (Wallet, Coupon y Voucher)", en:"Promo APIs (Wallet, Coupon and Voucher)" },
+    { pt:"Workflow Agents", es:"Workflow Agents", en:"Workflow Agents" },
+    { pt:"Agentes que automatizam fluxos da plataforma e reduzem o tempo de configuração.", es:"Agentes que automatizan flujos de la plataforma y reducen el tiempo de configuración.", en:"Agents that automate platform workflows and reduce setup time." },
+    { pt:"Segment Builder", es:"Constructor de segmentos", en:"Segment Builder" },
+    { pt:"Journey Builder", es:"Constructor de journeys", en:"Journey Builder" },
+    { pt:"Analytics Builder", es:"Constructor de analytics", en:"Analytics Builder" },
+    { pt:"AI Schema", es:"Esquema de IA", en:"AI Schema" },
+    { pt:"NPS Insights", es:"Insights de NPS", en:"NPS Insights" },
+    { pt:"Predictions", es:"Predictions", en:"Predictions" },
+    { pt:"Previsão de probabilidade de ações dos usuários com machine learning.", es:"Predicción de la probabilidad de acciones de los usuarios con machine learning.", en:"Prediction of the likelihood of user actions with machine learning." },
+    { pt:"Goal Events", es:"Eventos objetivo", en:"Goal Events" },
+    { pt:"Prediction Period", es:"Período de predicción", en:"Prediction Period" },
+    { pt:"Target Segment", es:"Segmento objetivo", en:"Target Segment" },
+    { pt:"Likelihood Alta / Média / Baixa", es:"Probabilidad Alta / Media / Baja", en:"High / Medium / Low Likelihood" },
+    { pt:"Analyze Predictions", es:"Analizar predicciones", en:"Analyze Predictions" },
+    { pt:"Engage with Predictions", es:"Interactuar con predicciones", en:"Engage with Predictions" },
+    { pt:"IntelliTime", es:"IntelliTime", en:"IntelliTime" },
+    { pt:"IntelliChannel", es:"IntelliChannel", en:"IntelliChannel" },
+    { pt:"IntelliAB", es:"IntelliAB", en:"IntelliAB" },
+    { pt:"Image Creator", es:"Creador de imágenes", en:"Image Creator" },
+    { pt:"Brand Context", es:"Contexto de marca", en:"Brand Context" },
+    { pt:"Brand Kit", es:"Kit de marca", en:"Brand Kit" },
+    { pt:"Chat no dashboard", es:"Chat en el dashboard", en:"Dashboard chat" },
+    { pt:"Suporte 24/7", es:"Soporte 24/7", en:"24/7 support" },
+    { pt:"Insights de produto", es:"Insights del producto", en:"Product insights" },
+    { pt:"Baseado na documentação", es:"Basado en la documentación", en:"Based on documentation" },
+    { pt:"Feedback nas respostas", es:"Feedback en las respuestas", en:"Feedback on responses" },
+    { pt:"CleverTap MCP", es:"CleverTap MCP", en:"CleverTap MCP" },
+    { pt:"Assistente de chat integrado ao dashboard para insights e suporte do produto.", es:"Asistente de chat integrado en el dashboard para insights y soporte del producto.", en:"Chat assistant integrated into the dashboard for product insights and support." }
   ];
   const PHRASE_INDEX = new Map();
   for(const entry of PHRASE_BUNDLES){
@@ -1049,6 +1089,8 @@
     setButtonCopy("solution:scribeai", translateKnownPhrase("ScribeAI"), translateKnownPhrase("Bloco AI especial"));
     setButtonCopy("solution:askai", translateKnownPhrase("AskAI"), translateKnownPhrase("Bloco AI especial"));
     setButtonCopy("solution:agentai", translateKnownPhrase("AI Agent"), translateKnownPhrase("Bloco AI especial"));
+    setButtonCopy("solution:workflowagents", translateKnownPhrase("Workflow Agents"), translateKnownPhrase("Bloco AI especial"));
+    setButtonCopy("solution:predictions", translateKnownPhrase("Predictions"), translateKnownPhrase("Bloco AI especial"));
     setButtonCopy("text:note", translateKnownPhrase("Texto Livre"), translateKnownPhrase("Nota flutuante no canvas"));
     setButtonCopy("text:sticky", translateKnownPhrase("Sticky Note"), translateKnownPhrase("Post-it colorido"));
     setButtonCopy("general:area", translateKnownPhrase("Bloco de área"), translateKnownPhrase("Área pontilhada redimensionável"));
@@ -3270,7 +3312,7 @@
       } else if(n.variant === "ai"){
         const aiDefaultDesc = {
           "scribeai": "Assistente de conteúdo com AI generativa.",
-          "askai": "Camada de decisão e recomendação da jornada com AI.",
+          "askai": "Assistente de chat integrado ao dashboard para insights e suporte do produto.",
           "ai agent": "Agentes inteligentes para estratégia, decisão e ação."
         };
         const aiKey = (n.title || "").toLowerCase();
@@ -3330,7 +3372,7 @@
             <div class="aiInner">
               <div class="aiHead">
                 <div class="aiTitleRow">
-                  <span class="aiIconBadge"><img src="https://img.icons8.com/ios11/512/FFFFFF/bard.png" alt="AI" /></span>
+                  <span class="aiIconBadge"><img src="${escapeHTML(n.logoUrl || "https://img.icons8.com/ios11/512/FFFFFF/bard.png")}" alt="AI" /></span>
                   <div class="aiTitle">${escapeHTML(n.title || "ScribeAI")}</div>
                 </div>
                 ${aiDescHtml}
@@ -4873,16 +4915,9 @@
       icon:"A", kind:"Solução", type:"red", variant:"solution",
       title:"Analytics", desc:"",
       w: 300,
-      userMinH: 220,
+      userMinH: 440,
       solutionLayout: "pills",
-      items: [
-        "Drop offs",
-        "Desinstalações",
-        "Cortes de Retenção",
-        "Comportamental",
-        "Tendências",
-        "Impacto Real"
-      ]
+      items: ["Boards", "Funnels", "Cohorts", "Flows", "Trends", "Pivots", "Real Impact", "Anomaly Detection", "Conversions"]
     },
     "solution:productexperiences": {
       icon:"PX", kind:"Addon", type:"red", variant:"default",
@@ -4896,13 +4931,16 @@
       title:"Promotions", desc:"",
       w: 320,
       userMinH: 248,
-      solutionLayout: "grid",
+      solutionLayout: "pills",
       items: [
         { icon:"https://png.pngtree.com/png-vector/20230315/ourmid/pngtree-campaign-line-icon-vector-png-image_6649613.png", label:"Promo Campaigns" },
+        "Loyalty Tiers",
         { icon:"https://icons.iconarchive.com/icons/icons8/ios7/512/Finance-Wallet-icon.png", label:"Carteira de fidelidade" },
         { icon:"https://cdn-icons-png.flaticon.com/512/6713/6713658.png", label:"Cupons", tone:"brand" },
         { icon:"https://cdn-icons-png.freepik.com/512/7162/7162364.png", label:"Vouchers de parceiros", tone:"brand" },
-        { icon:"https://cdn-icons-png.flaticon.com/512/2666/2666513.png", label:"Custom Rewards" }
+        { icon:"https://cdn-icons-png.flaticon.com/512/2666/2666513.png", label:"Custom Rewards" },
+        "Promo Reports",
+        "Promo APIs (Wallet, Coupon e Voucher)"
       ]
     },
     "solution:tesseractdbtm": {
@@ -4927,26 +4965,33 @@
       desc:"Assistente de conteúdo com AI generativa.",
       w: 360,
       userMinH: 220,
-      items: [
-        "Copy Generation",
-        "Emotion Signals",
-        "Content Rewrite",
-        "Emotion Optimization",
-        "Channel Support"
-      ]
+      items: ["Copy Generation", "Emotion Signals", "Content Rewrite", "Emotion Optimization", "Channel Support", "Image Creator", "Brand Context", "Brand Kit", "Templates"]
     },
     "solution:askai": {
       icon:"AI", kind:"Solução AI", type:"blue", variant:"ai",
       title:"AskAI",
-      desc:"Camada de decisão e recomendação da jornada com AI.",
+      desc:"Assistente de chat integrado ao dashboard para insights e suporte do produto.",
       w: 360,
       userMinH: 240,
-      items: [
-        "Best Time to Deliver",
-        "Preferred Channel",
-        "Predictive Segmentation",
-        "Lifecycle Optmizer"
-      ]
+      items: ["Chat no dashboard", "Suporte 24/7", "Insights de produto", "Baseado na documentação", "Feedback nas respostas", "CleverTap MCP"]
+    },
+    "solution:predictions": {
+      icon:"AI", kind:"Solução AI", type:"blue", variant:"ai",
+      title:"Predictions",
+      desc:"Previsão de probabilidade de ações dos usuários com machine learning.",
+      w: 360,
+      userMinH: 240,
+      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png",
+      items: ["Goal Events", "Prediction Period", "Target Segment", "Likelihood Alta / Média / Baixa", "Analyze Predictions", "Engage with Predictions"]
+    },
+    "solution:workflowagents": {
+      icon:"AI", kind:"Solução AI", type:"blue", variant:"ai",
+      title:"Workflow Agents",
+      desc:"Agentes que automatizam fluxos da plataforma e reduzem o tempo de configuração.",
+      w: 360,
+      userMinH: 240,
+      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png",
+      items: ["Segment Builder", "Journey Builder", "Analytics Builder", "AI Schema", "NPS Insights"]
     },
     "solution:agentai": {
       icon:"AI", kind:"Solução AI", type:"blue", variant:"ai",
@@ -4954,14 +4999,7 @@
       desc:"Agentes inteligentes para estratégia, decisão e ação.",
       w: 360,
       userMinH: 260,
-      items: [
-        "Strategy Agents",
-        "Decision Agents",
-        "Creative Agents",
-        "Action Agents",
-        "IntelliNODE",
-        "Product Recommendations"
-      ]
+      items: ["IntelliTime", "IntelliChannel", "IntelliNODE", "IntelliAB", "Recommendations"]
     },
     "solution:profile": {
       icon:"USR", kind:"Solução", type:"blue", variant:"profile",
