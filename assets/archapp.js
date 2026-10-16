@@ -3372,7 +3372,7 @@
             <div class="aiInner">
               <div class="aiHead">
                 <div class="aiTitleRow">
-                  <span class="aiIconBadge"><img src="${escapeHTML(n.logoUrl || "https://img.icons8.com/ios11/512/FFFFFF/bard.png")}" alt="AI" /></span>
+                  <span class="aiIconBadge"><img src="https://img.icons8.com/ios11/512/FFFFFF/bard.png" alt="AI" /></span>
                   <div class="aiTitle">${escapeHTML(n.title || "ScribeAI")}</div>
                 </div>
                 ${aiDescHtml}
@@ -3552,7 +3552,7 @@
         });
         stickyBody?.addEventListener("dblclick", (e)=>{
           e.stopPropagation();
-          stickyBody.setAttribute("contenteditable", "true");
+          stickyBody.setAttribute("contenteditable", "plaintext-only");
           stickyBody.focus();
           const sel = window.getSelection();
           const range = document.createRange();
@@ -3561,8 +3561,9 @@
           sel?.addRange(range);
         });
         stickyBody?.addEventListener("blur", ()=>{
+          const text = stickyBody.textContent;
           stickyBody.setAttribute("contenteditable", "false");
-          n.text = (stickyBody.textContent || "").trim() || STICKY_DEFAULT_TEXT;
+          n.text = text || STICKY_DEFAULT_TEXT;
           stickyBody.textContent = n.text;
           ensureNodeI18n(n);
           n.i18n.text[currentLanguage] = n.text;
@@ -4331,7 +4332,7 @@
     if(e.target.closest("#tbText")) return;
     if(e.target.closest(".textCtl")) return;
     if(e.target.closest(".textFont")) return;
-    if(e.target.closest('[contenteditable="true"]')) return;
+    if(e.target.closest('[contenteditable="true"], [contenteditable="plaintext-only"]')) return;
     if(e.shiftKey) return;
     e.stopPropagation();
     e.preventDefault();
@@ -4981,7 +4982,6 @@
       desc:"Previsão de probabilidade de ações dos usuários com machine learning.",
       w: 360,
       userMinH: 240,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png",
       items: ["Goal Events", "Prediction Period", "Target Segment", "Likelihood Alta / Média / Baixa", "Analyze Predictions", "Engage with Predictions"]
     },
     "solution:workflowagents": {
@@ -4990,7 +4990,6 @@
       desc:"Agentes que automatizam fluxos da plataforma e reduzem o tempo de configuração.",
       w: 360,
       userMinH: 240,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png",
       items: ["Segment Builder", "Journey Builder", "Analytics Builder", "AI Schema", "NPS Insights"]
     },
     "solution:agentai": {
