@@ -1945,7 +1945,7 @@
       -webkit-user-select:none;
       font-weight:500;
     }
-    .sticky-node .stickyBody[contenteditable="true"]{
+    .sticky-node .stickyBody[contenteditable="plaintext-only"]{
       cursor:text;
       user-select:text;
       -webkit-user-select:text;
