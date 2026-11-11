@@ -627,7 +627,8 @@
         box-shadow .24s ease,
         opacity .22s ease,
         transform .24s ease;
-      will-change: width, height, transform, padding, border-radius, box-shadow;
+      /* Let the browser rasterize at the current zoom instead of retaining a scaled texture. */
+      will-change: auto;
     }
     .node.compact{
       width:84px;
@@ -3079,10 +3080,10 @@
 .presentationControls .btn2:focus-visible, #btnPresent:focus-visible{outline:2px solid #2563eb; outline-offset:3px;}
 .presentationControls [hidden]{display:none !important;}
 .node.spotlightDim{opacity:.24 !important;}
-.node.spotlightFocus{box-shadow:0 0 0 2px rgba(59,130,246,.6), 0 8px 32px rgba(37,99,235,.22);}
+.node.spotlightFocus{box-shadow:0 0 0 2px rgba(239,68,68,.6), 0 8px 32px rgba(239,68,68,.22);}
 #svg [data-edge-id]{transition:opacity .22s ease, filter .22s ease;}
 #svg .spotlightEdgeDim{opacity:.12 !important;}
-#svg .spotlightEdgeFocus:not(.edgeDel){filter:drop-shadow(0 0 2px rgba(59,130,246,.3));}
+#svg .spotlightEdgeFocus:not(.edgeDel){filter:drop-shadow(0 0 2px rgba(239,68,68,.3));}
 .presentationMode .sidebar,
 .presentationMode .topbar,
 .presentationMode .settingsPanel,
@@ -3100,7 +3101,7 @@
 .presentationMode .orgMenu{display:none !important;}
 .presentationMode .grid{opacity:.3;}
 .presentationMode .node, .presentationMode .node *{cursor:pointer !important;}
-.presentationMode .node:hover:not(.spotlightDim){outline:1px solid rgba(59,130,246,.35); outline-offset:2px;}
+.presentationMode .node:hover:not(.spotlightDim){outline:1px solid rgba(239,68,68,.35); outline-offset:2px;}
 .presentationMode .node.overlap{outline:none;}
 @media (prefers-reduced-motion:reduce){
   .node, #svg [data-edge-id], .presentationControls .btn2{transition:none !important;}
