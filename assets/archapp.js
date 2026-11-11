@@ -113,6 +113,10 @@
 
   // viewport pan+zoom
   let view = { x: 0, y: 0, z: 1 };
+  let presentationMode = false;
+  let spotlightOn = false;
+  let presentationSnapshot = null;
+  let cameraFrame = 0;
   let isPanning = false;
   let isMiddlePanning = false;
   let panStart = { x: 0, y: 0, vx: 0, vy: 0 };
@@ -551,6 +555,12 @@
     }
   };
   const PHRASE_BUNDLES = [
+    { pt:"Apresentar", es:"Presentar", en:"Present" },
+    { pt:"Spotlight", es:"Spotlight", en:"Spotlight" },
+    { pt:"Focar no componente", es:"Enfocar componente", en:"Focus on component" },
+    { pt:"Visão geral", es:"Vista general", en:"Overview" },
+    { pt:"Sair da apresentação", es:"Salir de la presentación", en:"Exit presentation" },
+    { pt:"Controles de apresentação", es:"Controles de presentación", en:"Presentation controls" },
     { pt:"Conectores de Integração", es:"Conectores de Integración", en:"Integration Connectors" },
     { pt:"Bloco Central", es:"Bloque Central", en:"Core Block" },
     { pt:"Canais", es:"Canales", en:"Channels" },
@@ -995,14 +1005,19 @@
     nodes.forEach((node)=> snapshotNodeLanguage(node, lang));
   }
   function setButtonCopy(key, title, subtitle = ""){
-    const btn = document.querySelector(`[data-add="${key}"]`);
+    const btn = document.getElementById(key) || document.querySelector(`[data-add="${key}"]`);
     if(!btn) return;
     const titleEl = btn.querySelector(".txt > div");
     const subtitleEl = btn.querySelector(".txt > span");
     if(titleEl) titleEl.textContent = title;
+    else btn.textContent = title;
     if(subtitleEl) subtitleEl.textContent = subtitle;
   }
   function applyLanguageToUI(){
+    for(const [id, label] of Object.entries({btnPresent:"Apresentar", btnSpotlight:"Spotlight", btnFocusNode:"Focar no componente", btnOverview:"Visão geral", btnExitPresentation:"Sair da apresentação"})){
+      setButtonCopy(id, translateKnownPhrase(label));
+    }
+    document.querySelector(".presentationControls")?.setAttribute("aria-label", translateKnownPhrase("Controles de apresentação"));
     const sectionTitles = document.querySelectorAll(".sidebar .section .hd h2");
     if(sectionTitles[0]) sectionTitles[0].textContent = translateKnownPhrase("Conectores de Integração");
     if(sectionTitles[1]) sectionTitles[1].textContent = translateKnownPhrase("Bloco Central");
@@ -1665,7 +1680,8 @@
     }
     return { x: 0, y: 0 };
   }
-  function setTransform(){
+  function setTransform(fromCamera = false){
+    if(!fromCamera) cancelCameraMotion();
     nodesLayer.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.z})`;
     svg.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.z})`;
     const step = 28;
@@ -2818,7 +2834,7 @@
     };
 
     // filter highlight by search (dim nodes not matching)
-    const q = (search.value || "").trim().toLowerCase();
+    const q = presentationMode ? "" : (search.value || "").trim().toLowerCase();
     const matches = (n) => {
       if(!q) return true;
       const items = Array.isArray(n.items)
@@ -3549,6 +3565,7 @@
             nodeEl.classList.toggle("selected", nodeEl.dataset.id === n.id);
           });
           refreshTextBar();
+          refreshPresentationVisuals();
         });
         stickyBody?.addEventListener("dblclick", (e)=>{
           e.stopPropagation();
@@ -3874,6 +3891,7 @@
 
     let selectedEdgeMeta = null;
     for(const ed of edges){
+      const edgeChildStart = svg.children.length;
       const aN = nodes.find(n=>n.id===ed.from.node);
       const bN = nodes.find(n=>n.id===ed.to.node);
       if(!aN || !bN) continue;
@@ -4000,6 +4018,9 @@
           svg.appendChild(flowPath);
         }
       }
+      for(const part of Array.from(svg.children).slice(edgeChildStart)){
+        part.dataset.edgeId = ed.id;
+      }
     }
 
     // intentionally hidden: no temporary red connector preview while dragging
@@ -4009,6 +4030,7 @@
       hideEdgeTypeBar();
     }
     refreshTextBar();
+    refreshPresentationVisuals();
     queuePersist();
   }
 
@@ -4438,6 +4460,136 @@
     document.addEventListener("mouseup", up);
   }
 
+  // Presentation state is transient; it never changes component positions or the JSON schema.
+  function refreshPresentationVisuals(){
+    const selectedIds = new Set([...selectedNodeIds].filter(id => nodes.some(n => n.id === id)));
+    const active = spotlightOn && selectedIds.size > 0;
+    for(const el of nodesLayer.querySelectorAll('.node')){
+      const chosen = selectedIds.has(el.dataset.id);
+      el.classList.toggle('spotlightFocus', active && chosen);
+      el.classList.toggle('spotlightDim', active && !chosen);
+      el.classList.toggle('selected', chosen);
+    }
+    const related = new Set(edges.filter(e => selectedIds.has(e.from.node) || selectedIds.has(e.to.node)).map(e => e.id));
+    for(const el of svg.querySelectorAll('[data-edge-id]')){
+      el.classList.toggle('spotlightEdgeDim', active && !related.has(el.dataset.edgeId));
+      el.classList.toggle('spotlightEdgeFocus', active && related.has(el.dataset.edgeId));
+    }
+    document.getElementById('btnSpotlight').setAttribute('aria-pressed', String(spotlightOn));
+    document.getElementById('btnFocusNode').disabled = selectedIds.size !== 1;
+    document.getElementById('btnOverview').disabled = !nodes.length;
+  }
+  function cancelCameraMotion(){
+    cancelAnimationFrame(cameraFrame);
+    cameraFrame = 0;
+  }
+  function animateCamera(target){
+    cancelCameraMotion();
+    const start = { ...view };
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 380;
+    const began = performance.now();
+    const step = now => {
+      const progress = duration ? Math.min(1, (now - began) / duration) : 1;
+      const ease = 1 - Math.pow(1 - progress, 3);
+      view = Object.fromEntries(['x','y','z'].map(k => [k, start[k] + (target[k] - start[k]) * ease]));
+      setTransform(true);
+      if(progress < 1) cameraFrame = requestAnimationFrame(step);
+      else cameraFrame = 0;
+    };
+    cameraFrame = requestAnimationFrame(step);
+  }
+  function focusBounds(bounds, maxZoom){
+    if(!bounds) return;
+    // Leave room for the editor sidebar and the floating navigation controls.
+    const left = !presentationMode && !appEl.classList.contains('sidebar-collapsed') ? 230 : 40;
+    const right = 40, top = presentationMode ? 40 : 90, bottom = 100;
+    const width = Math.max(80, wrap.clientWidth - left - right);
+    const height = Math.max(80, wrap.clientHeight - top - bottom);
+    const z = Math.max(0.01, Math.min(maxZoom, width / Math.max(1, bounds.w), height / Math.max(1, bounds.h)));
+    animateCamera({ z, x:left + (width - bounds.w * z) / 2 - bounds.x * z,
+      y:top + (height - bounds.h * z) / 2 - bounds.y * z });
+  }
+  function focusSelectedComponent(){
+    if(selectedNodeIds.size !== 1) return;
+    const node = nodes.find(n => selectedNodeIds.has(n.id));
+    if(node) focusBounds(nodeBounds(node), 1.35);
+  }
+  function showArchitectureOverview(){
+    const bounds = allNodesBounds();
+    if(bounds) focusBounds({ x:bounds.minX, y:bounds.minY, w:bounds.w, h:bounds.h }, 1.2);
+  }
+  function setPresentationMode(on){
+    if(on === presentationMode) return;
+    cancelCameraMotion();
+    if(on){
+      document.activeElement?.blur();
+      presentationSnapshot = { view:{...view}, connectMode, spotlightOn, selected:{...selected}, selectedIds:[...selectedNodeIds] };
+      closeAllCtxMenus();
+      closeNativeFlyout({force:true});
+      closeFeaturesFlyout({force:true});
+      setPreviewPickMode(false);
+      connectFrom = null;
+      connectDrag = null;
+      connectMode = false;
+    }
+    presentationMode = on;
+    appEl.classList.toggle('presentationMode', on);
+    document.body.classList.toggle('is-presenting', on);
+    sidebarEl.inert = on;
+    document.querySelector('.topbar').inert = on;
+    document.getElementById('btnPresent').setAttribute('aria-pressed', String(on));
+    document.getElementById('btnExitPresentation').hidden = !on;
+    if(!on && presentationSnapshot){
+      view = presentationSnapshot.view;
+      connectMode = presentationSnapshot.connectMode;
+      spotlightOn = presentationSnapshot.spotlightOn;
+      selected = presentationSnapshot.selected;
+      selectedNodeIds = new Set(presentationSnapshot.selectedIds);
+      presentationSnapshot = null;
+    }
+    btnConnect.classList.toggle('active', connectMode);
+    setTransform();
+    render();
+    document.getElementById(on ? 'btnSpotlight' : 'btnPresent').focus();
+  }
+  document.getElementById('btnPresent').addEventListener('click', () => setPresentationMode(true));
+  document.getElementById('btnExitPresentation').addEventListener('click', () => setPresentationMode(false));
+  document.getElementById('btnSpotlight').addEventListener('click', () => {
+    spotlightOn = !spotlightOn;
+    refreshPresentationVisuals();
+  });
+  document.getElementById('btnFocusNode').addEventListener('click', focusSelectedComponent);
+  document.getElementById('btnOverview').addEventListener('click', showArchitectureOverview);
+
+  // Capture events before existing editing handlers; background pan and zoom stay available.
+  for(const type of ['mousedown','pointerdown','touchstart','click','dblclick','contextmenu','dragstart','dragover','drop']){
+    wrap.addEventListener(type, e => {
+      if(!presentationMode) return;
+      if(e.target.closest('.presentationControls, .zoomDock')) return;
+      const nodeEl = e.target.closest('.node');
+      const blocked = nodeEl || e.target.closest('#svg') || ['contextmenu','dragstart','dragover','drop'].includes(type);
+      if(!blocked) return;
+      if(e.button === 1 && type === 'mousedown') return;
+      if(type === 'click' && nodeEl){
+        setSingleNodeSelection(nodeEl.dataset.id);
+        refreshPresentationVisuals();
+      }
+      if(type !== 'touchstart' && type !== 'pointerdown') e.preventDefault();
+      e.stopImmediatePropagation();
+    }, {capture:true, passive:false});
+  }
+  window.addEventListener('keydown', e => {
+    if(!presentationMode) return;
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      setPresentationMode(false);
+    } else if(!e.target.closest('.presentationControls, .zoomDock') && e.key !== 'Tab'){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  }, true);
+
   // --- Middle-click pan anywhere (navigation mode) ---
   wrap.addEventListener("mousedown", startMiddlePan, true);
   wrap.addEventListener("auxclick", (e)=>{
@@ -4507,7 +4659,7 @@
     // only pan if click background
     if(e.target !== wrap && e.target.id !== "canvas" && e.target !== grid && e.target !== svg && e.target !== nodesLayer) return;
     connectFrom = null;
-    if(e.shiftKey){
+    if(e.shiftKey && !presentationMode){
       const start = worldFromClient(e.clientX, e.clientY);
       marquee = { x1:start.x, y1:start.y, x2:start.x, y2:start.y, append:true };
       const r = wrap.getBoundingClientRect();
@@ -4694,6 +4846,7 @@
     }
   });
   window.addEventListener("keydown", (e)=>{
+    if(presentationMode) return;
     if(e.key==="Escape"){
       closeNativeFlyout({ force:true });
       closeEdit();
@@ -5663,6 +5816,7 @@
 
   // Delete selected (node/edge)
   window.addEventListener("keydown", (e)=>{
+    if(presentationMode) return;
     const active = document.activeElement?.tagName?.toLowerCase();
     const isTypingContext = active === "input"
       || active === "textarea"
