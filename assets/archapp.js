@@ -4050,13 +4050,21 @@
   }
 
   function selectNode(id, append = false){
-    if(selected.type === "edge") selected = { type:null, id:null };
+    const hadSelectedEdge = selected.type === "edge";
+    if(hadSelectedEdge) selected = { type:null, id:null };
     if(append){
       toggleNodeInSelection(id);
     } else {
       setSingleNodeSelection(id);
     }
-    render();
+    if(spotlightOn && !hadSelectedEdge){
+      // Keep existing elements and their opacity transitions when moving the spotlight.
+      refreshPresentationVisuals();
+      refreshTextBar();
+      queuePersist();
+    } else {
+      render();
+    }
   }
 
   function onPortClick(nodeId, port){
