@@ -554,6 +554,7 @@
           </div>
           <button class="btn2" id="btnPreview">Selecionar área</button>
           <button class="btn2" id="btnCenter">Centralizar</button>
+          <button class="btn2" id="btnPresent" type="button" aria-pressed="false">Apresentar</button>
           <button class="btn2 primary" id="btnGenerateProject">Gerar projeto</button>
         </div>
       </div>
@@ -660,6 +661,12 @@
       </div>
 
       <div class="wrap" id="wrap">
+        <div class="presentationControls" role="toolbar" aria-label="Controles de apresentação">
+          <button class="btn2" id="btnSpotlight" type="button" aria-pressed="false">Spotlight</button>
+          <button class="btn2" id="btnFocusNode" type="button" disabled>Focar no componente</button>
+          <button class="btn2" id="btnOverview" type="button">Visão geral</button>
+          <button class="btn2" id="btnExitPresentation" type="button" hidden>Sair da apresentação</button>
+        </div>
         <div class="zoomDock">
           <button class="zoomBtn" id="btnZoomOut" type="button" title="Zoom out">−</button>
           <input class="zoomPct" id="zoomPct" type="text" inputmode="decimal" value="100%" title="Zoom %" aria-label="Zoom porcentagem" />
