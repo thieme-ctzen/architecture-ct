@@ -172,9 +172,9 @@
   let importMode = "paste";
   let html2canvasLoader = null;
   let jsPdfLoader = null;
-  const DUP_ICON_URL = "https://www.pngall.com/wp-content/uploads/16/Black-Copy-Icon-PNG-Photos.png";
-  const COMPACT_ICON_URL = "https://cdn-icons-png.flaticon.com/512/2223/2223714.png";
-  const MAXIMIZE_ICON_URL = "https://cdn-icons-png.flaticon.com/512/8373/8373559.png";
+  const DUP_ICON_URL = "./assets/images/Black-Copy-Icon-PNG-Photos-553cd6f438f9.png";
+  const COMPACT_ICON_URL = "./assets/images/2223714-cebc7d54c5a0.png";
+  const MAXIMIZE_ICON_URL = "./assets/images/8373559-4f1c5e93849a.png";
   const TEMPLATE_LIBRARY_KEY = "clevertap_canvas_templates_v1";
   const DRIVE_PROJECT_WEBHOOK_URL = "";
   let projectOverallInfo = {
@@ -297,10 +297,10 @@
         "description": "","text": "",
         "items": [
           { "icon": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Clock_icon.svg","label": "RFM","mono": false },
-          { "icon": "https://marketplace.canva.com/XL6M0/MAEpMrXL6M0/1/tl/canva-clock-real-realtime-time-icon-icon-MAEpMrXL6M0.png","label": "Real-time","mono": false },
-          { "icon": "https://cdn-icons-png.flaticon.com/512/5799/5799191.png","label": "Preditiva","mono": false },
-          { "icon": "https://cdn-icons-png.flaticon.com/512/12282/12282281.png","label": "Psicográfica","mono": true },
-          { "icon": "https://idecbrasil.com.br/wp-content/uploads/2025/03/processo-1.png","label": "Comportamental","mono": true }
+          { "icon": "./assets/images/canva-clock-real-realtime-time-icon-icon-MAEpMrX-e81174fb9c34.png","label": "Real-time","mono": false },
+          { "icon": "./assets/images/5799191-52f7f6598a8f.png","label": "Preditiva","mono": false },
+          { "icon": "./assets/images/12282281-c234d18bd995.png","label": "Psicográfica","mono": true },
+          { "icon": "./assets/images/processo-1-fda39581d19f.png","label": "Comportamental","mono": true }
         ],
         "orgOptions": [],"stacks": []
       }
@@ -320,7 +320,7 @@
     {
       "id": "n_2c161496","nodeRef": "integration:sdk:n_2c161496","order": 10,"kind": "Integration","variant": "default","title": "SDK",
       "position": { "x": -503, "y": -169 },"size": { "w": 280, "h": 122, "userMinH": 0 },
-      "style": { "type": "blue","icon": "SDK","logoUrl": "https://icons.veryicon.com/png/o/miscellaneous/hekr/open-sdk-download.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "blue","icon": "SDK","logoUrl": "./assets/images/open-sdk-download-43df16fde4db.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Instrumentacao App/Web para coleta e mensageria.","text": "","items": [],"orgOptions": [],"stacks": [] }
     },
     {
@@ -332,7 +332,7 @@
     {
       "id": "n_10a515fc","nodeRef": "integration:api:n_10a515fc","order": 12,"kind": "Integration","variant": "default","title": "API",
       "position": { "x": -503, "y": -283 },"size": { "w": 280, "h": 105, "userMinH": 0 },
-      "style": { "type": "blue","icon": "API","logoUrl": "https://icons.veryicon.com/png/o/internet--web/internet-simple-icon/api-management.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "blue","icon": "API","logoUrl": "./assets/images/api-management-d5c6a0957c3d.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Conector server-to-server para eventos, perfis e integracoes.","text": "","items": [],"orgOptions": [],"stacks": [] }
     },
     {
@@ -344,31 +344,31 @@
     {
       "id": "n_a84b4160","nodeRef": "channel:app:n_a84b4160","order": 14,"kind": "Channel","variant": "stack","title": "App",
       "position": { "x": 960, "y": -280 },"size": { "w": 280, "h": 121, "userMinH": 0 },
-      "style": { "type": "red","icon": "APP","logoUrl": "https://cdn-icons-png.flaticon.com/512/8766/8766948.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "red","icon": "APP","logoUrl": "./assets/images/8766948-101448f0d9c9.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Push, In-App, App Inbox, Native Display.","text": "","items": [],"orgOptions": [],"stacks": [] }
     },
     {
       "id": "n_4d2b58d9","nodeRef": "channel:web:n_4d2b58d9","order": 15,"kind": "Channel","variant": "stack","title": "Web",
       "position": { "x": 961, "y": -154 },"size": { "w": 280, "h": 137, "userMinH": 0 },
-      "style": { "type": "red","icon": "WEB","logoUrl": "https://cdn-icons-png.flaticon.com/512/5339/5339181.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "red","icon": "WEB","logoUrl": "./assets/images/5339181-41d4e033e597.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Web Push, Pop-ups, Exit intent, Native Display.","text": "","items": [],"orgOptions": [],"stacks": [{ "id": "web-sdk","label": "Web SDK" }] }
     },
     {
       "id": "n_d0494966","nodeRef": "channel:email:n_d0494966","order": 16,"kind": "Channel","variant": "default","title": "Email",
       "position": { "x": 961, "y": 331 },"size": { "w": 280, "h": 105, "userMinH": 0 },
-      "style": { "type": "red","icon": "EM","logoUrl": "https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small/email-message-icon-design-in-blue-circle-png.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "red","icon": "EM","logoUrl": "./assets/images/email-message-icon-design-in-blue-circle-png-d4a3c459eac9.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Campanhas e mensagens com HTML rico.","text": "","items": [],"orgOptions": [],"stacks": [] }
     },
     {
       "id": "n_652817e3","nodeRef": "channel:sms:n_652817e3","order": 17,"kind": "Channel","variant": "default","title": "SMS",
       "position": { "x": 961, "y": -13 },"size": { "w": 280, "h": 105, "userMinH": 0 },
-      "style": { "type": "red","icon": "SMS","logoUrl": "https://cdn-icons-png.flaticon.com/512/733/733533.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "red","icon": "SMS","logoUrl": "./assets/images/733533-0368ce34f8ba.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Mensagens transacionais e promocionais.","text": "","items": [],"orgOptions": [],"stacks": [] }
     },
     {
       "id": "n_55ac0e71","nodeRef": "ads:facebook-ads:n_55ac0e71","order": 18,"kind": "Ads","variant": "default","title": "Facebook Ads",
       "position": { "x": 959, "y": 626 },"size": { "w": 280, "h": 92, "userMinH": 0 },
-      "style": { "type": "red","icon": "FB","logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/960px-2023_Facebook_icon.svg.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "red","icon": "FB","logoUrl": "./assets/images/960px-2023_Facebook_icon-svg-d26b8d74659b.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Export de audiencia para remarketing.","text": "","items": [],"orgOptions": [],"stacks": [] }
     },
     {
@@ -380,7 +380,7 @@
     {
       "id": "n_e810a2c3","nodeRef": "ads:google-ads:n_e810a2c3","order": 20,"kind": "Ads","variant": "default","title": "Google Ads",
       "position": { "x": 959, "y": 533 },"size": { "w": 280, "h": 92, "userMinH": 0 },
-      "style": { "type": "red","icon": "GA","logoUrl": "https://static.vecteezy.com/system/resources/previews/042/712/671/non_2x/google-ads-icon-logo-symbol-free-png.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "red","icon": "GA","logoUrl": "./assets/images/google-ads-icon-logo-symbol-free-png-329f78f26df5.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Export de audiencia para remarketing.","text": "","items": [],"orgOptions": [],"stacks": [] }
     },
     {
@@ -420,11 +420,11 @@
       "content": {
         "description": "","text": "",
         "items": [
-          { "icon": "https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png","label": "Retenção entre 3~10 anos" },
-          { "icon": "https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png","label": "Escala e Performance" },
-          { "icon": "https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png","label": "Dados em tempo real" },
-          { "icon": "https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png","label": "Visão Unificada do Cliente" },
-          { "icon": "https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png","label": "Redução de Custo e Complexidade" }
+          { "icon": "./assets/images/CleverTap_fav-ac15fb175ba3.png","label": "Retenção entre 3~10 anos" },
+          { "icon": "./assets/images/CleverTap_fav-ac15fb175ba3.png","label": "Escala e Performance" },
+          { "icon": "./assets/images/CleverTap_fav-ac15fb175ba3.png","label": "Dados em tempo real" },
+          { "icon": "./assets/images/CleverTap_fav-ac15fb175ba3.png","label": "Visão Unificada do Cliente" },
+          { "icon": "./assets/images/CleverTap_fav-ac15fb175ba3.png","label": "Redução de Custo e Complexidade" }
         ],
         "orgOptions": [],"stacks": []
       }
@@ -432,13 +432,13 @@
     {
       "id": "n_a52fb00e","nodeRef": "channel:whatsapp:n_a52fb00e","order": 27,"kind": "Channel","variant": "stack","title": "WhatsApp",
       "position": { "x": 961, "y": 206 },"size": { "w": 280, "h": 121, "userMinH": 0 },
-      "style": { "type": "red","icon": "WA","logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "whatsappProviders" },
+      "style": { "type": "red","icon": "WA","logoUrl": "./assets/images/960px-WhatsApp-svg-0f4bc879d3b2.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "whatsappProviders" },
       "content": { "description": "Canal conversacional (menu/flows/IA).","text": "","items": [],"orgOptions": [],"stacks": [{ "id": "direct","label": "Direct" }] }
     },
     {
       "id": "n_941970f2","nodeRef": "channel:rcs:n_941970f2","order": 28,"kind": "Channel","variant": "default","title": "RCS",
       "position": { "x": 961, "y": 97 },"size": { "w": 280, "h": 105, "userMinH": 0 },
-      "style": { "type": "red","icon": "RCS","logoUrl": "https://avatars.githubusercontent.com/u/67345131?s=280&v=4","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
+      "style": { "type": "red","icon": "RCS","logoUrl": "./assets/images/67345131-ccb87832b395.png","stickyColor": "","fontSize": 28,"fontFamily": "Georgia","color": "#1e293b","align": "left","solutionLayout": "pills","solutionLogo": "","stackCatalog": "" },
       "content": { "description": "Mensagens ricas (cards, botoes) via operadoras.","text": "","items": [],"orgOptions": [],"stacks": [] }
     }
   ],
@@ -1682,7 +1682,10 @@
   }
   function setTransform(fromCamera = false){
     if(!fromCamera) cancelCameraMotion();
-    nodesLayer.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.z})`;
+    // Layout zoom rerasterizes text, borders and images at the displayed size.
+    // Compensate the translation because CSS zoom also scales transform distances.
+    nodesLayer.style.zoom = String(view.z);
+    nodesLayer.style.transform = `translate(${view.x / view.z}px, ${view.y / view.z}px)`;
     svg.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.z})`;
     const step = 28;
     const gx = ((view.x % step) + step) % step;
@@ -1740,12 +1743,21 @@
     if(t==="green") return "green";
     return "";
   }
+  const imageAssets = window.CANVAS_IMAGE_ASSETS || {};
+  const localImagePaths = new Map(Object.values(imageAssets).map(path => [path.split("/").pop(), path]));
   function normalizeLogoUrl(v){
     const raw = (v || "").trim();
     if(!raw) return "";
     if(/^data:image\//i.test(raw)) return raw;
     try{
+      const mapped = imageAssets[raw];
+      if(mapped) return new URL(mapped, window.location.href).href;
       const u = new URL(raw, window.location.href);
+      // Rebase exported local assets when a JSON is opened on another host.
+      const localPath = localImagePaths.get(u.pathname.split("/").pop());
+      if(localPath && u.pathname.includes("/assets/images/")){
+        return new URL(localPath, window.location.href).href;
+      }
       if(u.protocol === "http:" || u.protocol === "https:" || u.protocol === "data:") return u.href;
     } catch {}
     return "";
@@ -1772,24 +1784,24 @@
   function svgDataUri(svg){
     return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg.replace(/\s+/g, " ").trim())}`;
   }
-  const TIKTOK_ADS_LOGO_URL = "https://static.vecteezy.com/system/resources/thumbnails/016/716/450/small/tiktok-icon-free-png.png";
-  const TESSERACT_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8xaoF7Ur9YH164H8QTlfxqzyvOVIZ_XpYm8fJozOikA&s=10";
+  const TIKTOK_ADS_LOGO_URL = "./assets/images/tiktok-icon-free-png-1c522e4d5759.png";
+  const TESSERACT_LOGO_URL = "./assets/images/images-5713ee45503f.jpg";
   const LEGACY_TIKTOK_ADS_LOGO_URL = "https://www.oviond.com/wp-content/uploads/2023/06/tiktok-ads-icon.png";
-  const LEGACY_TESSERACT_LOGO_URL = "https://clevertap.com/wp-content/uploads/2024/03/Hyper-personalization-image.png";
-  const TESSERACT_DEFAULT_ITEM_ICON = "https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png";
+  const LEGACY_TESSERACT_LOGO_URL = "./assets/images/Hyper-personalization-image-720f9dbce26c.png";
+  const TESSERACT_DEFAULT_ITEM_ICON = "./assets/images/CleverTap_fav-ac15fb175ba3.png";
   function normalizeSpecialNodeLogos(node){
     if(!node || typeof node !== "object") return node;
     const title = normalizeI18nText(node.title || "");
     if(title.includes("tiktok ads")){
       const current = normalizeLogoUrl(node.logoUrl);
-      if(!current || current === LEGACY_TIKTOK_ADS_LOGO_URL){
+      if(!current || current === normalizeLogoUrl(LEGACY_TIKTOK_ADS_LOGO_URL)){
         node.logoUrl = TIKTOK_ADS_LOGO_URL;
         node.logoInvalid = false;
       }
     }
     if(title.includes("tesseractdb")){
       const current = normalizeLogoUrl(node.solutionLogo);
-      if(!current || current === LEGACY_TESSERACT_LOGO_URL){
+      if(!current || current === normalizeLogoUrl(LEGACY_TESSERACT_LOGO_URL)){
         node.solutionLogo = TESSERACT_LOGO_URL;
       }
     }
@@ -2560,7 +2572,7 @@
       tbAreaLock.setAttribute("aria-pressed", on ? "true" : "false");
       tbAreaLock.classList.toggle("active", on);
       tbAreaLock.title = on ? translateKnownPhrase("Desbloquear movimentação") : translateKnownPhrase("Bloquear movimentação");
-      tbAreaLock.innerHTML = `<img src="https://us.123rf.com/450wm/sumberejeki/sumberejeki2007/sumberejeki200702918/151738175-ilustra%C3%A7%C3%A3o-gr%C3%A1fico-vetorial-do-%C3%ADcone-do-cadeado-apto-para-chave-seguro-senha-prote%C3%A7%C3%A3o-seguro.jpg?ver=6" alt="" aria-hidden="true" />`;
+      tbAreaLock.innerHTML = `<img src="./assets/images/151738175-ilustra-C3-A7-C3-A3o-gr-C3-A1fico-veto-913b10c23e66.jpg" alt="" aria-hidden="true" />`;
     }
   }
   function refreshSettingsUI(){
@@ -2590,37 +2602,37 @@
     return isSel ? "url(#arrowActive)" : "url(#arrow)";
   }
   const STACK_OPTIONS = [
-    { id:"ios-native", label:"iOS Native", logo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHWXIPNdXbKSE0eC4wiiIMmO7aTUjuws_4hw&s" },
+    { id:"ios-native", label:"iOS Native", logo:"./assets/images/images-06a7a530814e.png" },
     { id:"android-native", label:"Android Native", logo:"https://images.icon-icons.com/2415/PNG/512/android_original_logo_icon_146653.png" },
-    { id:"cordova", label:"Cordova", logo:"https://cdn.freebiesupply.com/logos/large/2x/cordova-logo-png-transparent.png" },
-    { id:"flutter", label:"Flutter", logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Flutter_logo.svg/250px-Flutter_logo.svg.png" },
-    { id:"react-native", label:"React Native", logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/3840px-React-icon.svg.png" },
-    { id:"unity", label:"Unity", logo:"https://images.seeklogo.com/logo-png/27/2/unity-logo-png_seeklogo-274050.png" },
-    { id:"unity-native", label:"Unity Native", logo:"https://images.seeklogo.com/logo-png/27/2/unity-logo-png_seeklogo-274050.png" },
-    { id:"web-sdk", label:"Web SDK", logo:"https://pixellot-web-sdk.pixellot.tv/v3/docs/sdk.png" },
-    { id:"kaios", label:"KaiOS", logo:"https://cdn.iconscout.com/icon/free/png-256/free-kaios-logo-icon-svg-download-png-3030010.png?f=webp" },
-    { id:"unreal-sdk", label:"Unreal SDK", logo:"https://static.amplitude.com/data-connections/icons/UNREAL.png" },
+    { id:"cordova", label:"Cordova", logo:"./assets/images/cordova-logo-png-transparent-2b56286824cb.png" },
+    { id:"flutter", label:"Flutter", logo:"./assets/images/250px-Flutter_logo-svg-296633f158d2.png" },
+    { id:"react-native", label:"React Native", logo:"./assets/images/3840px-React-icon-svg-f9e21571b28b.png" },
+    { id:"unity", label:"Unity", logo:"./assets/images/unity-logo-png_seeklogo-274050-9ced2c123484.png" },
+    { id:"unity-native", label:"Unity Native", logo:"./assets/images/unity-logo-png_seeklogo-274050-9ced2c123484.png" },
+    { id:"web-sdk", label:"Web SDK", logo:"./assets/images/sdk-fe541c6b12bf.png" },
+    { id:"kaios", label:"KaiOS", logo:"./assets/images/free-kaios-logo-icon-svg-download-png-3030010-d5693b7fdcc4.webp" },
+    { id:"unreal-sdk", label:"Unreal SDK", logo:"./assets/images/UNREAL-3f93c92b75f2.png" },
     { id:"smart-tv-sdk", label:"Smart TV SDK", logo:"" }
   ];
   const WHATSAPP_PROVIDER_OPTIONS = [
-    { id:"direct", label:"Direct", logo:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" },
-    { id:"connect", label:"Connect", logo:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" },
-    { id:"generic", label:"Generic", logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png" },
-    { id:"8x8", label:"8x8", logo:"https://companieslogo.com/img/orig/EGHT-95dcecf5.png?t=1744724283" },
-    { id:"aisensy", label:"AiSensy", logo:"https://waba.aisensy.com/static/media/logo.704a7a4bfa9c51deca0f.jpg" },
+    { id:"direct", label:"Direct", logo:"./assets/images/CleverTap_fav-ac15fb175ba3.png" },
+    { id:"connect", label:"Connect", logo:"./assets/images/CleverTap_fav-ac15fb175ba3.png" },
+    { id:"generic", label:"Generic", logo:"./assets/images/960px-WhatsApp-svg-0f4bc879d3b2.png" },
+    { id:"8x8", label:"8x8", logo:"./assets/images/EGHT-95dcecf5-152beaff70f1.png" },
+    { id:"aisensy", label:"AiSensy", logo:"./assets/images/logo-704a7a4bfa9c51deca0f-5a355ecb7a84.png" },
     { id:"exotel", label:"Exotel", logo:"https://exotel.com/wp-content/uploads/2025/07/green-black-logo.png" },
-    { id:"gupshup", label:"Gupshup", logo:"https://companieslogo.com/img/orig/gupshup-1d75e54c.png?t=1720244494" },
-    { id:"haptik", label:"Haptik", logo:"https://www.haptik.ai/hs-fs/hubfs/Business%20Blog/Haptik%20Reborn/handlogo-1-2.png?width=262&name=handlogo-1-2.png" },
-    { id:"infobip", label:"Infobip", logo:"https://www.infobip.com/developers/wp-content/uploads/2023/03/Infobip_logo_favicon.png" },
-    { id:"interakt", label:"Interakt", logo:"https://images.g2crowd.com/uploads/product/image/social_landscape/social_landscape_7370fed2a36dc9eee7c8a2952c803b81/haptik-interakt.png" },
-    { id:"kaleyra", label:"Kaleyra", logo:"https://www.tatacommunications.com/hubfs/TaCO-2024/Brand-logo/Kaleyra/Kaleyra.png" },
-    { id:"msg91", label:"MSG91", logo:"https://media.trustradius.com/product-logos/7D/jl/09ULF2HP569H.PNG" },
-    { id:"nexmo", label:"Nexmo", logo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGkTwn6R8vAhNEErNhon8OEKBNZoFvIAwYuA&s" },
+    { id:"gupshup", label:"Gupshup", logo:"./assets/images/gupshup-1d75e54c-2d951ed77151.png" },
+    { id:"haptik", label:"Haptik", logo:"./assets/images/handlogo-1-2-9d33f9cfa0ac.png" },
+    { id:"infobip", label:"Infobip", logo:"./assets/images/Infobip_logo_favicon-c327160497c4.png" },
+    { id:"interakt", label:"Interakt", logo:"./assets/images/haptik-interakt-b31c1b44226d.png" },
+    { id:"kaleyra", label:"Kaleyra", logo:"./assets/images/Kaleyra-bf4d11efb1fd.png" },
+    { id:"msg91", label:"MSG91", logo:"./assets/images/09ULF2HP569H-658cd47c49bb.png" },
+    { id:"nexmo", label:"Nexmo", logo:"./assets/images/images-d13b4c84b605.png" },
     { id:"onextel", label:"OneXtel", logo:"https://onextelcommunication.com/wp-content/uploads/2024/09/OCM_Logo_OneXtel_Communication_Media_Pvt._Ltd._Logo2.png" },
-    { id:"pingbix", label:"Pingbix", logo:"https://pingbix.com/static/navbar-logo.png" },
-    { id:"quickreply", label:"QuickReply", logo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4GF507R2A_iwwxy6dPPDtnn5QBI8JmPgMyw&s" },
-    { id:"route-mobile", label:"Route Mobile", logo:"https://play-lh.googleusercontent.com/nBsYx365olelYmQHPflxq8vpS5wZ17kPzOILRwbEnW2aNqttltjcHOQOF5TGlBGgmQ" },
-    { id:"sinch", label:"Sinch", logo:"https://sinch.com/wp-content/themes/simpletexting-theme-blank/assets/images/logo-sinch.svg" }
+    { id:"pingbix", label:"Pingbix", logo:"./assets/images/navbar-logo-9641a4cb2948.png" },
+    { id:"quickreply", label:"QuickReply", logo:"./assets/images/images-8e60e2501d23.png" },
+    { id:"route-mobile", label:"Route Mobile", logo:"./assets/images/nBsYx365olelYmQHPflxq8vpS5wZ17kPzOILRwbEnW2aNqtt-d0d216d07a79.png" },
+    { id:"sinch", label:"Sinch", logo:"./assets/images/logo-sinch-f13e35134da1.svg" }
   ];
   function stackCatalogForNode(n){
     if((n?.stackCatalog || "") === "whatsappProviders") return WHATSAPP_PROVIDER_OPTIONS;
@@ -2792,21 +2804,21 @@
       "reducao de custo e complexidade":TESSERACT_ITEM_ICON
     };
     const SEGMENTS_ICON_BY_LABEL = {
-      "rfm":"https://cdn-icons-png.flaticon.com/512/570/570291.png",
-      "real-time":"https://marketplace.canva.com/XL6M0/MAEpMrXL6M0/1/tl/canva-clock-real-realtime-time-icon-icon-MAEpMrXL6M0.png",
-      "real time":"https://marketplace.canva.com/XL6M0/MAEpMrXL6M0/1/tl/canva-clock-real-realtime-time-icon-icon-MAEpMrXL6M0.png",
-      "preditiva":"https://cdn-icons-png.flaticon.com/512/5799/5799191.png",
-      "psicográfica":"https://cdn-icons-png.flaticon.com/512/12282/12282281.png",
-      "psicografica":"https://cdn-icons-png.flaticon.com/512/12282/12282281.png",
-      "comportamental":"https://idecbrasil.com.br/wp-content/uploads/2025/03/processo-1.png"
+      "rfm":"./assets/images/570291-aefcd539d06a.png",
+      "real-time":"./assets/images/canva-clock-real-realtime-time-icon-icon-MAEpMrX-e81174fb9c34.png",
+      "real time":"./assets/images/canva-clock-real-realtime-time-icon-icon-MAEpMrX-e81174fb9c34.png",
+      "preditiva":"./assets/images/5799191-52f7f6598a8f.png",
+      "psicográfica":"./assets/images/12282281-c234d18bd995.png",
+      "psicografica":"./assets/images/12282281-c234d18bd995.png",
+      "comportamental":"./assets/images/processo-1-fda39581d19f.png"
     };
     const SEGMENTS_MONO = new Set(["psicográfica", "psicografica", "comportamental"]);
     const PROFILE_CHANNELS = [
-      { label:"WhatsApp", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png" },
-      { label:"Email", icon:"https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small/email-message-icon-design-in-blue-circle-png.png" },
-      { label:"SMS", icon:"https://cdn-icons-png.flaticon.com/512/733/733533.png" },
-      { label:"App", icon:"https://cdn-icons-png.flaticon.com/512/8766/8766948.png" },
-      { label:"Web", icon:"https://cdn-icons-png.flaticon.com/512/5339/5339181.png" }
+      { label:"WhatsApp", icon:"./assets/images/960px-WhatsApp-svg-0f4bc879d3b2.png" },
+      { label:"Email", icon:"./assets/images/email-message-icon-design-in-blue-circle-png-d4a3c459eac9.png" },
+      { label:"SMS", icon:"./assets/images/733533-0368ce34f8ba.png" },
+      { label:"App", icon:"./assets/images/8766948-101448f0d9c9.png" },
+      { label:"Web", icon:"./assets/images/5339181-41d4e033e597.png" }
     ];
     const PROFILE_PROPERTIES = [
       { label:"Idade", value:"34 anos" },
@@ -2976,7 +2988,7 @@
           el.innerHTML = `
             <div class="profileCard">
               <div class="profileTop">
-                <img class="profileAvatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="John Smith" />
+                <img class="profileAvatar" src="./assets/images/12225935-55586ef1bd27.png" alt="John Smith" />
                 <div class="profileIdentity">
                   <div class="profileName">${escapeHTML(n.title || "John Smith")}</div>
                   <div class="profileKind">${escapeHTML(translateKnownPhrase(n.desc || "Profile / CDP"))}</div>
@@ -3014,8 +3026,6 @@
             </div>
           `;
         }
-      } else if(compactToggleAnim?.nodeId === n.id){
-        el.classList.add("compactAnim", `compactAnim-${compactToggleAnim.mode}`);
       } else if(n.variant === "text"){
         const fontSize = clamp(Number(n.fontSize || 24), 12, 60);
         const fontFamily = (n.fontFamily || "Georgia").toString();
@@ -3079,7 +3089,7 @@
         el.innerHTML = `
           <div class="profileCard">
             <div class="profileTop">
-              <img class="profileAvatar" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="John Smith" />
+              <img class="profileAvatar" src="./assets/images/12225935-55586ef1bd27.png" alt="John Smith" />
               <div class="profileIdentity">
                 <div class="profileName">${profileName}</div>
                 <div class="profileKind">${profileKind}</div>
@@ -3130,8 +3140,8 @@
             <div class="areaLabel"><span class="areaBadge"></span>${escapeHTML(n.title || "Bloco de área")}</div>
           </div>
           <div class="nodeActions">
-            <button class="nact back" type="button" title="Enviar para trás" aria-label="Enviar para trás"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Enviar para trás" /></button>
-            <button class="nact front" type="button" title="Trazer para frente" aria-label="Trazer para frente"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Trazer para frente" /></button>
+            <button class="nact back" type="button" title="Enviar para trás" aria-label="Enviar para trás"><img src="./assets/images/3843793-200-ad618744c171.png" alt="Enviar para trás" /></button>
+            <button class="nact front" type="button" title="Trazer para frente" aria-label="Trazer para frente"><img src="./assets/images/3843793-200-ad618744c171.png" alt="Trazer para frente" /></button>
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
           </div>
@@ -3270,7 +3280,7 @@
               ${layout === "tesseract" ? "" : `
               <div class="solutionRail">
                 <div class="solutionBrand">
-                  <img class="solutionBrandLogo" src="https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png" alt="CleverTap" />
+                  <img class="solutionBrandLogo" src="./assets/images/CleverTap_fav-ac15fb175ba3.png" alt="CleverTap" />
                   <div class="solutionBrandTitle">${escapeHTML(n.title || "Martech")}</div>
                 </div>
                 <div class="solutionMeta">
@@ -3317,8 +3327,8 @@
             <div class="organizerBody"></div>
           </div>
           <div class="nodeActions">
-            <button class="nact back" type="button" title="Enviar para trás" aria-label="Enviar para trás"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Enviar para trás" /></button>
-            <button class="nact front" type="button" title="Trazer para frente" aria-label="Trazer para frente"><img src="https://static.thenounproject.com/png/3843793-200.png" alt="Trazer para frente" /></button>
+            <button class="nact back" type="button" title="Enviar para trás" aria-label="Enviar para trás"><img src="./assets/images/3843793-200-ad618744c171.png" alt="Enviar para trás" /></button>
+            <button class="nact front" type="button" title="Trazer para frente" aria-label="Trazer para frente"><img src="./assets/images/3843793-200-ad618744c171.png" alt="Trazer para frente" /></button>
             <button class="nact dup" type="button" title="Duplicar bloco" aria-label="Duplicar bloco"><img src="${DUP_ICON_URL}" alt="Duplicar" /></button>
             ${compactToggleButtonHtml(n)}
             <button class="nact del" type="button" title="Excluir bloco" aria-label="Excluir bloco">✕</button>
@@ -3388,7 +3398,7 @@
             <div class="aiInner">
               <div class="aiHead">
                 <div class="aiTitleRow">
-                  <span class="aiIconBadge"><img src="https://img.icons8.com/ios11/512/FFFFFF/bard.png" alt="AI" /></span>
+                  <span class="aiIconBadge"><img src="./assets/images/bard-9ea20d6c5422.png" alt="AI" /></span>
                   <div class="aiTitle">${escapeHTML(n.title || "ScribeAI")}</div>
                 </div>
                 ${aiDescHtml}
@@ -3481,6 +3491,13 @@
         `;
       }
 
+      if(!isCompactNode && compactToggleAnim?.nodeId === n.id){
+        el.classList.add("compactAnim", `compactAnim-${compactToggleAnim.mode}`);
+      }
+      el.querySelectorAll("img").forEach((img)=>{
+        const localUrl = normalizeLogoUrl(img.getAttribute("src"));
+        if(localUrl) img.src = localUrl;
+      });
       nodesLayer.appendChild(el);
       el.querySelectorAll("img").forEach((img)=>{
         img.draggable = false;
@@ -4913,40 +4930,40 @@
 
   // --- Sidebar add blocks ---
   const templates = {
-    "integration:api":     { icon:"API", kind:"Integration", type:"blue",  title:"API", desc:"Conector server-to-server para eventos, perfis e integracoes.", logoUrl:"https://icons.veryicon.com/png/o/internet--web/internet-simple-icon/api-management.png" },
-    "integration:sdk":     { icon:"SDK", kind:"Integration", type:"blue",  title:"SDK", desc:"Instrumentacao App/Web para coleta e mensageria.", logoUrl:"https://icons.veryicon.com/png/o/miscellaneous/hekr/open-sdk-download.png" },
+    "integration:api":     { icon:"API", kind:"Integration", type:"blue",  title:"API", desc:"Conector server-to-server para eventos, perfis e integracoes.", logoUrl:"./assets/images/api-management-d5c6a0957c3d.png" },
+    "integration:sdk":     { icon:"SDK", kind:"Integration", type:"blue",  title:"SDK", desc:"Instrumentacao App/Web para coleta e mensageria.", logoUrl:"./assets/images/open-sdk-download-43df16fde4db.png" },
     "integration:native":  { icon:"N", kind:"Integration", type:"blue",  title:"Nativo", desc:"Capacidade nativa da plataforma (sem conector externo).", logoUrl:"https://images.icon-icons.com/3251/PNG/512/plug_connected_regular_icon_202791.png" },
     "native:connector":    { icon:"N", kind:"Integration", type:"blue",  title:"Nativo", desc:"Capacidade nativa da plataforma (sem conector externo).", logoUrl:"https://images.icon-icons.com/3251/PNG/512/plug_connected_regular_icon_202791.png" },
-    "native:amplitude":    { icon:"AM", kind:"Analytics", type:"blue", title:"Amplitude", desc:"Plataforma de analytics com conexão nativa.", logoUrl:"https://companieslogo.com/img/orig/AMPL-501a52ff.png?t=1720244490" },
-    "native:mixpanel":     { icon:"MX", kind:"Analytics", type:"blue", title:"Mixpanel", desc:"Plataforma de analytics com conexão nativa.", logoUrl:"https://cdn.appsflyer.com/marketplace/static/logo/mixpanel.png" },
-    "native:posthog":      { icon:"PH", kind:"Analytics", type:"blue", title:"PostHog", desc:"Plataforma de analytics com conexão nativa.", logoUrl:"https://posthog.com/brand/posthog-logo-stacked@2x.png" },
-    "native:adjust":       { icon:"AD", kind:"Attribution", type:"blue", title:"Adjust", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"https://avatars.githubusercontent.com/u/1327203?s=280&v=4" },
-    "native:airbridge":    { icon:"AB", kind:"Attribution", type:"blue", title:"Airbridge", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"https://upload.wikimedia.org/wikipedia/commons/d/d3/Airbridge_logo_CL.png" },
-    "native:appsflyer":    { icon:"AF", kind:"Attribution", type:"blue", title:"AppsFlyer", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"https://cdn.prod.website-files.com/5ecbeb8d7557e7f636691721/65837c5f480644e2de769eb5_AppsFlyer_logo.png" },
-    "native:apptrove":     { icon:"AT", kind:"Attribution", type:"blue", title:"AppTrove", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"https://files.readme.io/1d84909a84cbc1303083f451b01b6345f8329ac4a8bc8a0bf675153453cea99c-Apptrove.webp" },
-    "native:branch":       { icon:"BR", kind:"Attribution", type:"blue", title:"Branch", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv6Ow_N_fGWVLscgtELG4K7j1_3LyThe-Ulg&s" },
+    "native:amplitude":    { icon:"AM", kind:"Analytics", type:"blue", title:"Amplitude", desc:"Plataforma de analytics com conexão nativa.", logoUrl:"./assets/images/AMPL-501a52ff-04d95ce4b5aa.png" },
+    "native:mixpanel":     { icon:"MX", kind:"Analytics", type:"blue", title:"Mixpanel", desc:"Plataforma de analytics com conexão nativa.", logoUrl:"./assets/images/mixpanel-29b160de0b42.png" },
+    "native:posthog":      { icon:"PH", kind:"Analytics", type:"blue", title:"PostHog", desc:"Plataforma de analytics com conexão nativa.", logoUrl:"./assets/images/posthog-logo-stacked-2x-e017c732ecbb.png" },
+    "native:adjust":       { icon:"AD", kind:"Attribution", type:"blue", title:"Adjust", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"./assets/images/1327203-4a39a67b1832.png" },
+    "native:airbridge":    { icon:"AB", kind:"Attribution", type:"blue", title:"Airbridge", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"./assets/images/Airbridge_logo_CL-59f99aa2190f.png" },
+    "native:appsflyer":    { icon:"AF", kind:"Attribution", type:"blue", title:"AppsFlyer", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"./assets/images/65837c5f480644e2de769eb5_AppsFlyer_logo-b45102347ea5.png" },
+    "native:apptrove":     { icon:"AT", kind:"Attribution", type:"blue", title:"AppTrove", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"./assets/images/1d84909a84cbc1303083f451b01b6345f8329ac4a8bc8a0b-ca2bae5bf6dc.webp" },
+    "native:branch":       { icon:"BR", kind:"Attribution", type:"blue", title:"Branch", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"./assets/images/images-d58744589a92.png" },
     "native:singular":     { icon:"SG", kind:"Attribution", type:"blue", title:"Singular", desc:"Plataforma de atribuição com conexão nativa.", logoUrl:"https://www.businessofapps.com/wp-content/uploads/2019/05/singular_logo_2019.png" },
-    "native:shopify":      { icon:"SH", kind:"E-commerce", type:"blue", title:"Shopify", desc:"Plataforma de e-commerce com conexão nativa.", logoUrl:"https://www.pngall.com/wp-content/uploads/13/Shopify-Logo-PNG.png" },
-    "native:vtex":         { icon:"VT", kind:"E-commerce", type:"blue", title:"VTEX", desc:"Plataforma de e-commerce com conexão nativa.", logoUrl:"https://companieslogo.com/img/orig/VTEX-64045aa2.png?t=1720244494" },
+    "native:shopify":      { icon:"SH", kind:"E-commerce", type:"blue", title:"Shopify", desc:"Plataforma de e-commerce com conexão nativa.", logoUrl:"./assets/images/Shopify-Logo-PNG-662463f3a5a6.png" },
+    "native:vtex":         { icon:"VT", kind:"E-commerce", type:"blue", title:"VTEX", desc:"Plataforma de e-commerce com conexão nativa.", logoUrl:"./assets/images/VTEX-64045aa2-5777a1933092.png" },
     "native:eventbridge":  { icon:"EB", kind:"Cloud Storage", type:"blue", title:"Amazon EventBridge", desc:"Event routing / orchestration", logoUrl:"https://www.awsicon.com/static/images/Service-Icons/App-Integration/64/png5x/EventBridge.png" },
-    "native:s3":           { icon:"S3", kind:"Cloud Storage", type:"blue", title:"AWS S3", desc:"Object storage", logoUrl:"https://logowik.com/content/uploads/images/amazon-s37765.jpg" },
-    "native:gcp":          { icon:"GCP", kind:"Cloud Storage", type:"blue", title:"Google Cloud Platform", desc:"Cloud platform", logoUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8bqoxPxauHlIQdvfMHPRKRWB-SoZaDhwc-w&s" },
-    "native:azure":        { icon:"AZ", kind:"Cloud Storage", type:"blue", title:"Microsoft Azure", desc:"Cloud platform", logoUrl:"https://www.northware.mx/wp-content/uploads/2022/09/northware-microsoft-azure-logo.png" },
-    "native:bigquery":     { icon:"BQ", kind:"Data Warehouse", type:"blue", title:"BigQuery", desc:"Cloud data warehouse", logoUrl:"https://cdn.worldvectorlogo.com/logos/google-bigquery-logo-1.svg" },
-    "native:snowflake":    { icon:"SN", kind:"Data Warehouse", type:"blue", title:"SnowFlake", desc:"Cloud data warehouse", logoUrl:"https://companieslogo.com/img/orig/SNOW-35164165.png?t=1751096598" },
-    "native:databricks":   { icon:"DB", kind:"Data Warehouse", type:"blue", title:"Databricks", desc:"Lakehouse / analytics", logoUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSA9evqOC59ZcPyjL2-nnMXboMeUbhr3e266w&s" },
-    "native:redshift":     { icon:"RS", kind:"Data Warehouse", type:"blue", title:"Amazon Redshift", desc:"Cloud data warehouse", logoUrl:"https://www.shareicon.net/download/2015/08/28/92232_database.ico" },
-    "native:fabric":       { icon:"FB", kind:"Data Warehouse", type:"blue", title:"Microsoft Fabric", desc:"Analytics platform", logoUrl:"https://davidalzamendi.com/wp-content/uploads/2023/05/Fabric_final_x256.png" },
-    "native:hightouch":    { icon:"HT", kind:"CDP", type:"blue", title:"High Touch", desc:"CDP com conexão nativa.", logoUrl:"https://static.amplitude.com/data-connections/icons/HIGHTOUCH.png" },
+    "native:s3":           { icon:"S3", kind:"Cloud Storage", type:"blue", title:"AWS S3", desc:"Object storage", logoUrl:"./assets/images/amazon-s37765-e33095407b34.jpg" },
+    "native:gcp":          { icon:"GCP", kind:"Cloud Storage", type:"blue", title:"Google Cloud Platform", desc:"Cloud platform", logoUrl:"./assets/images/images-8f35fc28f10e.png" },
+    "native:azure":        { icon:"AZ", kind:"Cloud Storage", type:"blue", title:"Microsoft Azure", desc:"Cloud platform", logoUrl:"./assets/images/northware-microsoft-azure-logo-d44400fef84d.png" },
+    "native:bigquery":     { icon:"BQ", kind:"Data Warehouse", type:"blue", title:"BigQuery", desc:"Cloud data warehouse", logoUrl:"./assets/images/google-bigquery-logo-1-f005ab82e2fc.svg" },
+    "native:snowflake":    { icon:"SN", kind:"Data Warehouse", type:"blue", title:"SnowFlake", desc:"Cloud data warehouse", logoUrl:"./assets/images/SNOW-35164165-714d4ea7a224.png" },
+    "native:databricks":   { icon:"DB", kind:"Data Warehouse", type:"blue", title:"Databricks", desc:"Lakehouse / analytics", logoUrl:"./assets/images/images-28b555885f9e.png" },
+    "native:redshift":     { icon:"RS", kind:"Data Warehouse", type:"blue", title:"Amazon Redshift", desc:"Cloud data warehouse", logoUrl:"./assets/images/92232_database-e03754201215.ico" },
+    "native:fabric":       { icon:"FB", kind:"Data Warehouse", type:"blue", title:"Microsoft Fabric", desc:"Analytics platform", logoUrl:"./assets/images/Fabric_final_x256-c4cabf3cf957.png" },
+    "native:hightouch":    { icon:"HT", kind:"CDP", type:"blue", title:"High Touch", desc:"CDP com conexão nativa.", logoUrl:"./assets/images/HIGHTOUCH-c74f5ec62a1c.png" },
     "native:segment":      { icon:"SE", kind:"CDP", type:"blue", title:"Segment", desc:"CDP com conexão nativa.", logoUrl:"https://logo.svgcdn.com/logos/segment.png" },
-    "native:rudderstack":  { icon:"RS", kind:"CDP", type:"blue", title:"RudderStack", desc:"CDP com conexão nativa.", logoUrl:"https://cdn.prod.website-files.com/685d3f27e667cdf05fe197f8/685d3f27e667cdf05fe1aa8b_64d3ddaa31ad7172011fd9b5_rudderstack-1.svg" },
-    "native:census":       { icon:"CE", kind:"CDP", type:"blue", title:"Census", desc:"CDP com conexão nativa.", logoUrl:"https://f.hubspotusercontent10.net/hubfs/7162616/__hs-marketplace__/Census%20logo%2032x32-3-1.png" },
-    "native:boltic":       { icon:"BO", kind:"CDP", type:"blue", title:"Boltic", desc:"CDP com conexão nativa.", logoUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1AWj_TRcan-rLeTFdVzDdfe98wQL5pQb-ew&s" },
+    "native:rudderstack":  { icon:"RS", kind:"CDP", type:"blue", title:"RudderStack", desc:"CDP com conexão nativa.", logoUrl:"./assets/images/685d3f27e667cdf05fe1aa8b_64d3ddaa31ad7172011fd9b-89a25d66eb54.svg" },
+    "native:census":       { icon:"CE", kind:"CDP", type:"blue", title:"Census", desc:"CDP com conexão nativa.", logoUrl:"./assets/images/Census-20logo-2032x32-3-1-50368d7da4f3.png" },
+    "native:boltic":       { icon:"BO", kind:"CDP", type:"blue", title:"Boltic", desc:"CDP com conexão nativa.", logoUrl:"./assets/images/images-bee7565edefd.png" },
     "native:mparticle":    { icon:"MP", kind:"CDP", type:"blue", title:"mParticle", desc:"CDP com conexão nativa.", logoUrl:"https://www.svgrepo.com/show/354098/mparticle-icon.svg" },
     "native:treasuredata": { icon:"TD", kind:"CDP", type:"blue", title:"Treasure Data", desc:"CDP com conexão nativa.", logoUrl:"https://www.svgrepo.com/show/354460/treasuredata-icon.svg" },
-    "integration:manual":  { icon:"MAN", kind:"Integration", type:"blue",  title:"Manual", desc:"Operacao manual ou assistida, sem dependencia de API, SDK ou conector nativo.", logoUrl:"https://media.istockphoto.com/id/1187149723/pt/vetorial/touch-outline-vector-illustration-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=h2Z3b3CzeZPm5oLu_m_g6dzhhCgWWwfO5CEHTuS1E-A=" },
+    "integration:manual":  { icon:"MAN", kind:"Integration", type:"blue",  title:"Manual", desc:"Operacao manual ou assistida, sem dependencia de API, SDK ou conector nativo.", logoUrl:"./assets/images/touch-outline-vector-illustration-icon-isolated--09b6c655b80b.jpg" },
 
-    "core:central":        { icon:"C", kind:"Core",        type:"blue",  title:"Bloco Central", desc:"Edite o nome e descreva a funcionalidade (ex.: Segmentacao, Journeys, Analytics).", logoUrl:"https://cdn-icons-png.flaticon.com/512/30/30254.png" },
+    "core:central":        { icon:"C", kind:"Core",        type:"blue",  title:"Bloco Central", desc:"Edite o nome e descreva a funcionalidade (ex.: Segmentacao, Journeys, Analytics).", logoUrl:"./assets/images/30254-0d95b2a8a793.png" },
     "core:organizer":      {
       icon:"ORG", kind:"Core", type:"blue", variant:"organizer",
       title:"Fonte de dados", desc:"",
@@ -4967,20 +4984,20 @@
     "channel:whatsapp":    {
       icon:"WA", kind:"Channel", type:"red", title:"WhatsApp",
       desc:"Canal conversacional (menu/flows/IA).",
-      logoUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png",
+      logoUrl:"./assets/images/960px-WhatsApp-svg-0f4bc879d3b2.png",
       variant:"stack",
       stackCatalog:"whatsappProviders",
       stacks:["direct"]
     },
-    "channel:rcs":         { icon:"RCS", kind:"Channel",     type:"red",   title:"RCS", desc:"Mensagens ricas (cards, botoes) via operadoras.", logoUrl:"https://avatars.githubusercontent.com/u/67345131?s=280&v=4" },
-    "channel:app":         { icon:"APP", kind:"Channel",     type:"red",   title:"App", desc:"Push, In-App, App Inbox, Native Display.", logoUrl:"https://cdn-icons-png.flaticon.com/512/8766/8766948.png", variant:"stack", stacks:["ios-native","android-native"] },
-    "channel:web":         { icon:"WEB", kind:"Channel",     type:"red",   title:"Web", desc:"Web Push, Pop-ups, Exit intent, Native Display.", logoUrl:"https://cdn-icons-png.flaticon.com/512/5339/5339181.png", variant:"stack", stacks:["web-sdk"] },
-    "channel:email":       { icon:"EM", kind:"Channel",     type:"red",   title:"Email", desc:"Campanhas e mensagens com HTML rico.", logoUrl:"https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small/email-message-icon-design-in-blue-circle-png.png" },
-    "channel:sms":         { icon:"SMS", kind:"Channel",     type:"red",   title:"SMS", desc:"Mensagens transacionais e promocionais.", logoUrl:"https://cdn-icons-png.flaticon.com/512/733/733533.png" },
-    "channel:webhook":     { icon:"WH", kind:"Channel",     type:"red",   title:"Webhook", desc:"Recebe eventos em tempo real via callbacks HTTP para automações e integrações.", logoUrl:"https://www.svix.com/resources/assets/images/color-webhook-240-1deccb0e365ff4ea493396ad28638fb7.png" },
-    "channel:fbads":       { icon:"FB", kind:"Ads",         type:"red",   title:"Facebook Ads", desc:"Export de audiencia para remarketing.", logoUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/960px-2023_Facebook_icon.svg.png" },
+    "channel:rcs":         { icon:"RCS", kind:"Channel",     type:"red",   title:"RCS", desc:"Mensagens ricas (cards, botoes) via operadoras.", logoUrl:"./assets/images/67345131-ccb87832b395.png" },
+    "channel:app":         { icon:"APP", kind:"Channel",     type:"red",   title:"App", desc:"Push, In-App, App Inbox, Native Display.", logoUrl:"./assets/images/8766948-101448f0d9c9.png", variant:"stack", stacks:["ios-native","android-native"] },
+    "channel:web":         { icon:"WEB", kind:"Channel",     type:"red",   title:"Web", desc:"Web Push, Pop-ups, Exit intent, Native Display.", logoUrl:"./assets/images/5339181-41d4e033e597.png", variant:"stack", stacks:["web-sdk"] },
+    "channel:email":       { icon:"EM", kind:"Channel",     type:"red",   title:"Email", desc:"Campanhas e mensagens com HTML rico.", logoUrl:"./assets/images/email-message-icon-design-in-blue-circle-png-d4a3c459eac9.png" },
+    "channel:sms":         { icon:"SMS", kind:"Channel",     type:"red",   title:"SMS", desc:"Mensagens transacionais e promocionais.", logoUrl:"./assets/images/733533-0368ce34f8ba.png" },
+    "channel:webhook":     { icon:"WH", kind:"Channel",     type:"red",   title:"Webhook", desc:"Recebe eventos em tempo real via callbacks HTTP para automações e integrações.", logoUrl:"./assets/images/color-webhook-240-1deccb0e365ff4ea493396ad28638f-8005a1268a3a.png" },
+    "channel:fbads":       { icon:"FB", kind:"Ads",         type:"red",   title:"Facebook Ads", desc:"Export de audiencia para remarketing.", logoUrl:"./assets/images/960px-2023_Facebook_icon-svg-d26b8d74659b.png" },
     "channel:tiktok":      { icon:"TT", kind:"Ads",         type:"red",   title:"TikTok Ads", desc:"Export de audiencia para remarketing.", logoUrl:TIKTOK_ADS_LOGO_URL },
-    "channel:gads":        { icon:"GA", kind:"Ads",         type:"red",   title:"Google Ads", desc:"Export de audiencia para remarketing.", logoUrl:"https://static.vecteezy.com/system/resources/previews/042/712/671/non_2x/google-ads-icon-logo-symbol-free-png.png" },
+    "channel:gads":        { icon:"GA", kind:"Ads",         type:"red",   title:"Google Ads", desc:"Export de audiencia para remarketing.", logoUrl:"./assets/images/google-ads-icon-logo-symbol-free-png-329f78f26df5.png" },
 
     "data:datalake":       { icon:"DL", kind:"Data",        type:"green", title:"Data Lake", desc:"Armazenamento bruto/historico.", logoUrl:"https://images.icon-icons.com/1502/PNG/512/officedatabase_103574.png" },
     "data:warehouse":      { icon:"DW", kind:"Data",        type:"green", title:"Data Warehouse", desc:"Camada analitica/BI e modelagem.", logoUrl:"https://images.icon-icons.com/1502/PNG/512/officedatabase_103574.png" },
@@ -5021,43 +5038,43 @@
       icon:"EV", kind:"Solução", type:"red", variant:"default",
       title:"Events", desc:"",
       w: 280,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png"
+      logoUrl:"./assets/images/CleverTap_fav-ac15fb175ba3.png"
     },
     "solution:userproperties": {
       icon:"UP", kind:"Solução", type:"red", variant:"default",
       title:"User Properties", desc:"",
       w: 280,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png"
+      logoUrl:"./assets/images/CleverTap_fav-ac15fb175ba3.png"
     },
     "solution:useridentity": {
       icon:"UID", kind:"Solução", type:"red", variant:"default",
       title:"User Identity", desc:"Identity do usuário por Email, Telefone ou Custom ID.",
       w: 280,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png"
+      logoUrl:"./assets/images/CleverTap_fav-ac15fb175ba3.png"
     },
     "solution:piiencryption": {
       icon:"PII", kind:"Solução", type:"red", variant:"default",
       title:"PII Encryption", desc:"",
       w: 280,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png"
+      logoUrl:"./assets/images/CleverTap_fav-ac15fb175ba3.png"
     },
     "solution:productcatalog": {
       icon:"CAT", kind:"Solução", type:"red", variant:"default",
       title:"Product Catalog", desc:"",
       w: 280,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png"
+      logoUrl:"./assets/images/CleverTap_fav-ac15fb175ba3.png"
     },
     "solution:recommendations": {
       icon:"REC", kind:"Solução", type:"red", variant:"default",
       title:"Recommendations", desc:"",
       w: 280,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png"
+      logoUrl:"./assets/images/CleverTap_fav-ac15fb175ba3.png"
     },
     "solution:hyperpersonalization": {
       icon:"HP", kind:"Solução", type:"red", variant:"default",
       title:"Hyper Personalization", desc:"",
       w: 280,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png"
+      logoUrl:"./assets/images/CleverTap_fav-ac15fb175ba3.png"
     },
     "solution:segments":   {
       icon:"S", kind:"Solução", type:"red", variant:"solution",
@@ -5066,11 +5083,11 @@
       userMinH: 230,
       solutionLayout: "grid",
       items: [
-        { icon:"https://cdn-icons-png.flaticon.com/512/570/570291.png", label:"RFM" },
-        { icon:"https://marketplace.canva.com/XL6M0/MAEpMrXL6M0/1/tl/canva-clock-real-realtime-time-icon-icon-MAEpMrXL6M0.png", label:"Real-time" },
-        { icon:"https://cdn-icons-png.flaticon.com/512/5799/5799191.png", label:"Preditiva" },
-        { icon:"https://cdn-icons-png.flaticon.com/512/12282/12282281.png", label:"Psicográfica", mono:true },
-        { icon:"https://idecbrasil.com.br/wp-content/uploads/2025/03/processo-1.png", label:"Comportamental", mono:true }
+        { icon:"./assets/images/570291-aefcd539d06a.png", label:"RFM" },
+        { icon:"./assets/images/canva-clock-real-realtime-time-icon-icon-MAEpMrX-e81174fb9c34.png", label:"Real-time" },
+        { icon:"./assets/images/5799191-52f7f6598a8f.png", label:"Preditiva" },
+        { icon:"./assets/images/12282281-c234d18bd995.png", label:"Psicográfica", mono:true },
+        { icon:"./assets/images/processo-1-fda39581d19f.png", label:"Comportamental", mono:true }
       ]
     },
     "solution:analytics":  {
@@ -5086,7 +5103,7 @@
       title:"Product Experiences",
       desc:"Personalização remota e testes A/B.",
       w: 280,
-      logoUrl:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png"
+      logoUrl:"./assets/images/CleverTap_fav-ac15fb175ba3.png"
     },
     "solution:promotions": {
       icon:"PR", kind:"Addon", type:"red", variant:"solution",
@@ -5097,10 +5114,10 @@
       items: [
         { icon:"https://png.pngtree.com/png-vector/20230315/ourmid/pngtree-campaign-line-icon-vector-png-image_6649613.png", label:"Promo Campaigns" },
         "Loyalty Tiers",
-        { icon:"https://icons.iconarchive.com/icons/icons8/ios7/512/Finance-Wallet-icon.png", label:"Carteira de fidelidade" },
-        { icon:"https://cdn-icons-png.flaticon.com/512/6713/6713658.png", label:"Cupons", tone:"brand" },
-        { icon:"https://cdn-icons-png.freepik.com/512/7162/7162364.png", label:"Vouchers de parceiros", tone:"brand" },
-        { icon:"https://cdn-icons-png.flaticon.com/512/2666/2666513.png", label:"Custom Rewards" },
+        { icon:"./assets/images/Finance-Wallet-icon-25f9f1e92576.png", label:"Carteira de fidelidade" },
+        { icon:"./assets/images/6713658-f1554f5917f6.png", label:"Cupons", tone:"brand" },
+        { icon:"./assets/images/7162364-9e214f7e0bfe.png", label:"Vouchers de parceiros", tone:"brand" },
+        { icon:"./assets/images/2666513-bbb7798e9a1a.png", label:"Custom Rewards" },
         "Promo Reports",
         "Promo APIs (Wallet, Coupon e Voucher)"
       ]
@@ -5114,11 +5131,11 @@
       solutionLogo: TESSERACT_LOGO_URL,
       unboundedResize: true,
       items: [
-        { icon:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png", label:"Retenção entre 3~10 anos" },
-        { icon:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png", label:"Escala e Performance" },
-        { icon:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png", label:"Dados em tempo real" },
-        { icon:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png", label:"Visão Unificada do Cliente" },
-        { icon:"https://cdn-public.softwarereviews.com/production/favicons/offerings/8910/original/CleverTap_fav.png", label:"Redução de Custo e Complexidade" }
+        { icon:"./assets/images/CleverTap_fav-ac15fb175ba3.png", label:"Retenção entre 3~10 anos" },
+        { icon:"./assets/images/CleverTap_fav-ac15fb175ba3.png", label:"Escala e Performance" },
+        { icon:"./assets/images/CleverTap_fav-ac15fb175ba3.png", label:"Dados em tempo real" },
+        { icon:"./assets/images/CleverTap_fav-ac15fb175ba3.png", label:"Visão Unificada do Cliente" },
+        { icon:"./assets/images/CleverTap_fav-ac15fb175ba3.png", label:"Redução de Custo e Complexidade" }
       ]
     },
     "solution:scribeai": {
@@ -5182,11 +5199,11 @@
         "Clicou em campanha"
       ],
       profileChannels: [
-        { label:"WhatsApp", icon:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/960px-WhatsApp.svg.png" },
-        { label:"Email", icon:"https://static.vecteezy.com/system/resources/thumbnails/014/440/980/small/email-message-icon-design-in-blue-circle-png.png" },
-        { label:"SMS", icon:"https://cdn-icons-png.flaticon.com/512/733/733533.png" },
-        { label:"App", icon:"https://cdn-icons-png.flaticon.com/512/8766/8766948.png" },
-        { label:"Web", icon:"https://cdn-icons-png.flaticon.com/512/5339/5339181.png" }
+        { label:"WhatsApp", icon:"./assets/images/960px-WhatsApp-svg-0f4bc879d3b2.png" },
+        { label:"Email", icon:"./assets/images/email-message-icon-design-in-blue-circle-png-d4a3c459eac9.png" },
+        { label:"SMS", icon:"./assets/images/733533-0368ce34f8ba.png" },
+        { label:"App", icon:"./assets/images/8766948-101448f0d9c9.png" },
+        { label:"Web", icon:"./assets/images/5339181-41d4e033e597.png" }
       ]
     },
     "text:note": {
@@ -6177,7 +6194,15 @@
         backgroundColor: "#ffffff",
         useCORS: true,
         scale: Math.min(2, window.devicePixelRatio || 1.5),
-        logging: false
+        logging: false,
+        onclone: (doc)=>{
+          // html2canvas uses transform scaling; keep its export coordinates unchanged.
+          const layer = doc.getElementById("nodes");
+          if(layer){
+            layer.style.zoom = "1";
+            layer.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.z})`;
+          }
+        }
       });
       const canvas = await composeCanvasWithSvgOverlay(baseCanvas);
       const sx = canvas.width / Math.max(wrap.clientWidth, 1);
