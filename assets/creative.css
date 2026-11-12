@@ -3080,7 +3080,7 @@
 .presentationControls .btn2:focus-visible, #btnPresent:focus-visible{outline:2px solid #2563eb; outline-offset:3px;}
 .presentationControls [hidden]{display:none !important;}
 .node.spotlightDim{opacity:.24 !important;}
-.node.spotlightFocus{box-shadow:0 0 0 2px rgba(239,68,68,.6), 0 8px 32px rgba(239,68,68,.22);}
+.node.spotlightFocus{border-color:rgba(239,68,68,.6); outline-color:rgba(239,68,68,.45); box-shadow:0 0 0 2px rgba(239,68,68,.6), 0 8px 32px rgba(239,68,68,.22);}
 #svg [data-edge-id]{transition:opacity .22s ease, filter .22s ease;}
 #svg .spotlightEdgeDim{opacity:.12 !important;}
 #svg .spotlightEdgeFocus:not(.edgeDel){filter:drop-shadow(0 0 2px rgba(239,68,68,.3));}
