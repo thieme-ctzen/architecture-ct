@@ -661,11 +661,23 @@
       </div>
 
       <div class="wrap" id="wrap">
-        <div class="presentationControls" role="toolbar" aria-label="Controles de apresentação">
-          <button class="btn2" id="btnSpotlight" type="button" aria-pressed="false">Spotlight</button>
-          <button class="btn2" id="btnFocusNode" type="button" disabled>Focar no componente</button>
-          <button class="btn2" id="btnOverview" type="button">Visão geral</button>
-          <button class="btn2" id="btnExitPresentation" type="button" hidden>Sair da apresentação</button>
+        <div class="presentationDock">
+          <button class="presentationDockToggle" id="btnTogglePresentationControls" type="button" aria-expanded="true" aria-controls="presentationControls" aria-label="Recolher controles" title="Recolher controles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="presentationControls" id="presentationControls" role="toolbar" aria-label="Controles de apresentação">
+            <button class="presentationSwitch" id="btnSpotlight" type="button" role="switch" aria-checked="false" aria-label="Spotlight">
+              <span class="switchTrack" aria-hidden="true"><span class="switchThumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></span></span>
+              <span class="controlTooltip">Spotlight</span>
+            </button>
+            <button class="presentationSwitch" id="btnFocusNode" type="button" role="switch" aria-checked="false" aria-label="Focar no componente" disabled>
+              <span class="switchTrack" aria-hidden="true"><span class="switchThumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/><rect x="8" y="8" width="8" height="8" rx="2"/></svg></span></span>
+              <span class="controlTooltip">Focar no componente</span>
+            </button>
+            <button class="presentationSwitch" id="btnOverview" type="button" role="switch" aria-checked="false" aria-label="Visão geral">
+              <span class="switchTrack" aria-hidden="true"><span class="switchThumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span></span>
+              <span class="controlTooltip">Visão geral</span>
+            </button>
+            <button class="presentationExit" id="btnExitPresentation" type="button" aria-label="Sair da apresentação" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v16h5m6-12 4 4-4 4M9 12h10"/></svg><span class="controlTooltip">Sair da apresentação</span></button>
+          </div>
         </div>
         <div class="zoomDock">
           <button class="zoomBtn" id="btnZoomOut" type="button" title="Zoom out">−</button>
