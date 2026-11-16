@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/creative.css?v=20260721-2" />
+  <link rel="stylesheet" href="./assets/creative.css?v=20261116-presentation-switches" />
   <style>
     body.mock-plan-loading {
       display: grid;
@@ -41,6 +41,7 @@
 </head>
 <body class="mock-plan-loading">
   <div class="mock-plan-loader">Carregando arquitetura CleverTap...</div>
+  <script src="./assets/images/catalog.js?v=20261112-local-images"></script>
   <script>
     (async () => {
       try {
@@ -49,10 +50,16 @@
           throw new Error('Falha ao carregar o fragmento do canvas (' + response.status + ')');
         }
         const html = await response.text();
+        const fragment = document.createElement('template');
+        fragment.innerHTML = html;
+        fragment.content.querySelectorAll('img[src]').forEach((img) => {
+          const local = window.CANVAS_IMAGE_ASSETS?.[img.getAttribute('src')];
+          if (local) img.setAttribute('src', local);
+        });
         document.body.className = '';
-        document.body.innerHTML = html;
+        document.body.replaceChildren(fragment.content);
         const script = document.createElement('script');
-        script.src = './assets/archapp.js?v=20260721-2';
+        script.src = './assets/archapp.js?v=20261116-presentation-switches';
         script.defer = true;
         script.onerror = () => {
           document.body.innerHTML = '<div class="mock-plan-error">Falha ao carregar o script principal do canvas.</div>';
