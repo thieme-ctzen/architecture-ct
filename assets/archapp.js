@@ -117,6 +117,9 @@
   let spotlightOn = false;
   let presentationSnapshot = null;
   let cameraFrame = 0;
+  let cameraMode = null;
+  let cameraReturnView = null;
+  let focusedComponentId = null;
   let isPanning = false;
   let isMiddlePanning = false;
   let panStart = { x: 0, y: 0, vx: 0, vy: 0 };
@@ -556,6 +559,8 @@
   };
   const PHRASE_BUNDLES = [
     { pt:"Apresentar", es:"Presentar", en:"Present" },
+    { pt:"Recolher controles", es:"Ocultar controles", en:"Hide controls" },
+    { pt:"Expandir controles", es:"Mostrar controles", en:"Show controls" },
     { pt:"Spotlight", es:"Spotlight", en:"Spotlight" },
     { pt:"Focar no componente", es:"Enfocar componente", en:"Focus on component" },
     { pt:"Visão geral", es:"Vista general", en:"Overview" },
@@ -1007,6 +1012,12 @@
   function setButtonCopy(key, title, subtitle = ""){
     const btn = document.getElementById(key) || document.querySelector(`[data-add="${key}"]`);
     if(!btn) return;
+    const tooltip = btn.querySelector('.controlTooltip');
+    if(tooltip){
+      tooltip.textContent = title;
+      btn.setAttribute('aria-label', title);
+      return;
+    }
     const titleEl = btn.querySelector(".txt > div");
     const subtitleEl = btn.querySelector(".txt > span");
     if(titleEl) titleEl.textContent = title;
@@ -1014,6 +1025,7 @@
     if(subtitleEl) subtitleEl.textContent = subtitle;
   }
   function applyLanguageToUI(){
+    updatePresentationDockLabel();
     for(const [id, label] of Object.entries({btnPresent:"Apresentar", btnSpotlight:"Spotlight", btnFocusNode:"Focar no componente", btnOverview:"Visão geral", btnExitPresentation:"Sair da apresentação"})){
       setButtonCopy(id, translateKnownPhrase(label));
     }
@@ -4500,16 +4512,28 @@
       el.classList.toggle('spotlightEdgeDim', active && !related.has(el.dataset.edgeId));
       el.classList.toggle('spotlightEdgeFocus', active && related.has(el.dataset.edgeId));
     }
-    document.getElementById('btnSpotlight').setAttribute('aria-pressed', String(spotlightOn));
+    if((cameraMode === 'focus' && (selectedIds.size !== 1 || !selectedIds.has(focusedComponentId))) || (cameraMode === 'overview' && !nodes.length)) cancelCameraMotion();
+    document.getElementById('btnSpotlight').setAttribute('aria-checked', String(spotlightOn));
+    refreshCameraSwitches();
     document.getElementById('btnFocusNode').disabled = selectedIds.size !== 1;
     document.getElementById('btnOverview').disabled = !nodes.length;
   }
-  function cancelCameraMotion(){
+  function refreshCameraSwitches(){
+    document.getElementById('btnFocusNode').setAttribute('aria-checked', String(cameraMode === 'focus'));
+    document.getElementById('btnOverview').setAttribute('aria-checked', String(cameraMode === 'overview'));
+  }
+  function cancelCameraMotion(resetMode = true){
+    if(resetMode){
+      cameraMode = null;
+      cameraReturnView = null;
+      focusedComponentId = null;
+      refreshCameraSwitches();
+    }
     cancelAnimationFrame(cameraFrame);
     cameraFrame = 0;
   }
   function animateCamera(target){
-    cancelCameraMotion();
+    cancelCameraMotion(false);
     const start = { ...view };
     const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 380;
     const began = performance.now();
@@ -4575,6 +4599,7 @@
     btnConnect.classList.toggle('active', connectMode);
     setTransform();
     render();
+    if(on) setPresentationControlsExpanded(true);
     document.getElementById(on ? 'btnSpotlight' : 'btnPresent').focus();
   }
   document.getElementById('btnPresent').addEventListener('click', () => setPresentationMode(true));
@@ -4583,14 +4608,47 @@
     spotlightOn = !spotlightOn;
     refreshPresentationVisuals();
   });
-  document.getElementById('btnFocusNode').addEventListener('click', focusSelectedComponent);
-  document.getElementById('btnOverview').addEventListener('click', showArchitectureOverview);
+  function toggleCameraMode(mode){
+    if(cameraMode === mode){
+      const restore = cameraReturnView;
+      cancelCameraMotion();
+      if(restore) animateCamera(restore);
+      return;
+    }
+    if(!cameraMode) cameraReturnView = {...view};
+    cameraMode = mode;
+    focusedComponentId = mode === 'focus' ? firstSelectedNodeId() : null;
+    if(mode === 'focus') focusSelectedComponent();
+    else showArchitectureOverview();
+    refreshCameraSwitches();
+  }
+  function updatePresentationDockLabel(){
+    const button = document.getElementById('btnTogglePresentationControls');
+    const label = translateKnownPhrase(button.getAttribute('aria-expanded') === 'true' ? 'Recolher controles' : 'Expandir controles');
+    button.setAttribute('aria-label', label);
+    button.title = label;
+  }
+  function setPresentationControlsExpanded(expanded){
+    const controls = document.getElementById('presentationControls');
+    const button = document.getElementById('btnTogglePresentationControls');
+    if(!expanded && controls.contains(document.activeElement)) button.focus();
+    controls.inert = !expanded;
+    controls.setAttribute('aria-hidden', String(!expanded));
+    button.setAttribute('aria-expanded', String(expanded));
+    button.closest('.presentationDock').classList.toggle('is-collapsed', !expanded);
+    updatePresentationDockLabel();
+  }
+  document.getElementById('btnTogglePresentationControls').addEventListener('click', e => {
+    setPresentationControlsExpanded(e.currentTarget.getAttribute('aria-expanded') !== 'true');
+  });
+  document.getElementById('btnFocusNode').addEventListener('click', () => toggleCameraMode('focus'));
+  document.getElementById('btnOverview').addEventListener('click', () => toggleCameraMode('overview'));
 
   // Capture events before existing editing handlers; background pan and zoom stay available.
   for(const type of ['mousedown','pointerdown','touchstart','click','dblclick','contextmenu','dragstart','dragover','drop']){
     wrap.addEventListener(type, e => {
       if(!presentationMode) return;
-      if(e.target.closest('.presentationControls, .zoomDock')) return;
+      if(e.target.closest('.presentationDock, .zoomDock')) return;
       const nodeEl = e.target.closest('.node');
       const blocked = nodeEl || e.target.closest('#svg') || ['contextmenu','dragstart','dragover','drop'].includes(type);
       if(!blocked) return;
@@ -4609,7 +4667,7 @@
       e.preventDefault();
       e.stopImmediatePropagation();
       setPresentationMode(false);
-    } else if(!e.target.closest('.presentationControls, .zoomDock') && e.key !== 'Tab'){
+    } else if(!e.target.closest('.presentationDock, .zoomDock') && e.key !== 'Tab'){
       e.preventDefault();
       e.stopImmediatePropagation();
     }
